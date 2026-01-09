@@ -5,80 +5,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Github, Linkedin, Mail, Twitter } from 'lucide-react';
-
-// Mock Data
-const members = [
-    {
-        id: 1,
-        name: "Alex Rivera",
-        position: "President",
-        department: "Computer Science",
-        year: "4th Year",
-        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=faces",
-        bio: "Passionate about student welfare and tech innovation.",
-        category: "Executive"
-    },
-    {
-        id: 2,
-        name: "Sarah Chen",
-        position: "Vice President",
-        department: "Economics",
-        year: "3rd Year",
-        image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop&crop=faces",
-        bio: "Focused on inclusive policy making and campus events.",
-        category: "Executive"
-    },
-    {
-        id: 3,
-        name: "Marcus Johnson",
-        position: "General Secretary",
-        department: "Mechanical Eng.",
-        year: "4th Year",
-        image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&crop=faces",
-        bio: "Ensuring smooth operations and transparent communication.",
-        category: "Executive"
-    },
-    {
-        id: 4,
-        name: "Priya Patel",
-        position: "Cultural Sec.",
-        department: "Arts & Design",
-        year: "3rd Year",
-        image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop&crop=faces",
-        bio: "Bringing the campus to life with vibrant festivals.",
-        category: "Committee Head"
-    },
-    {
-        id: 5,
-        name: "David Kim",
-        position: "Sports Sec.",
-        department: "Physical Ed.",
-        year: "3rd Year",
-        image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop&crop=faces",
-        bio: "Promoting health, fitness, and competitive spirit.",
-        category: "Committee Head"
-    },
-    {
-        id: 6,
-        name: "Emily Davis",
-        position: "Academic Rep",
-        department: "Physics",
-        year: "2nd Year",
-        image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=400&fit=crop&crop=faces",
-        bio: "Advocating for better academic resources and support.",
-        category: "Representative"
-    },
-];
-
-const categories = ["All", "Executive", "Committee Head", "Representative"];
+import { Mail, User } from 'lucide-react';
+import { useSharedData } from '@/hooks/useSharedData';
 
 export default function MembersPage() {
-    const [filter, setFilter] = useState("All");
-
-    const filteredMembers = filter === "All"
-        ? members
-        : members.filter(m => m.category === filter);
+    const { members } = useSharedData();
+    // Start with "All" to show everyone; categories won't work perfectly without that field in data
+    // so we'll simplify or remove the filter controls if they aren't useful.
+    // For now, let's keep it simple and just show the list.
 
     return (
         <div className="min-h-screen bg-black text-white pt-10 pb-20">
@@ -89,69 +23,58 @@ export default function MembersPage() {
                     <p className="text-gray-400">The dedicated individuals working for you.</p>
                 </div>
 
-                {/* Filter */}
-                <div className="flex justify-center gap-2 mb-12 flex-wrap">
-                    {categories.map((cat) => (
-                        <Button
-                            key={cat}
-                            variant={filter === cat ? "default" : "outline"}
-                            onClick={() => setFilter(cat)}
-                            className={filter === cat ? "bg-yellow-500 text-black hover:bg-yellow-400" : "border-white/20 text-gray-300"}
-                        >
-                            {cat}
-                        </Button>
-                    ))}
-                </div>
-
                 {/* Grid */}
-                <motion.div
-                    layout
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-                >
-                    <AnimatePresence>
-                        {filteredMembers.map((member) => (
-                            <motion.div
-                                key={member.id}
-                                layout
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.9 }}
-                                transition={{ duration: 0.3 }}
-                            >
-                                <Card className="bg-white/5 border-white/10 overflow-hidden group hover:border-yellow-500/50 transition-colors">
-                                    <div className="aspect-square overflow-hidden relative">
-                                        <img
-                                            src={member.image}
-                                            alt={member.name}
-                                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                        />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-60" />
+                {members.length === 0 ? (
+                    <div className="text-center py-20 bg-white/5 border border-white/10 rounded-lg">
+                        <p className="text-gray-400">No council members listed yet.</p>
+                    </div>
+                ) : (
+                    <motion.div
+                        layout
+                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                    >
+                        <AnimatePresence>
+                            {members.map((member) => (
+                                <motion.div
+                                    key={member.id}
+                                    layout
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.9 }}
+                                    transition={{ duration: 0.3 }}
+                                >
+                                    <Card className="bg-white/5 border-white/10 overflow-hidden group hover:border-yellow-500/50 transition-colors h-full flex flex-col">
+                                        <div className="aspect-square overflow-hidden relative bg-neutral-900 flex items-center justify-center">
+                                            {/* Placeholder Avatar since we don't have images in shared data yet */}
+                                            <div className="w-32 h-32 rounded-full bg-yellow-500/20 flex items-center justify-center text-4xl font-bold text-yellow-500">
+                                                {member.name.charAt(0)}
+                                            </div>
 
-                                        <div className="absolute bottom-0 left-0 w-full p-6">
-                                            <Badge className="mb-2 bg-yellow-500 text-black hover:bg-yellow-400">{member.position}</Badge>
-                                            <h3 className="text-2xl font-bold text-white">{member.name}</h3>
-                                            <p className="text-sm text-gray-300">{member.department} • {member.year}</p>
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-60" />
+
+                                            <div className="absolute bottom-0 left-0 w-full p-6">
+                                                <Badge className="mb-2 bg-yellow-500 text-black hover:bg-yellow-400">{member.role}</Badge>
+                                                <h3 className="text-2xl font-bold text-white">{member.name}</h3>
+                                                {/* <p className="text-sm text-gray-300">{member.department} • {member.year}</p> */}
+                                                {/* Department/Year not in current schema */}
+                                            </div>
                                         </div>
-                                    </div>
-                                    <CardContent className="p-6">
-                                        <p className="text-gray-400 mb-6 text-sm leading-relaxed">"{member.bio}"</p>
-                                        <div className="flex gap-4">
-                                            <Button size="icon" variant="ghost" className="h-8 w-8 text-gray-400 hover:text-white hover:bg-white/10">
-                                                <Mail className="w-4 h-4" />
-                                            </Button>
-                                            <Button size="icon" variant="ghost" className="h-8 w-8 text-gray-400 hover:text-white hover:bg-white/10">
-                                                <Linkedin className="w-4 h-4" />
-                                            </Button>
-                                            <Button size="icon" variant="ghost" className="h-8 w-8 text-gray-400 hover:text-white hover:bg-white/10">
-                                                <Twitter className="w-4 h-4" />
-                                            </Button>
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            </motion.div>
-                        ))}
-                    </AnimatePresence>
-                </motion.div>
+                                        <CardContent className="p-6 mt-auto">
+                                            {/* <p className="text-gray-400 mb-6 text-sm leading-relaxed">"{member.bio}"</p> */}
+                                            {/* Bio not in current schema */}
+                                            <div className="flex gap-4 pt-4 border-t border-white/5">
+                                                <div className="flex items-center gap-2 text-gray-400 text-sm">
+                                                    <Mail className="w-4 h-4 text-yellow-500" />
+                                                    {member.email}
+                                                </div>
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+                                </motion.div>
+                            ))}
+                        </AnimatePresence>
+                    </motion.div>
+                )}
 
             </div>
         </div>

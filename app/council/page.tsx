@@ -2,13 +2,16 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Target, Lightbulb, Users, Shield } from 'lucide-react';
+import { Target, Lightbulb, Users, Shield, User } from 'lucide-react';
 import { PageBackgroundSpace } from '@/components/solar/PageBackgroundSpace';
 import ScrollAnimation from '@/components/ui/motion/ScrollAnimation';
 import StaggeredList from '@/components/ui/motion/StaggeredList';
 import TextReveal from '@/components/ui/motion/TextReveal';
+import { useSharedData } from '@/hooks/useSharedData';
 
 export default function CouncilPage() {
+    const { members } = useSharedData();
+
     return (
         <PageBackgroundSpace>
             <div className="container mx-auto px-4 pt-24 pb-20">
@@ -80,10 +83,45 @@ export default function CouncilPage() {
                     </StaggeredList>
                 </div>
 
+                {/* Meet the Council (Dynamic) */}
+                <div className="mb-20">
+                    <ScrollAnimation variant="fade-up">
+                        <h2 className="text-3xl font-bold text-center mb-12">Meet the Council</h2>
+                    </ScrollAnimation>
+
+                    {members.length === 0 ? (
+                        <div className="text-center py-10 bg-white/5 rounded-lg border border-white/10">
+                            <p className="text-gray-400">Council members list is currently being updated.</p>
+                        </div>
+                    ) : (
+                        <StaggeredList className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" itemVariant="fade-up">
+                            {members.map((member) => (
+                                <Card key={member.id} className="bg-white/5 border-white/10 hover:border-yellow-500/50 transition-all group">
+                                    <CardContent className="p-6 flex items-start gap-4">
+                                        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-yellow-400 to-orange-600 flex items-center justify-center text-black font-bold text-2xl shadow-lg shrink-0">
+                                            {member.name.charAt(0)}
+                                        </div>
+                                        <div>
+                                            <h3 className="text-xl font-bold group-hover:text-yellow-500 transition-colors">{member.name}</h3>
+                                            <Badge variant="outline" className="mt-1 border-yellow-500/50 text-yellow-500 bg-yellow-500/10">
+                                                {member.role}
+                                            </Badge>
+                                            <p className="text-sm text-gray-500 mt-2 flex items-center gap-2">
+                                                <User className="w-3 h-3" />
+                                                {member.email}
+                                            </p>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            ))}
+                        </StaggeredList>
+                    )}
+                </div>
+
                 {/* Structure Diagram (Simplified) */}
                 <div>
                     <ScrollAnimation variant="fade-up">
-                        <h2 className="text-3xl font-bold text-center mb-12">Council Structure</h2>
+                        <h2 className="text-3xl font-bold text-center mb-12">Organizational Structure</h2>
                     </ScrollAnimation>
                     <ScrollAnimation variant="scale-up" className="flex flex-col items-center gap-8 max-w-4xl mx-auto">
                         <Badge className="px-6 py-2 text-lg bg-yellow-500 text-black hover:bg-yellow-400">President</Badge>

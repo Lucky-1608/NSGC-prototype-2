@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-export type TicketStatus = 'Pending' | 'In Review' | 'In Progress' | 'Completed';
+export type TicketStatus = 'Pending' | 'In Review' | 'In Progress' | 'Completed' | 'Rejected';
 export type TicketPriority = 'Low' | 'Medium' | 'High';
 export type Department = 'Academic' | 'Hostel' | 'Sanitation' | 'Ragging' | 'Other';
 
@@ -20,6 +20,7 @@ export interface Ticket {
     email: string;
     department: string; // Using string to allow flexibility, but typed as Department in UI
     type: string;
+    subject: string;
     description: string;
     priority: TicketPriority;
     status: TicketStatus;
@@ -28,14 +29,20 @@ export interface Ticket {
     updatedAt: string;
     timeline: TimelineEvent[];
     proofUrl?: string; // Mock URL
+    image?: string; // Base64 image string
+    votes: number;
+    votedBy: string[]; // Array of user emails/IDs who have voted
 }
 
 interface TicketContextType {
     tickets: Ticket[];
-    createTicket: (ticket: Omit<Ticket, 'id' | 'createdAt' | 'updatedAt' | 'timeline' | 'status' | 'assignedTo'>) => void;
+    createTicket: (ticket: Omit<Ticket, 'id' | 'createdAt' | 'updatedAt' | 'timeline' | 'status' | 'assignedTo' | 'votes' | 'votedBy'>) => string;
     updateTicketStatus: (id: string, status: TicketStatus, note?: string) => void;
+    updateTicketContent: (id: string, updates: Partial<Ticket>) => void;
+    deleteTicket: (id: string) => void;
     assignTicket: (id: string, adminName: string) => void;
     addComment: (id: string, comment: string) => void;
+    upvoteTicket: (id: string, userId: string) => void;
     getTicketById: (id: string) => Ticket | undefined;
 }
 
@@ -73,6 +80,7 @@ export const TicketProvider = ({ children }: { children: ReactNode }) => {
                     email: 'alice@example.com',
                     department: 'Hostel',
                     type: 'Water Supply',
+                    subject: 'No water in Block A',
                     description: 'No water in Block A 2nd floor since yesterday.',
                     priority: 'High',
                     status: 'In Progress',
@@ -83,7 +91,9 @@ export const TicketProvider = ({ children }: { children: ReactNode }) => {
                         { status: 'Received', date: new Date(Date.now() - 86400000 * 2).toLocaleString(), completed: true, description: 'Ticket created' },
                         { status: 'In Review', date: new Date(Date.now() - 86400000).toLocaleString(), completed: true, description: 'Reviewed by admin' },
                         { status: 'In Progress', date: new Date(Date.now() - 3600000).toLocaleString(), completed: true, description: 'Maintenance team dispatched' },
-                    ]
+                    ],
+                    votes: 5,
+                    votedBy: ['bob@example.com', 'charlie@example.com', 'david@example.com', 'eve@example.com', 'frank@example.com']
                 },
                 {
                     id: 'CMP-2025-002',
@@ -91,6 +101,7 @@ export const TicketProvider = ({ children }: { children: ReactNode }) => {
                     email: 'bob@example.com',
                     department: 'Academic',
                     type: 'Grade Correction',
+                    subject: 'Math 101 Grade Issue',
                     description: 'My Math 101 grade is incorrect on the portal.',
                     priority: 'Medium',
                     status: 'Pending',
@@ -99,7 +110,9 @@ export const TicketProvider = ({ children }: { children: ReactNode }) => {
                     updatedAt: new Date(Date.now() - 43200000).toISOString(),
                     timeline: [
                         { status: 'Received', date: new Date(Date.now() - 43200000).toLocaleString(), completed: true, description: 'Ticket created' },
-                    ]
+                    ],
+                    votes: 0,
+                    votedBy: []
                 }
             ];
             setTickets(dummyTickets);
@@ -114,7 +127,7 @@ export const TicketProvider = ({ children }: { children: ReactNode }) => {
         }
     }, [tickets, isLoaded]);
 
-    const createTicket = (data: Omit<Ticket, 'id' | 'createdAt' | 'updatedAt' | 'timeline' | 'status' | 'assignedTo'>) => {
+    const createTicket = (data: Omit<Ticket, 'id' | 'createdAt' | 'updatedAt' | 'timeline' | 'status' | 'assignedTo' | 'votes' | 'votedBy'>) => {
         const newTicket: Ticket = {
             ...data,
             id: `CMP-2025-${String(tickets.length + 100).padStart(3, '0')}`,
@@ -129,9 +142,12 @@ export const TicketProvider = ({ children }: { children: ReactNode }) => {
                     completed: true,
                     description: 'Ticket created successfully'
                 }
-            ]
+            ],
+            votes: 0,
+            votedBy: []
         };
         setTickets(prev => [newTicket, ...prev]);
+        return newTicket.id;
     };
 
     const updateTicketStatus = (id: string, status: TicketStatus, note?: string) => {
@@ -152,6 +168,23 @@ export const TicketProvider = ({ children }: { children: ReactNode }) => {
             }
             return ticket;
         }));
+    };
+
+    const updateTicketContent = (id: string, updates: Partial<Ticket>) => {
+        setTickets(prev => prev.map(ticket => {
+            if (ticket.id === id) {
+                return {
+                    ...ticket,
+                    ...updates,
+                    updatedAt: new Date().toISOString()
+                };
+            }
+            return ticket;
+        }));
+    };
+
+    const deleteTicket = (id: string) => {
+        setTickets(prev => prev.filter(ticket => ticket.id !== id));
     };
 
     const assignTicket = (id: string, adminName: string) => {
@@ -193,10 +226,48 @@ export const TicketProvider = ({ children }: { children: ReactNode }) => {
         }));
     };
 
+    const upvoteTicket = (id: string, userId: string) => {
+        setTickets(prev => prev.map(ticket => {
+            if (ticket.id === id) {
+                // Ensure votedBy exists
+                const currentVotedBy = ticket.votedBy || [];
+                const currentVotes = ticket.votes || 0;
+
+                const hasVoted = currentVotedBy.includes(userId);
+
+                // Toggle vote
+                if (hasVoted) {
+                    return {
+                        ...ticket,
+                        votes: Math.max(0, currentVotes - 1),
+                        votedBy: currentVotedBy.filter(u => u !== userId)
+                    };
+                } else {
+                    return {
+                        ...ticket,
+                        votes: currentVotes + 1,
+                        votedBy: [...currentVotedBy, userId]
+                    };
+                }
+            }
+            return ticket;
+        }));
+    };
+
     const getTicketById = (id: string) => tickets.find(t => t.id === id);
 
     return (
-        <TicketContext.Provider value={{ tickets, createTicket, updateTicketStatus, assignTicket, addComment, getTicketById }}>
+        <TicketContext.Provider value={{
+            tickets,
+            createTicket,
+            updateTicketStatus,
+            updateTicketContent,
+            deleteTicket,
+            assignTicket,
+            addComment,
+            upvoteTicket,
+            getTicketById
+        }}>
             {children}
         </TicketContext.Provider>
     );

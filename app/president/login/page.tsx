@@ -5,55 +5,58 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Lock, Crown, ArrowRight } from 'lucide-react';
 
-import { Lock, User, ArrowRight, Shield, Crown } from 'lucide-react';
-
-export default function LoginPage() {
+export default function PresidentLoginPage() {
     const router = useRouter();
-    const [role] = useState('student');
     const [loading, setLoading] = useState(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
 
-        // Simulate API call
+        // Simulate API call for President
         setTimeout(() => {
-            // Store mock token/role
-            localStorage.setItem('userRole', role);
-            localStorage.setItem('userName', 'Student Name'); // Mock user name
+            // Verify credentials (mock)
+            if (email.includes('prez') || email.includes('alex')) {
+                localStorage.setItem('userRole', 'president');
+                localStorage.setItem('userName', 'President Alex');
 
-            // Notify other components about auth change
-            window.dispatchEvent(new Event('auth-change'));
-
-            router.push(`/dashboard/${role}`);
-            setLoading(false);
+                window.dispatchEvent(new Event('auth-change'));
+                router.push('/dashboard/president');
+            } else {
+                alert('Invalid Credentials. Access Denied.');
+                setLoading(false);
+            }
         }, 1000);
     };
 
     return (
         <div className="min-h-screen bg-black text-white flex items-center justify-center p-4 relative overflow-hidden">
-            {/* Background Elements */}
             <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-yellow-900/20 via-black to-black pointer-events-none" />
 
-            <Card className="w-full max-w-md bg-white/5 border-white/10 relative z-10">
+            <Card className="w-full max-w-md bg-white/5 border-white/10 relative z-10 border-t-4 border-t-yellow-500">
                 <CardHeader className="text-center">
                     <div className="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4 text-black font-bold text-xl">
-                        N
+                        <Crown className="w-6 h-6" />
                     </div>
-                    <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
-                    <CardDescription>Sign in to access the NSGC Portal</CardDescription>
+                    <CardTitle className="text-2xl font-bold">Presidential Access</CardTitle>
+                    <CardDescription>Secure login for User Council President</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <form onSubmit={handleLogin} className="space-y-4">
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-300">Email</label>
+                            <label className="text-sm font-medium text-gray-300">Official Email</label>
                             <div className="relative">
-                                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                                <Crown className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                                 <input
                                     type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                     className="w-full bg-black/50 border border-white/10 rounded-md pl-10 pr-4 py-2 text-white focus:outline-none focus:border-yellow-500 transition-colors"
-                                    placeholder="student@university.edu"
+                                    placeholder="president@nsgc.edu"
                                     required
                                 />
                             </div>
@@ -65,6 +68,8 @@ export default function LoginPage() {
                                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                                 <input
                                     type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                     className="w-full bg-black/50 border border-white/10 rounded-md pl-10 pr-4 py-2 text-white focus:outline-none focus:border-yellow-500 transition-colors"
                                     placeholder="••••••••"
                                     required
@@ -72,34 +77,20 @@ export default function LoginPage() {
                             </div>
                         </div>
 
-                        {/* Role selection removed - defaulting to student */}
-                        {/* <input type="hidden" value={role} /> */}
-
                         <Button
                             type="submit"
-                            className="w-full bg-yellow-500 text-black hover:bg-yellow-400 font-bold"
+                            className="w-full bg-yellow-600 text-black hover:bg-yellow-500 font-bold"
                             disabled={loading}
                         >
-                            {loading ? 'Signing in...' : 'Sign In'}
+                            {loading ? 'Verifying...' : 'Access Office'}
                             {!loading && <ArrowRight className="ml-2 w-4 h-4" />}
                         </Button>
                     </form>
                 </CardContent>
                 <CardFooter className="justify-center">
                     <p className="text-sm text-gray-400">
-                        Don't have an account? <Link href="/signup" className="text-yellow-500 hover:underline">Sign up</Link>
+                        <Link href="/login" className="hover:text-white transition-colors">Return to Main Login</Link>
                     </p>
-                    <div className="w-full text-center mt-4 pt-4 border-t border-white/10 flex justify-center gap-4">
-                        <Link href="/president/login" className="text-xs text-gray-500 hover:text-yellow-500 flex items-center gap-1 transition-colors">
-                            <Crown className="w-3 h-3" /> President
-                        </Link>
-                        <Link href="/council/login" className="text-xs text-gray-500 hover:text-blue-500 flex items-center gap-1 transition-colors">
-                            <User className="w-3 h-3" /> Council
-                        </Link>
-                        <Link href="/admin/login" className="text-xs text-gray-500 hover:text-red-500 flex items-center gap-1 transition-colors">
-                            <Shield className="w-3 h-3" /> Admin
-                        </Link>
-                    </div>
                 </CardFooter>
             </Card>
         </div>

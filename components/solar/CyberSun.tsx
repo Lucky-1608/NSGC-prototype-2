@@ -13,9 +13,17 @@ export function CyberSun() {
         if (materialRef.current) {
             // Animate noise layers for "burning" effect
             const time = state.clock.getElapsedTime();
-            materialRef.current.layers[0].offset.x = time * 0.1;
-            materialRef.current.layers[1].offset.y = time * 0.2;
-            materialRef.current.layers[1].offset.z = time * 0.1;
+
+            // Layer 1: Main Noise (Plasma)
+            if (materialRef.current.layers[1]?.offset) {
+                materialRef.current.layers[1].offset.x = time * 0.1;
+                materialRef.current.layers[1].offset.y = time * 0.2;
+            }
+
+            // Layer 2: Detail Noise
+            if (materialRef.current.layers[2]?.offset) {
+                materialRef.current.layers[2].offset.x = time * 0.1; // Re-purposing the x animation for the second noise layer
+            }
         }
     });
 

@@ -7,7 +7,7 @@ import { TiltCard } from '@/components/ui/TiltCard';
 
 export function PresidentSection() {
     return (
-        <section className="py-20 bg-black relative overflow-hidden">
+        <section id="meet-president" className="py-20 bg-black relative overflow-hidden">
             {/* Background Elements */}
             <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-yellow-900/20 to-transparent pointer-events-none" />
 

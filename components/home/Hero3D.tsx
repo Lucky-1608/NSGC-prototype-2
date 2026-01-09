@@ -35,6 +35,9 @@ export function Hero3D() {
                         <Button
                             size="lg"
                             className="bg-blue-600/20 backdrop-blur-md border border-blue-500/50 text-blue-100 hover:bg-blue-600/40 w-full sm:w-auto text-lg h-14 px-10 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(37,99,235,0.4)]"
+                            onClick={() => {
+                                document.getElementById('meet-president')?.scrollIntoView({ behavior: 'smooth' });
+                            }}
                         >
                             Initialize Sequence
                             <ArrowRight className="ml-2 w-5 h-5" />

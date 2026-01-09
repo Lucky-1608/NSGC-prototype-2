@@ -17,6 +17,8 @@ interface CyberPlanetProps {
     description: string;
 }
 
+const MotionMesh = motion.mesh as any;
+
 export function CyberPlanet({ name, radius, distance, speed, color, route, description }: CyberPlanetProps) {
     const meshRef = useRef<THREE.Mesh>(null);
     const orbitRef = useRef<THREE.Group>(null);
@@ -54,7 +56,7 @@ export function CyberPlanet({ name, radius, distance, speed, color, route, descr
             <group ref={orbitRef}>
                 <group position={[distance, 0, 0]}>
                     {/* The Planet Mesh */}
-                    <motion.mesh
+                    <MotionMesh
                         ref={meshRef}
                         onClick={handleClick}
                         onPointerOver={() => { document.body.style.cursor = 'pointer'; setHovered(true); }}
@@ -75,7 +77,7 @@ export function CyberPlanet({ name, radius, distance, speed, color, route, descr
                             distort={hovered ? 0.6 : 0.3} // More distortion on hover
                             speed={hovered ? 5 : 2}
                         />
-                    </motion.mesh>
+                    </MotionMesh>
 
                     {/* Label */}
                     <group position={[0, radius + 0.5, 0]}>

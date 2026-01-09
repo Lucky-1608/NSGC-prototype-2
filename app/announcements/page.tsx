@@ -8,57 +8,19 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input'; // Need to create Input component or use standard input
 import { Megaphone, Calendar, Search, Filter } from 'lucide-react';
 
-// Mock Data
-const announcements = [
-    {
-        id: 1,
-        title: "Semester End Exam Schedule Released",
-        category: "Academic",
-        date: "2025-05-15",
-        content: "The final exam schedule for the Spring 2025 semester has been released. Please check the student portal for your specific dates.",
-        priority: "High"
-    },
-    {
-        id: 2,
-        title: "Annual Cultural Fest 'Aura' Registration",
-        category: "Events",
-        date: "2025-05-10",
-        content: "Registration for all cultural events including Dance, Music, and Drama is now open. Visit the desk at the Student Center.",
-        priority: "Medium"
-    },
-    {
-        id: 3,
-        title: "Library Maintenance Downtime",
-        category: "Facility",
-        date: "2025-05-08",
-        content: "The central library digital catalog will be down for maintenance on Sunday from 2 AM to 6 AM.",
-        priority: "Low"
-    },
-    {
-        id: 4,
-        title: "New Hostel Allocation Policy",
-        category: "Hostel",
-        date: "2025-05-05",
-        content: "A new merit-based allocation policy has been drafted for the upcoming academic year. Feedback is welcome.",
-        priority: "High"
-    },
-    {
-        id: 5,
-        title: "Guest Lecture: AI in Governance",
-        category: "Academic",
-        date: "2025-05-01",
-        content: "Join us for an insightful session with Dr. Alan Turing on the role of AI in modern governance systems.",
-        priority: "Medium"
-    }
-];
+import { useSharedData } from '@/hooks/useSharedData';
 
-const categories = ["All", "Academic", "Events", "Facility", "Hostel", "Sports"];
+const categories = ["All", "Academic", "Events", "Facility", "Hostel", "Sports", "General"];
 
 export default function AnnouncementsPage() {
+    const { announcements } = useSharedData();
     const [filter, setFilter] = useState("All");
     const [search, setSearch] = useState("");
 
-    const filteredAnnouncements = announcements.filter(a => {
+    const filteredAnnouncements = announcements.map(a => ({
+        ...a,
+        category: a.category || "General"
+    })).filter(a => {
         const matchesCategory = filter === "All" || a.category === filter;
         const matchesSearch = a.title.toLowerCase().includes(search.toLowerCase()) || a.content.toLowerCase().includes(search.toLowerCase());
         return matchesCategory && matchesSearch;

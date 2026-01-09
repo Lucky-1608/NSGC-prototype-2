@@ -4,38 +4,11 @@ import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Trophy, Medal, Star } from 'lucide-react';
-
-const achievements = [
-    {
-        id: 1,
-        student: "Arjun Mehta",
-        title: "Gold Medal - National Coding Olympiad",
-        category: "Academic",
-        date: "April 2025",
-        image: "https://images.unsplash.com/photo-1569383746724-6f1b882b8f46?w=800&h=400&fit=crop",
-        description: "Secured 1st rank among 5000+ participants nationwide."
-    },
-    {
-        id: 2,
-        student: "University Football Team",
-        title: "Winners - Inter-University Cup",
-        category: "Sports",
-        date: "March 2025",
-        image: "https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=800&h=400&fit=crop",
-        description: "Defeated reigning champions 3-1 in the finals."
-    },
-    {
-        id: 3,
-        student: "Riya Singh",
-        title: "Best Research Paper Award",
-        category: "Research",
-        date: "February 2025",
-        image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&h=400&fit=crop",
-        description: "Paper on 'Sustainable Energy' published in IEEE Journal."
-    }
-];
+import { useSharedData } from '@/hooks/useSharedData';
 
 export default function AchievementsPage() {
+    const { achievements } = useSharedData();
+
     return (
         <div className="min-h-screen bg-black text-white pt-10 pb-20">
             <div className="container mx-auto px-4">
