@@ -11,7 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { GlassModal } from '@/components/ui/glass-modal';
 import {
     Users, Megaphone, Calendar, Flag, Plus, Trash2,
-    LogOut, CheckCircle, AlertTriangle, Star, Menu, FileText, ShoppingBag, BarChart2, Vote, Trophy, MessageSquare, ExternalLink, Camera, Upload, X, Crop, ThumbsUp
+    LogOut, CheckCircle, AlertTriangle, Star, Menu, FileText, ShoppingBag, BarChart2, Vote, Trophy, MessageSquare, ExternalLink, Camera, Upload, X, Crop, ThumbsUp, Eye
 } from 'lucide-react';
 import { useTickets, TicketProvider, TicketStatus } from '@/lib/ticket-context';
 import Link from 'next/link';
@@ -62,6 +62,9 @@ function PresidentDashboardContent() {
     // Temporary Candidate State for Election Form
     const [tempCandidateName, setTempCandidateName] = useState('');
     const [tempCandidateImage, setTempCandidateImage] = useState<string | undefined>(undefined);
+
+    // Image Viewer Logic
+    const [viewingImage, setViewingImage] = useState<string | null>(null);
 
     // Form States
     const [formData, setFormData] = useState<Record<string, any>>({});
@@ -618,10 +621,25 @@ function PresidentDashboardContent() {
                                                     <p className="text-gray-400 text-sm line-clamp-3">{ticket.description}</p>
 
                                                     {ticket.image && (
-                                                        <div className="mt-2">
-                                                            <a href={ticket.image} target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-xs text-yellow-500 hover:underline">
-                                                                <FileText className="w-3 h-3 mr-1" /> View Attachment
-                                                            </a>
+                                                        <div className="mt-3">
+                                                            <div
+                                                                className="relative h-32 w-48 rounded-lg overflow-hidden border border-white/10 cursor-pointer group bg-black/40"
+                                                                onClick={() => setViewingImage(ticket.image!)}
+                                                            >
+                                                                <img
+                                                                    src={ticket.image}
+                                                                    alt="Attachment"
+                                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                                />
+                                                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                                                                    <div className="bg-black/60 p-2 rounded-full backdrop-blur-sm">
+                                                                        <Eye className="w-5 h-5 text-white" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
+                                                                <FileText className="w-3 h-3" /> Click to view attachment
+                                                            </p>
                                                         </div>
                                                     )}
 
@@ -756,6 +774,28 @@ function PresidentDashboardContent() {
                 </Tabs>
 
                 {/* --- Modals --- */}
+
+                {/* Image Preview Modal */}
+                <GlassModal
+                    isOpen={!!viewingImage}
+                    onClose={() => setViewingImage(null)}
+                    title="Attachment Preview"
+                    footer={
+                        <Button onClick={() => setViewingImage(null)} className="bg-white text-black hover:bg-gray-200">
+                            Close
+                        </Button>
+                    }
+                >
+                    <div className="flex justify-center items-center bg-black/20 rounded-lg p-2 min-h-[200px]">
+                        {viewingImage && (
+                            <img
+                                src={viewingImage}
+                                alt="Full size attachment"
+                                className="max-w-full max-h-[70vh] object-contain rounded-md"
+                            />
+                        )}
+                    </div>
+                </GlassModal>
 
                 {/* Add Item Modal */}
                 <GlassModal
