@@ -17,20 +17,19 @@ export default function PresidentLoginPage() {
         e.preventDefault();
         setLoading(true);
 
-        // Simulate API call for President
-        setTimeout(() => {
-            // Verify credentials (mock)
-            if (email.includes('prez') || email.includes('alex')) {
-                localStorage.setItem('userRole', 'president');
-                localStorage.setItem('userName', 'President Alex');
-
+        // Server-Side Verification
+        import('@/app/actions/auth').then(async ({ universalLogin }) => {
+            const result = await universalLogin(email, password);
+            if (result.success && result.role) {
+                localStorage.setItem('userRole', result.role);
+                localStorage.setItem('userName', result.userName || 'User');
                 window.dispatchEvent(new Event('auth-change'));
-                router.push('/dashboard/president');
+                router.push(`/dashboard/${result.role}`);
             } else {
-                alert('Invalid Credentials. Access Denied.');
+                alert('Invalid Credentials');
                 setLoading(false);
             }
-        }, 1000);
+        });
     };
 
     return (

@@ -12,23 +12,34 @@ export default function LoginPage() {
     const router = useRouter();
     const [role] = useState('student');
     const [loading, setLoading] = useState(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
 
-        // Simulate API call
-        setTimeout(() => {
-            // Store mock token/role
-            localStorage.setItem('userRole', role);
-            localStorage.setItem('userName', 'Student Name'); // Mock user name
+        // Server-Side Universal Login Check
+        import('@/app/actions/auth').then(async ({ universalLogin }) => {
+            const result = await universalLogin(email, password); // Change local var 'role' to email from input if possible, but here we use state
 
-            // Notify other components about auth change
-            window.dispatchEvent(new Event('auth-change'));
-
-            router.push(`/dashboard/${role}`);
-            setLoading(false);
-        }, 1000);
+            if (result.success && result.role) {
+                // It's a special role (Admin/President/Council)
+                localStorage.setItem('userRole', result.role);
+                localStorage.setItem('userName', result.userName || 'User');
+                window.dispatchEvent(new Event('auth-change'));
+                router.push(`/dashboard/${result.role}`);
+            } else {
+                // Fallback to Student Login (Mock)
+                setTimeout(() => {
+                    localStorage.setItem('userRole', 'student');
+                    localStorage.setItem('userName', 'Student Name');
+                    window.dispatchEvent(new Event('auth-change'));
+                    router.push('/dashboard/student');
+                    setLoading(false);
+                }, 1000);
+            }
+        });
     };
 
     return (
@@ -52,6 +63,8 @@ export default function LoginPage() {
                                 <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                                 <input
                                     type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                     className="w-full bg-black/50 border border-white/10 rounded-md pl-10 pr-4 py-2 text-white focus:outline-none focus:border-yellow-500 transition-colors"
                                     placeholder="student@university.edu"
                                     required
@@ -65,6 +78,8 @@ export default function LoginPage() {
                                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                                 <input
                                     type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                     className="w-full bg-black/50 border border-white/10 rounded-md pl-10 pr-4 py-2 text-white focus:outline-none focus:border-yellow-500 transition-colors"
                                     placeholder="••••••••"
                                     required
@@ -89,17 +104,7 @@ export default function LoginPage() {
                     <p className="text-sm text-gray-400">
                         Don't have an account? <Link href="/signup" className="text-yellow-500 hover:underline">Sign up</Link>
                     </p>
-                    <div className="w-full text-center mt-4 pt-4 border-t border-white/10 flex justify-center gap-4">
-                        <Link href="/president/login" className="text-xs text-gray-500 hover:text-yellow-500 flex items-center gap-1 transition-colors">
-                            <Crown className="w-3 h-3" /> President
-                        </Link>
-                        <Link href="/council/login" className="text-xs text-gray-500 hover:text-blue-500 flex items-center gap-1 transition-colors">
-                            <User className="w-3 h-3" /> Council
-                        </Link>
-                        <Link href="/admin/login" className="text-xs text-gray-500 hover:text-red-500 flex items-center gap-1 transition-colors">
-                            <Shield className="w-3 h-3" /> Admin
-                        </Link>
-                    </div>
+
                 </CardFooter>
             </Card>
         </div>

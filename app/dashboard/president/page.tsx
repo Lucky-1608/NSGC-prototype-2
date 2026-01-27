@@ -33,6 +33,9 @@ function PresidentDashboardContent() {
         elections, setElections,
         achievements, setAchievements,
         users, setUsers,
+
+        polls, setPolls,
+        surveys, setSurveys,
         totalUsers
     } = useSharedData();
 
@@ -43,7 +46,7 @@ function PresidentDashboardContent() {
 
     // Add Modal State
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-    const [addModalType, setAddModalType] = useState<'announcement' | 'member' | 'club' | 'event' | 'election' | 'achievement' | 'user'>('announcement');
+    const [addModalType, setAddModalType] = useState<'announcement' | 'member' | 'club' | 'event' | 'election' | 'achievement' | 'user' | 'poll' | 'survey'>('announcement');
 
     // Delete Modal State
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -79,7 +82,7 @@ function PresidentDashboardContent() {
     }, [router]);
 
     // --- Helpers ---
-    const openAddModal = (type: 'announcement' | 'member' | 'club' | 'event' | 'election' | 'achievement' | 'user', data?: any) => {
+    const openAddModal = (type: 'announcement' | 'member' | 'club' | 'event' | 'election' | 'achievement' | 'user' | 'poll' | 'survey', data?: any) => {
         setAddModalType(type);
         setFormData(data || {}); // Reset form or load existing data
         setIsAddModalOpen(true);
@@ -183,6 +186,8 @@ function PresidentDashboardContent() {
             case 'election': setElections(prev => prev.filter(i => i.id !== id)); break;
             case 'achievement': setAchievements(prev => prev.filter(i => i.id !== id)); break;
             case 'user': setUsers(prev => prev.filter(i => i.id !== id)); break;
+            case 'poll': setPolls(prev => prev.filter(i => i.id !== id)); break;
+            case 'survey': setSurveys(prev => prev.filter(i => i.id !== id)); break;
         }
         setIsDeleteModalOpen(false);
         setItemToDelete(null);
@@ -229,6 +234,11 @@ function PresidentDashboardContent() {
                     }
                     return prev;
                 });
+            case 'poll':
+                setPolls(prev => updateState(prev, { ...newData, options: (newData as any).options || [], votes: 0, status: (newData as any).status || 'Active' }));
+                break;
+            case 'survey':
+                setSurveys(prev => updateState(prev, { ...newData, status: (newData as any).status || 'Active' }));
                 break;
         }
         setIsAddModalOpen(false);
@@ -314,6 +324,7 @@ function PresidentDashboardContent() {
                             <TabsTrigger value="achievements" className="data-[state=active]:bg-yellow-500 data-[state=active]:text-black"><Trophy className="w-4 h-4 mr-2" /> Achievements</TabsTrigger>
                             <TabsTrigger value="complaints" className="data-[state=active]:bg-yellow-500 data-[state=active]:text-black"><MessageSquare className="w-4 h-4 mr-2" /> Complaints</TabsTrigger>
                             <TabsTrigger value="students" className="data-[state=active]:bg-yellow-500 data-[state=active]:text-black"><Users className="w-4 h-4 mr-2" /> Students</TabsTrigger>
+                            <TabsTrigger value="polls" className="data-[state=active]:bg-yellow-500 data-[state=active]:text-black"><BarChart2 className="w-4 h-4 mr-2" /> Feedback & Polls</TabsTrigger>
                         </TabsList>
                     </div>
 
@@ -771,6 +782,64 @@ function PresidentDashboardContent() {
                             ))}
                         </div>
                     </TabsContent>
+
+                    {/* Feedback & Polls Content */}
+                    <TabsContent value="polls" className="space-y-6">
+                        {/* Polls Section */}
+                        <div className="space-y-4">
+                            <div className="flex justify-between items-center">
+                                <h2 className="text-2xl font-bold">Active Polls</h2>
+                                <Button onClick={() => openAddModal('poll')} className="bg-yellow-500 text-black hover:bg-yellow-400"><Plus className="w-4 h-4 mr-2" /> New Poll</Button>
+                            </div>
+                            <div className="grid gap-4">
+                                {polls.map((poll) => (
+                                    <Card key={poll.id} className="bg-white/5 border-white/10">
+                                        <CardContent className="p-6 flex justify-between items-center gap-4">
+                                            <div>
+                                                <div className="flex items-center gap-3">
+                                                    <h3 className="font-bold text-lg">{poll.question}</h3>
+                                                    <Badge className={poll.status === 'Active' ? 'bg-green-500/20 text-green-500' : 'bg-red-500/20 text-red-500'}>{poll.status}</Badge>
+                                                </div>
+                                                <p className="text-sm text-gray-400 mt-1">{poll.totalVotes} Votes • {poll.options.length} Options</p>
+                                            </div>
+                                            <div className="flex gap-2">
+                                                <Button variant="outline" size="sm" onClick={() => openAddModal('poll', poll)} className="border-white/20 text-gray-300 hover:text-white">Edit</Button>
+                                                <Button variant="ghost" size="icon" onClick={() => confirmDelete('poll', poll.id)} className="text-red-500 hover:bg-red-500/10"><Trash2 className="w-5 h-5" /></Button>
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Surveys Section */}
+                        <div className="space-y-4 pt-8 border-t border-white/10">
+                            <div className="flex justify-between items-center">
+                                <h2 className="text-2xl font-bold">Surveys</h2>
+                                <Button onClick={() => openAddModal('survey')} className="bg-yellow-500 text-black hover:bg-yellow-400"><Plus className="w-4 h-4 mr-2" /> New Survey</Button>
+                            </div>
+                            <div className="grid gap-4">
+                                {surveys.map((survey) => (
+                                    <Card key={survey.id} className="bg-white/5 border-white/10">
+                                        <CardContent className="p-6 flex justify-between items-center gap-4">
+                                            <div>
+                                                <div className="flex items-center gap-3">
+                                                    <h3 className="font-bold text-lg">{survey.title}</h3>
+                                                    <Badge className={survey.status === 'Active' ? 'bg-green-500/20 text-green-500' : 'bg-red-500/20 text-red-500'}>{survey.status}</Badge>
+                                                </div>
+                                                <p className="text-sm text-gray-400">{survey.description}</p>
+                                                <p className="text-xs text-gray-500 mt-1">{survey.time} to complete • {survey.questions} Questions</p>
+                                            </div>
+                                            <div className="flex gap-2">
+                                                <Button variant="outline" size="sm" onClick={() => openAddModal('survey', survey)} className="border-white/20 text-gray-300 hover:text-white">Edit</Button>
+                                                <Button variant="ghost" size="icon" onClick={() => confirmDelete('survey', survey.id)} className="text-red-500 hover:bg-red-500/10"><Trash2 className="w-5 h-5" /></Button>
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+                                ))}
+                            </div>
+                        </div>
+                    </TabsContent>
                 </Tabs>
 
                 {/* --- Modals --- */}
@@ -942,6 +1011,96 @@ function PresidentDashboardContent() {
                                     <select value={formData.status || 'Active'} onChange={e => setFormData({ ...formData, status: e.target.value })} className="w-full bg-black/50 border border-white/10 rounded-md p-2 text-white outline-none">
                                         <option value="Active">Active</option>
                                         <option value="Suspended">Suspended</option>
+                                    </select>
+                                </div>
+                            </>
+
+                        )}
+
+                        {addModalType === 'poll' && (
+                            <>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-300">Question</label>
+                                    <Input required value={formData.question || ''} onChange={e => setFormData({ ...formData, question: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-300">Status</label>
+                                    <select value={formData.status || 'Active'} onChange={e => setFormData({ ...formData, status: e.target.value })} className="w-full bg-black/50 border border-white/10 rounded-md p-2 text-white outline-none">
+                                        <option value="Active">Active</option>
+                                        <option value="Closed">Closed</option>
+                                    </select>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-300">Options</label>
+                                    <div className="space-y-2">
+                                        {(formData.options || []).map((opt: any, idx: number) => (
+                                            <div key={idx} className="flex gap-2">
+                                                <Input
+                                                    value={opt.text}
+                                                    onChange={(e) => {
+                                                        const newOpts = [...(formData.options || [])];
+                                                        newOpts[idx].text = e.target.value;
+                                                        setFormData({ ...formData, options: newOpts });
+                                                    }}
+                                                    className="bg-black/50 border-white/10 text-white"
+                                                />
+                                                <Button
+                                                    type="button"
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    onClick={() => {
+                                                        const newOpts = formData.options.filter((_: any, i: number) => i !== idx);
+                                                        setFormData({ ...formData, options: newOpts });
+                                                    }}
+                                                    className="text-red-500 hover:bg-red-500/10"
+                                                >
+                                                    <Trash2 className="w-4 h-4" />
+                                                </Button>
+                                            </div>
+                                        ))}
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => setFormData({ ...formData, options: [...(formData.options || []), { id: Math.random().toString(36).substr(2, 9), text: '', votes: 0 }] })}
+                                            className="border-white/10 text-gray-300 hover:text-white w-full"
+                                        >
+                                            <Plus className="w-4 h-4 mr-2" /> Add Option
+                                        </Button>
+                                    </div>
+                                </div>
+                            </>
+                        )}
+
+                        {addModalType === 'survey' && (
+                            <>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-300">Title</label>
+                                    <Input required value={formData.title || ''} onChange={e => setFormData({ ...formData, title: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-300">Description</label>
+                                    <Input required value={formData.description || ''} onChange={e => setFormData({ ...formData, description: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" />
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium text-gray-300">Est. Time</label>
+                                        <Input required value={formData.time || ''} onChange={e => setFormData({ ...formData, time: e.target.value })} className="bg-black/50 border-white/10 text-white" placeholder="e.g. 2 mins" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium text-gray-300">No. of Questions</label>
+                                        <Input type="number" required value={formData.questions || ''} onChange={e => setFormData({ ...formData, questions: parseInt(e.target.value) || 0 })} className="bg-black/50 border-white/10 text-white" />
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-300">External Link (Optional)</label>
+                                    <Input type="url" value={formData.link || ''} onChange={e => setFormData({ ...formData, link: e.target.value })} className="bg-black/50 border-white/10 text-white" placeholder="https://..." />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-300">Status</label>
+                                    <select value={formData.status || 'Active'} onChange={e => setFormData({ ...formData, status: e.target.value })} className="w-full bg-black/50 border border-white/10 rounded-md p-2 text-white outline-none">
+                                        <option value="Active">Active</option>
+                                        <option value="Closed">Closed</option>
                                     </select>
                                 </div>
                             </>
@@ -1363,7 +1522,7 @@ function PresidentDashboardContent() {
             {
                 croppingImage && (
                     <ImageCropper
-                        image={croppingImage}
+                        image={croppingImage!}
                         onCropComplete={handleCropComplete}
                         onCancel={() => setCroppingImage(null)}
                         aspectRatio={isCandidateCrop ? 1 : (addModalType === 'event' || addModalType === 'achievement') ? 16 / 9 : 1}

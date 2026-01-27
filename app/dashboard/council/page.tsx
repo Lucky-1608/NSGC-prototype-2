@@ -166,24 +166,7 @@ function CouncilDashboardContent() {
                         </CardHeader>
                         <CardContent>
                             <div className="space-y-4">
-                                {[
-                                    { title: 'Tech Summit 2025', date: 'June 10', status: 'Approved' },
-                                    { title: 'Cricket Tournament', date: 'June 15', status: 'Planning' },
-                                    { title: 'Leadership Workshop', date: 'June 20', status: 'Draft' },
-                                ].map((item, i) => (
-                                    <div key={i} className="flex items-center justify-between p-4 rounded-lg bg-black/40 border border-white/5">
-                                        <div className="flex items-center gap-3">
-                                            <Calendar className="w-5 h-5 text-gray-500" />
-                                            <div>
-                                                <h4 className="font-medium">{item.title}</h4>
-                                                <p className="text-xs text-gray-400">{item.date}</p>
-                                            </div>
-                                        </div>
-                                        <Badge variant="secondary" className="bg-white/10">
-                                            {item.status}
-                                        </Badge>
-                                    </div>
-                                ))}
+                                <p className="text-gray-500 text-center py-4">No upcoming events scheduled.</p>
                             </div>
                         </CardContent>
                     </Card>

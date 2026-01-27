@@ -76,6 +76,32 @@ export interface User {
     joinedDate: string;
 }
 
+export interface PollOption {
+    id: string;
+    text: string;
+    votes: number;
+}
+
+export interface Poll {
+    id: string; // Changed to string for consistency with UUIDs
+    question: string;
+    options: PollOption[];
+    totalVotes: number;
+    userVoted: boolean; // Note: In a real backend, this would be per-user. For local demo, it's global.
+    userChoice?: string;
+    status: 'Active' | 'Closed';
+}
+
+export interface Survey {
+    id: string;
+    title: string;
+    description: string;
+    questions: number; // Placeholder for now
+    time: string; // e.g. "2 mins"
+    link?: string; // Optional external link
+    status: 'Active' | 'Closed';
+}
+
 // Default Data (Empty)
 const DEFAULT_ANNOUNCEMENTS: Announcement[] = [];
 const DEFAULT_MEMBERS: CouncilMember[] = [];
@@ -83,13 +109,9 @@ const DEFAULT_CLUBS: Club[] = [];
 const DEFAULT_EVENTS: Event[] = [];
 const DEFAULT_ELECTIONS: Election[] = [];
 const DEFAULT_ACHIEVEMENTS: Achievement[] = [];
-const DEFAULT_USERS: User[] = [
-    { id: 'u1', firstName: 'John', lastName: 'Doe', email: 'john.doe@university.edu', status: 'Active', joinedDate: '2024-01-15' },
-    { id: 'u2', firstName: 'Jane', lastName: 'Smith', email: 'jane.smith@university.edu', status: 'Active', joinedDate: '2024-02-20' },
-    { id: 'u3', firstName: 'Mike', lastName: 'Johnson', email: 'mike.j@university.edu', status: 'Suspended', joinedDate: '2024-03-10' },
-    { id: 'u4', firstName: 'Sarah', lastName: 'Williams', email: 'sarah.w@university.edu', status: 'Active', joinedDate: '2024-04-05' },
-    { id: 'u5', firstName: 'David', lastName: 'Brown', email: 'david.b@university.edu', status: 'Active', joinedDate: '2024-05-12' },
-];
+const DEFAULT_USERS: User[] = [];
+const DEFAULT_POLLS: Poll[] = [];
+const DEFAULT_SURVEYS: Survey[] = [];
 
 export function useSharedData() {
     const [announcements, setAnnouncements] = useState<Announcement[]>([]);
@@ -99,6 +121,8 @@ export function useSharedData() {
     const [elections, setElections] = useState<Election[]>([]);
     const [achievements, setAchievements] = useState<Achievement[]>([]);
     const [users, setUsers] = useState<User[]>([]);
+    const [polls, setPolls] = useState<Poll[]>([]);
+    const [surveys, setSurveys] = useState<Survey[]>([]); // "Feedback" forms
     const [totalUsers, setTotalUsers] = useState(0);
     const [isLoaded, setIsLoaded] = useState(false);
 
@@ -128,6 +152,8 @@ export function useSharedData() {
         load('nsgc_elections', DEFAULT_ELECTIONS, setElections);
         load('nsgc_achievements', DEFAULT_ACHIEVEMENTS, setAchievements);
         load('nsgc_users', DEFAULT_USERS, setUsers);
+        load('nsgc_polls', DEFAULT_POLLS, setPolls);
+        load('nsgc_surveys', DEFAULT_SURVEYS, setSurveys);
 
         // Load Total Users count - Deprecated in favor of users.length but kept for backward compatibility if needed
         const storedUsersCount = localStorage.getItem('nsgc_users_count');
@@ -228,6 +254,24 @@ export function useSharedData() {
         });
     };
 
+    const updatePolls = (newData: Poll[] | ((prev: Poll[]) => Poll[])) => {
+        setPolls(prev => {
+            const updated = typeof newData === 'function' ? newData(prev) : newData;
+            localStorage.setItem('nsgc_polls', JSON.stringify(updated));
+            window.dispatchEvent(new Event('nsgc-data-update'));
+            return updated;
+        });
+    };
+
+    const updateSurveys = (newData: Survey[] | ((prev: Survey[]) => Survey[])) => {
+        setSurveys(prev => {
+            const updated = typeof newData === 'function' ? newData(prev) : newData;
+            localStorage.setItem('nsgc_surveys', JSON.stringify(updated));
+            window.dispatchEvent(new Event('nsgc-data-update'));
+            return updated;
+        });
+    };
+
     return {
         announcements, setAnnouncements: updateAnnouncements,
         members, setMembers: updateMembers,
@@ -236,6 +280,8 @@ export function useSharedData() {
         elections, setElections: updateElections,
         achievements, setAchievements: updateAchievements,
         users, setUsers: updateUsers,
+        polls, setPolls: updatePolls,
+        surveys, setSurveys: updateSurveys,
         isLoaded,
         totalUsers
     };

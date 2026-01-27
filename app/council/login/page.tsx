@@ -17,21 +17,19 @@ export default function CouncilLoginPage() {
         e.preventDefault();
         setLoading(true);
 
-        // Simulate API call for Council
-        setTimeout(() => {
-            // Verify credentials (mock)
-            // Accepts any email containing 'council' for demo purposes
-            if (email.toLowerCase().includes('council')) {
-                localStorage.setItem('userRole', 'council');
-                localStorage.setItem('userName', 'Council Member');
-
+        // Server-Side Verification
+        import('@/app/actions/auth').then(async ({ universalLogin }) => {
+            const result = await universalLogin(email, password);
+            if (result.success && result.role) {
+                localStorage.setItem('userRole', result.role);
+                localStorage.setItem('userName', result.userName || 'User');
                 window.dispatchEvent(new Event('auth-change'));
-                router.push('/dashboard/council');
+                router.push(`/dashboard/${result.role}`);
             } else {
-                alert('Invalid Credentials. Access Denied. (Hint: use an email with "council")');
+                alert('Invalid Credentials');
                 setLoading(false);
             }
-        }, 1000);
+        });
     };
 
     return (

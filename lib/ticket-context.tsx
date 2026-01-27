@@ -72,50 +72,8 @@ export const TicketProvider = ({ children }: { children: ReactNode }) => {
                 console.error('Failed to parse tickets', e);
             }
         } else {
-            // Add some dummy data for demo purposes
-            const dummyTickets: Ticket[] = [
-                {
-                    id: 'CMP-2025-001',
-                    studentName: 'Alice Johnson',
-                    email: 'alice@example.com',
-                    department: 'Hostel',
-                    type: 'Water Supply',
-                    subject: 'No water in Block A',
-                    description: 'No water in Block A 2nd floor since yesterday.',
-                    priority: 'High',
-                    status: 'In Progress',
-                    assignedTo: 'Warden Smith',
-                    createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
-                    updatedAt: new Date(Date.now() - 3600000).toISOString(),
-                    timeline: [
-                        { status: 'Received', date: new Date(Date.now() - 86400000 * 2).toLocaleString(), completed: true, description: 'Ticket created' },
-                        { status: 'In Review', date: new Date(Date.now() - 86400000).toLocaleString(), completed: true, description: 'Reviewed by admin' },
-                        { status: 'In Progress', date: new Date(Date.now() - 3600000).toLocaleString(), completed: true, description: 'Maintenance team dispatched' },
-                    ],
-                    votes: 5,
-                    votedBy: ['bob@example.com', 'charlie@example.com', 'david@example.com', 'eve@example.com', 'frank@example.com']
-                },
-                {
-                    id: 'CMP-2025-002',
-                    studentName: 'Bob Williams',
-                    email: 'bob@example.com',
-                    department: 'Academic',
-                    type: 'Grade Correction',
-                    subject: 'Math 101 Grade Issue',
-                    description: 'My Math 101 grade is incorrect on the portal.',
-                    priority: 'Medium',
-                    status: 'Pending',
-                    assignedTo: null,
-                    createdAt: new Date(Date.now() - 43200000).toISOString(),
-                    updatedAt: new Date(Date.now() - 43200000).toISOString(),
-                    timeline: [
-                        { status: 'Received', date: new Date(Date.now() - 43200000).toLocaleString(), completed: true, description: 'Ticket created' },
-                    ],
-                    votes: 0,
-                    votedBy: []
-                }
-            ];
-            setTickets(dummyTickets);
+            // Start with empty/default state instead of dummy data
+            setTickets([]);
         }
         setIsLoaded(true);
     }, []);

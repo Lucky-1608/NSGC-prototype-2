@@ -17,22 +17,19 @@ export default function AdminLoginPage() {
         e.preventDefault();
         setLoading(true);
 
-        // Simulate API call for Admin
-        setTimeout(() => {
-            // In a real app, verify credentials here
-            if (email.includes('admin')) {
-                localStorage.setItem('userRole', 'admin');
-                localStorage.setItem('userName', 'Administrator');
-
-                // Notify other components about auth change
+        // Server-Side Verification
+        import('@/app/actions/auth').then(async ({ universalLogin }) => {
+            const result = await universalLogin(email, password);
+            if (result.success && result.role) {
+                localStorage.setItem('userRole', result.role);
+                localStorage.setItem('userName', result.userName || 'User');
                 window.dispatchEvent(new Event('auth-change'));
-
-                router.push('/dashboard/admin');
+                router.push(`/dashboard/${result.role}`);
             } else {
-                alert('Invalid Admin Credentials. Try using an email with "admin".');
+                alert('Invalid Credentials');
                 setLoading(false);
             }
-        }, 1000);
+        });
     };
 
     return (
