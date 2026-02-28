@@ -22,13 +22,8 @@ export default function AdminDashboard() {
     const [isAuthorized, setIsAuthorized] = useState(false);
     const [lockdownMode, setLockdownMode] = useState(false);
 
-    // Initial Mock Data
-    const [users, setUsers] = useState<User[]>([
-        { id: '1', name: 'Alex Rivera', email: 'alex.r@nsgc.edu', role: 'President', status: 'Active' },
-        { id: '2', name: 'Sarah Chen', email: 'sarah.c@nsgc.edu', role: 'Vice President', status: 'Active' },
-        { id: '3', name: 'John Doe', email: 'john.d@student.edu', role: 'Student', status: 'Active' },
-        { id: '4', name: 'Jane Smith', email: 'jane.s@student.edu', role: 'Student', status: 'Suspended' },
-    ]);
+    // Initial Data
+    const [users, setUsers] = useState<User[]>([]);
 
     // Modal State
     const [isModalOpen, setIsModalOpen] = useState(false);

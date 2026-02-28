@@ -10,6 +10,7 @@ export interface Announcement {
     date: string;
     priority: 'Low' | 'Medium' | 'High';
     category: 'General' | 'Academic' | 'Event' | 'Emergency';
+    link?: string; // Optional external link
 }
 
 export interface CouncilMember {
@@ -145,15 +146,16 @@ export function useSharedData() {
             }
         };
 
-        load('nsgc_announcements', DEFAULT_ANNOUNCEMENTS, setAnnouncements);
-        load('nsgc_members', DEFAULT_MEMBERS, setMembers);
-        load('nsgc_clubs', DEFAULT_CLUBS, setClubs);
-        load('nsgc_events', DEFAULT_EVENTS, setEvents);
-        load('nsgc_elections', DEFAULT_ELECTIONS, setElections);
-        load('nsgc_achievements', DEFAULT_ACHIEVEMENTS, setAchievements);
-        load('nsgc_users', DEFAULT_USERS, setUsers);
-        load('nsgc_polls', DEFAULT_POLLS, setPolls);
-        load('nsgc_surveys', DEFAULT_SURVEYS, setSurveys);
+        load('nsgc_v3_announcements', DEFAULT_ANNOUNCEMENTS, setAnnouncements);
+        load('nsgc_v3_members', DEFAULT_MEMBERS, setMembers);
+        load('nsgc_v3_clubs', DEFAULT_CLUBS, setClubs);
+        load('nsgc_v3_events', DEFAULT_EVENTS, setEvents);
+        load('nsgc_v3_elections', DEFAULT_ELECTIONS, setElections);
+        load('nsgc_v3_achievements', DEFAULT_ACHIEVEMENTS, setAchievements);
+        load('nsgc_v3_users', DEFAULT_USERS, setUsers);
+        load('nsgc_v3_totalUsers', 1250, setTotalUsers); // Might want to change this to actual count later
+        load('nsgc_v3_polls', DEFAULT_POLLS, setPolls);
+        load('nsgc_v3_surveys', DEFAULT_SURVEYS, setSurveys);
 
         // Load Total Users count - Deprecated in favor of users.length but kept for backward compatibility if needed
         const storedUsersCount = localStorage.getItem('nsgc_users_count');

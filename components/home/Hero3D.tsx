@@ -7,40 +7,71 @@ import { CyberSolarSystem } from '@/components/solar/CyberSolarSystem';
 
 export function Hero3D() {
     return (
-        <section className="relative w-full h-[100vh] flex items-center justify-center overflow-hidden bg-black">
-            {/* 3D Solar System Scene */}
+        <section className="relative w-full h-[100vh] flex items-center justify-center overflow-hidden bg-transparent perspective-1000">
+            {/* 3D Solar System Scene - DO NOT TOUCH */}
             <div className="absolute inset-0 z-0">
                 <CyberSolarSystem />
             </div>
 
-            {/* Overlay Content - Positioned to not block the sun too much */}
-            <div className="relative z-10 container mx-auto px-4 text-center pointer-events-none mt-40">
+            {/* Background floating grid / lines already set in layout */}
+
+            {/* Ambient Corner Data */}
+            <div className="absolute top-32 left-8 md:left-24 text-blue-500/60 font-mono text-[10px] uppercase tracking-widest pointer-events-none hidden md:flex flex-col gap-1 z-10 animate-pulse-slow">
+                <motion.div initial={{ opacity: 0, y: 20, rotateX: 45 }} animate={{ opacity: 1, y: 0, rotateX: 0 }} transition={{ delay: 0.8, duration: 1 }}>STATUS: AWAKE</motion.div>
+                <motion.div initial={{ opacity: 0, y: 20, rotateX: 45 }} animate={{ opacity: 1, y: 0, rotateX: 0 }} transition={{ delay: 0.88, duration: 1 }}>SYSTEM: NEXUS_UI v.ZERO-G</motion.div>
+                <motion.div initial={{ opacity: 0, y: 20, rotateX: 45 }} animate={{ opacity: 1, y: 0, rotateX: 0 }} transition={{ delay: 0.96, duration: 1 }}>GRAVITY: 0.00G</motion.div>
+                <motion.div initial={{ opacity: 0, y: 20, rotateX: 45 }} animate={{ opacity: 1, y: 0, rotateX: 0 }} transition={{ delay: 1.04, duration: 1 }}>ORBIT: STABLE</motion.div>
+            </div>
+
+            {/* Launch Console - Center Low */}
+            <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-20 w-full max-w-2xl px-4 flex flex-col items-center">
+
+                {/* Orbital Rings around console */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[300%] border border-blue-500/10 rounded-[50%] animate-[spin_10s_linear_infinite] pointer-events-none z-0" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[250%] border-t border-b border-blue-500/5 rounded-[50%] animate-[spin_15s_linear_infinite_reverse] pointer-events-none z-0" />
+
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 1, dely: 0.5, ease: "easeOut" }}
-                    className="pointer-events-auto inline-block p-8 rounded-2xl"
+                    initial={{ opacity: 0, y: 100, rotateX: 30 }}
+                    animate={{ opacity: 1, y: 0, rotateX: 0 }}
+                    transition={{ duration: 1.2, delay: 0.5, ease: "easeOut" }}
+                    className="w-full flex flex-col items-center gap-6 glass-panel p-6 sm:p-8 relative z-10 animate-float-1"
                 >
-                    <h2 className="text-blue-400 font-bold tracking-[0.3em] uppercase mb-4 text-sm md:text-base drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]">
-                        System Online // V.2.0.25
-                    </h2>
-                    <h1 className="text-6xl md:text-8xl lg:text-9xl font-black text-white tracking-tighter mb-6 leading-tight mix-blend-overlay opacity-90">
-                        NSGC <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 drop-shadow-[0_0_20px_rgba(59,130,246,0.8)]">
-                            NEXUS
-                        </span>
+                    {/* Console Tag */}
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-black px-4 text-[10px] font-mono text-blue-500 tracking-[0.3em] uppercase border border-blue-500/30">
+                        [ COMMAND UPLINK ]
+                    </div>
+
+                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-black text-white tracking-[0.2em] text-center uppercase mix-blend-overlay opacity-90 drop-shadow-[0_0_20px_rgba(59,130,246,0.3)] mb-2 mt-4">
+                        NSGC <span className="text-transparent border-b-2 border-b-blue-500/50 bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-blue-700">NEXUS</span>
                     </h1>
 
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-10">
+                    <div className="w-full flex flex-col sm:flex-row items-stretch gap-4">
+                        <div className="flex-1 relative w-full group">
+                            {/* Terminal Brackets */}
+                            <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-blue-500/70" />
+                            <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-blue-500/70" />
+                            <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-blue-500/70" />
+                            <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-blue-500/70" />
+
+                            <input
+                                type="text"
+                                placeholder="AWAITING INITIALIZATION..."
+                                className="w-full h-full min-h-[48px] bg-black/50 border border-blue-500/10 px-4 font-mono text-sm text-blue-400 focus:outline-none placeholder:text-blue-500/20 shadow-[inset_0_0_15px_rgba(59,130,246,0.05)] uppercase"
+                                readOnly
+                            />
+                            {/* Blinking Block Cursor */}
+                            <div className="absolute top-1/2 -translate-y-1/2 left-[240px] w-2 h-5 bg-blue-500 animate-pulse-slow pointer-events-none hidden sm:block" />
+                        </div>
+
                         <Button
                             size="lg"
-                            className="bg-blue-600/20 backdrop-blur-md border border-blue-500/50 text-blue-100 hover:bg-blue-600/40 w-full sm:w-auto text-lg h-14 px-10 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(37,99,235,0.4)]"
+                            className="w-full sm:w-auto mt-0 py-6"
                             onClick={() => {
                                 document.getElementById('meet-president')?.scrollIntoView({ behavior: 'smooth' });
                             }}
                         >
-                            Initialize Sequence
-                            <ArrowRight className="ml-2 w-5 h-5" />
+                            <span className="mr-2 tracking-widest">TRANSMIT</span>
+                            <ArrowRight className="w-4 h-4 ml-2" />
                         </Button>
                     </div>
                 </motion.div>
@@ -48,12 +79,12 @@ export function Hero3D() {
 
             {/* Scroll Indicator */}
             <motion.div
-                className="absolute bottom-10 left-1/2 -translate-x-1/2 text-blue-500/50 pointer-events-none"
-                animate={{ y: [0, 10, 0], opacity: [0.5, 1, 0.5] }}
-                transition={{ repeat: Infinity, duration: 2 }}
+                className="absolute bottom-6 right-8 text-blue-500/50 pointer-events-none z-10 glass-panel p-2 flex flex-col items-center hidden md:flex"
+                animate={{ y: [0, 10, 0] }}
+                transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
             >
-                <div className="text-[10px] uppercase tracking-widest mb-2 text-center">Scroll to Scan</div>
-                <ChevronDown className="w-6 h-6 mx-auto" />
+                <div className="text-[9px] uppercase font-mono tracking-widest mb-1 [-webkit-writing-mode:vertical-rl] rotate-180">DESCEND</div>
+                <ChevronDown className="w-4 h-4" />
             </motion.div>
         </section>
     );

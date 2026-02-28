@@ -10,11 +10,11 @@ const Card = React.forwardRef<
     <motion.div
         ref={ref}
         className={cn(
-            "rounded-lg border border-white/10 bg-black/50 text-white shadow-sm backdrop-blur-md",
+            "glass-panel text-white relative group overflow-hidden",
             className
         )}
-        whileHover={{ y: -5, boxShadow: "0 10px 30px -10px rgba(255, 255, 255, 0.1)" }}
-        transition={{ duration: 0.2 }}
+        whileHover={{ y: -6, boxShadow: "0 15px 35px -10px rgba(0, 0, 0, 0.9), 0 0 25px rgba(59, 130, 246, 0.2)" }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
         {...props as any}
     />
 ))

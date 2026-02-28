@@ -9,11 +9,28 @@ import Link from 'next/link';
 import SpotlightCard from '@/components/ui/spotlight-card';
 import { useTickets, TicketProvider } from '@/lib/ticket-context';
 import { useSharedData } from '@/hooks/useSharedData';
+import { useCouncil, CouncilProvider } from '@/lib/council-context';
 
 function StudentDashboardContent() {
     const { tickets } = useTickets();
-    const { announcements, events, clubs, members, isLoaded } = useSharedData();
+    const { announcements: sharedAnnouncements, events: sharedEvents, clubs, members, isLoaded } = useSharedData();
+    const { announcements: councilAnnouncements, events: councilEvents } = useCouncil();
+
     const myTickets = tickets.slice(0, 3); // Just show the recent 3 for dashboard overview
+
+    // Merge and sort Announcements (newest first)
+    const allAnnouncements = ([...sharedAnnouncements, ...councilAnnouncements] as any[]).sort((a, b) => {
+        const dateA = new Date(a.createdAt || a.date).getTime();
+        const dateB = new Date(b.createdAt || b.date).getTime();
+        return dateB - dateA;
+    });
+
+    // Merge and sort Events (upcoming first)
+    const allEvents = [...sharedEvents, ...councilEvents].sort((a, b) => {
+        const dateA = new Date(a.date).getTime();
+        const dateB = new Date(b.date).getTime();
+        return dateA - dateB;
+    });
 
     if (!isLoaded) {
         return <div className="min-h-screen bg-black text-white pt-10 pb-20 flex items-center justify-center">Loading...</div>;
@@ -85,14 +102,14 @@ function StudentDashboardContent() {
                             </CardHeader>
                             <CardContent>
                                 <div className="space-y-4">
-                                    {announcements.length > 0 ? (
-                                        announcements.map((item) => (
+                                    {allAnnouncements.length > 0 ? (
+                                        allAnnouncements.map((item) => (
                                             <div key={item.id} className="flex gap-4 items-start p-3 rounded-lg bg-black/20">
                                                 <div className={`mt-1 w-2 h-2 rounded-full flex-shrink-0 ${item.priority === 'High' ? 'bg-red-500' : 'bg-blue-500'}`} />
                                                 <div className="flex-1">
                                                     <div className="flex justify-between items-start">
                                                         <h4 className="text-sm font-bold text-white mb-1">{item.title}</h4>
-                                                        <span className="text-[10px] text-gray-500 bg-white/5 px-2 py-0.5 rounded">{item.date}</span>
+                                                        <span className="text-[10px] text-gray-500 bg-white/5 px-2 py-0.5 rounded">{(item as any).date || new Date((item as any).createdAt).toLocaleDateString()}</span>
                                                     </div>
                                                     <p className="text-sm text-gray-400 leading-relaxed">{item.content}</p>
                                                 </div>
@@ -136,7 +153,7 @@ function StudentDashboardContent() {
 
                         {/* 2. Upcoming Events (Synced) */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {events.slice(0, 4).map((event) => (
+                            {allEvents.slice(0, 4).map((event) => (
                                 <SpotlightCard key={event.id} className="bg-white/5 border-white/10 group">
                                     <div className="p-5 flex flex-col gap-3">
                                         <div className="flex justify-between items-start">
@@ -262,7 +279,9 @@ function StudentDashboardContent() {
 export default function StudentDashboard() {
     return (
         <TicketProvider>
-            <StudentDashboardContent />
+            <CouncilProvider>
+                <StudentDashboardContent />
+            </CouncilProvider>
         </TicketProvider>
     );
 }

@@ -43,6 +43,7 @@ function PresidentDashboardContent() {
 
     // UI States
     const [activeTab, setActiveTab] = useState('announcements');
+    const [selectedTicket, setSelectedTicket] = useState<any>(null); // For viewing full complaint details
 
     // Add Modal State
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -348,6 +349,13 @@ function PresidentDashboardContent() {
                                             <p className="text-xs text-gray-500">Posted: {item.date}</p>
                                         </div>
                                         <div className="flex flex-col gap-2">
+                                            {item.link && (
+                                                <a href={item.link.startsWith('http') ? item.link : `https://${item.link}`} target="_blank" rel="noopener noreferrer">
+                                                    <Button variant="outline" size="sm" className="w-full border-yellow-500/20 text-yellow-500 hover:bg-yellow-500/10 hover:text-yellow-400 mb-2 md:mb-0">
+                                                        <ExternalLink className="w-4 h-4 mr-2" /> View Link
+                                                    </Button>
+                                                </a>
+                                            )}
                                             <Button variant="outline" size="sm" onClick={() => openAddModal('announcement', item)} className="border-white/20 text-gray-300 hover:text-white mb-2 md:mb-0">
                                                 Edit
                                             </Button>
@@ -603,117 +611,131 @@ function PresidentDashboardContent() {
                                 <p className="text-gray-500 italic">No complaints found.</p>
                             ) : (
                                 tickets.map((ticket) => (
-                                    <Card key={ticket.id} className="bg-white/5 border-white/10 hover:border-yellow-500/30 transition-all">
-                                        <CardContent className="p-6">
-                                            <div className="flex flex-col md:flex-row justify-between gap-6">
-                                                <div className="flex-1 space-y-3">
-                                                    <div className="flex items-start justify-between">
-                                                        <div>
-                                                            <div className="flex items-center gap-2 mb-1">
-                                                                <span className="font-mono text-xs text-gray-500">{ticket.id}</span>
-                                                                <Badge className={`${ticket.priority === 'High' ? 'bg-red-500/20 text-red-500' :
-                                                                    ticket.priority === 'Medium' ? 'bg-yellow-500/20 text-yellow-500' :
-                                                                        'bg-blue-500/20 text-blue-500'
-                                                                    }`}>
-                                                                    {ticket.priority}
-                                                                </Badge>
-                                                                <span className="text-xs text-gray-500 flex items-center gap-1">
-                                                                    <ThumbsUp className="w-3 h-3 text-yellow-500" />
-                                                                    {ticket.votes || 0} Votes
-                                                                </span>
-                                                                <Badge variant="outline" className="border-white/20 text-gray-400">
-                                                                    {ticket.department}
-                                                                </Badge>
+                                    <div key={ticket.id} onClick={() => setSelectedTicket(ticket)} className="cursor-pointer">
+                                        <Card className="bg-white/5 border-white/10 hover:border-yellow-500/30 transition-all">
+                                            <CardContent className="p-6">
+                                                <div className="flex flex-col md:flex-row justify-between gap-6">
+                                                    <div className="flex-1 space-y-3">
+                                                        <div className="flex items-start justify-between">
+                                                            <div>
+                                                                <div className="flex items-center gap-2 mb-1">
+                                                                    <span className="font-mono text-xs text-gray-500">{ticket.id}</span>
+                                                                    <Badge className={`${ticket.priority === 'High' ? 'bg-red-500/20 text-red-500' :
+                                                                        ticket.priority === 'Medium' ? 'bg-yellow-500/20 text-yellow-500' :
+                                                                            'bg-blue-500/20 text-blue-500'
+                                                                        }`}>
+                                                                        {ticket.priority}
+                                                                    </Badge>
+                                                                    <span className="text-xs text-gray-500 flex items-center gap-1">
+                                                                        <ThumbsUp className="w-3 h-3 text-yellow-500" />
+                                                                        {ticket.votes || 0} Votes
+                                                                    </span>
+                                                                    <Badge variant="outline" className="border-white/20 text-gray-400">
+                                                                        {ticket.department}
+                                                                    </Badge>
+                                                                </div>
+                                                                <h3 className="text-lg font-bold text-white">{ticket.subject}</h3>
                                                             </div>
-                                                            <h3 className="text-lg font-bold text-white">{ticket.subject}</h3>
                                                         </div>
-                                                    </div>
 
-                                                    <p className="text-gray-400 text-sm line-clamp-3">{ticket.description}</p>
+                                                        <p className="text-gray-400 text-sm line-clamp-3">{ticket.description}</p>
 
-                                                    {ticket.image && (
-                                                        <div className="mt-3">
-                                                            <div
-                                                                className="relative h-32 w-48 rounded-lg overflow-hidden border border-white/10 cursor-pointer group bg-black/40"
-                                                                onClick={() => setViewingImage(ticket.image!)}
-                                                            >
-                                                                <img
-                                                                    src={ticket.image}
-                                                                    alt="Attachment"
-                                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                                                />
-                                                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                                                                    <div className="bg-black/60 p-2 rounded-full backdrop-blur-sm">
-                                                                        <Eye className="w-5 h-5 text-white" />
+                                                        {ticket.image && (
+                                                            <div className="mt-3">
+                                                                <div
+                                                                    className="relative h-32 w-48 rounded-lg overflow-hidden border border-white/10 cursor-pointer group bg-black/40"
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        setViewingImage(ticket.image!);
+                                                                    }}
+                                                                >
+                                                                    <img
+                                                                        src={ticket.image}
+                                                                        alt="Attachment"
+                                                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                                    />
+                                                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                                                                        <div className="bg-black/60 p-2 rounded-full backdrop-blur-sm">
+                                                                            <Eye className="w-5 h-5 text-white" />
+                                                                        </div>
                                                                     </div>
                                                                 </div>
+                                                                <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
+                                                                    <FileText className="w-3 h-3" /> Click to view attachment
+                                                                </p>
                                                             </div>
-                                                            <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
-                                                                <FileText className="w-3 h-3" /> Click to view attachment
-                                                            </p>
-                                                        </div>
-                                                    )}
+                                                        )}
 
-                                                    <div className="flex items-center gap-4 text-xs text-gray-500 pt-2 border-t border-white/5">
-                                                        <div className="flex items-center gap-1">
-                                                            <Users className="w-3 h-3" />
-                                                            {ticket.studentName}
+                                                        <div className="flex items-center gap-4 text-xs text-gray-500 pt-2 border-t border-white/5">
+                                                            <div className="flex items-center gap-1">
+                                                                <Users className="w-3 h-3" />
+                                                                {ticket.studentName}
+                                                            </div>
+                                                            <div className="flex items-center gap-1">
+                                                                <Calendar className="w-3 h-3" />
+                                                                {new Date(ticket.createdAt).toLocaleDateString()}
+                                                            </div>
                                                         </div>
-                                                        <div className="flex items-center gap-1">
-                                                            <Calendar className="w-3 h-3" />
-                                                            {new Date(ticket.createdAt).toLocaleDateString()}
+                                                    </div>
+
+                                                    <div className="flex flex-col gap-3 min-w-[200px]">
+                                                        <div className="p-3 bg-black/40 rounded-lg border border-white/5">
+                                                            <span className="text-xs text-gray-500 block mb-2">Current Status</span>
+                                                            <Badge className={`w-full justify-center py-1 mb-3 ${ticket.status === 'Completed' ? 'bg-green-500 text-black' :
+                                                                ticket.status === 'In Progress' ? 'bg-blue-500 text-white' :
+                                                                    ticket.status === 'In Review' ? 'bg-purple-500 text-white' :
+                                                                        'bg-yellow-500 text-black'
+                                                                }`}>
+                                                                {ticket.status}
+                                                            </Badge>
+
+                                                            <div className="grid grid-cols-2 gap-2">
+                                                                {ticket.status !== 'In Progress' && ticket.status !== 'Completed' && (
+                                                                    <Button
+                                                                        size="sm"
+                                                                        variant="outline"
+                                                                        className="h-8 text-xs border-blue-500/50 text-blue-500 hover:bg-blue-500/10"
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation();
+                                                                            updateTicketStatus(ticket.id, 'In Progress');
+                                                                        }}
+                                                                    >
+                                                                        Start
+                                                                    </Button>
+                                                                )}
+                                                                {ticket.status !== 'Completed' && (
+                                                                    <Button
+                                                                        size="sm"
+                                                                        variant="outline"
+                                                                        className="h-8 text-xs border-green-500/50 text-green-500 hover:bg-green-500/10"
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation();
+                                                                            updateTicketStatus(ticket.id, 'Completed');
+                                                                        }}
+                                                                    >
+                                                                        Resolve
+                                                                    </Button>
+                                                                )}
+                                                                {ticket.status === 'Completed' && (
+                                                                    <Button
+                                                                        size="sm"
+                                                                        variant="outline"
+                                                                        className="h-8 text-xs border-yellow-500/50 text-yellow-500 hover:bg-yellow-500/10 col-span-2"
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation();
+                                                                            updateTicketStatus(ticket.id, 'In Progress', 'Reopened by President');
+                                                                        }}
+                                                                    >
+                                                                        Reopen
+                                                                    </Button>
+                                                                )}
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-
-                                                <div className="flex flex-col gap-3 min-w-[200px]">
-                                                    <div className="p-3 bg-black/40 rounded-lg border border-white/5">
-                                                        <span className="text-xs text-gray-500 block mb-2">Current Status</span>
-                                                        <Badge className={`w-full justify-center py-1 mb-3 ${ticket.status === 'Completed' ? 'bg-green-500 text-black' :
-                                                            ticket.status === 'In Progress' ? 'bg-blue-500 text-white' :
-                                                                ticket.status === 'In Review' ? 'bg-purple-500 text-white' :
-                                                                    'bg-yellow-500 text-black'
-                                                            }`}>
-                                                            {ticket.status}
-                                                        </Badge>
-
-                                                        <div className="grid grid-cols-2 gap-2">
-                                                            {ticket.status !== 'In Progress' && ticket.status !== 'Completed' && (
-                                                                <Button
-                                                                    size="sm"
-                                                                    variant="outline"
-                                                                    className="h-8 text-xs border-blue-500/50 text-blue-500 hover:bg-blue-500/10"
-                                                                    onClick={() => updateTicketStatus(ticket.id, 'In Progress')}
-                                                                >
-                                                                    Start
-                                                                </Button>
-                                                            )}
-                                                            {ticket.status !== 'Completed' && (
-                                                                <Button
-                                                                    size="sm"
-                                                                    variant="outline"
-                                                                    className="h-8 text-xs border-green-500/50 text-green-500 hover:bg-green-500/10"
-                                                                    onClick={() => updateTicketStatus(ticket.id, 'Completed')}
-                                                                >
-                                                                    Resolve
-                                                                </Button>
-                                                            )}
-                                                            {ticket.status === 'Completed' && (
-                                                                <Button
-                                                                    size="sm"
-                                                                    variant="outline"
-                                                                    className="h-8 text-xs border-yellow-500/50 text-yellow-500 hover:bg-yellow-500/10 col-span-2"
-                                                                    onClick={() => updateTicketStatus(ticket.id, 'In Progress', 'Reopened by President')}
-                                                                >
-                                                                    Reopen
-                                                                </Button>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </CardContent>
-                                    </Card>
+                                            </CardContent>
+                                        </Card>
+                                    </div>
                                 ))
                             )}
                         </div>
@@ -907,6 +929,10 @@ function PresidentDashboardContent() {
                                         <option value="Medium">Medium</option>
                                         <option value="High">High</option>
                                     </select>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-300">Link (Optional)</label>
+                                    <Input value={formData.link || ''} onChange={e => setFormData({ ...formData, link: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50 transition-colors" placeholder="e.g. https://example.com" />
                                 </div>
                             </>
                         )}
@@ -1519,6 +1545,96 @@ function PresidentDashboardContent() {
                 </GlassModal>
 
             </div>
+
+            {/* View Complaint Details Modal */}
+            <GlassModal
+                isOpen={!!selectedTicket}
+                onClose={() => setSelectedTicket(null)}
+                title="Complaint Details"
+                className="max-w-2xl"
+                footer={
+                    <>
+                        <Button variant="outline" onClick={() => setSelectedTicket(null)} className="border-white/20 hover:bg-white/10 hover:text-white">Close</Button>
+                        {selectedTicket?.status !== 'In Progress' && selectedTicket?.status !== 'Completed' && (
+                            <Button
+                                onClick={() => {
+                                    updateTicketStatus(selectedTicket.id, 'In Progress');
+                                    setSelectedTicket(null);
+                                }}
+                                className="bg-blue-600 text-white hover:bg-blue-700 font-bold border-none"
+                            >
+                                Start Progress
+                            </Button>
+                        )}
+                        {selectedTicket?.status !== 'Completed' && (
+                            <Button
+                                onClick={() => {
+                                    updateTicketStatus(selectedTicket.id, 'Completed');
+                                    setSelectedTicket(null);
+                                }}
+                                className="bg-green-600 text-white hover:bg-green-700 font-bold border-none"
+                            >
+                                Mark Resolved
+                            </Button>
+                        )}
+                    </>
+                }
+            >
+                {selectedTicket && (
+                    <div className="space-y-6 text-sm">
+                        <div className="flex flex-col md:flex-row justify-between gap-4 pb-4 border-b border-white/10">
+                            <div>
+                                <div className="text-gray-500 font-mono text-xs mb-1">Ticket ID: {selectedTicket.id}</div>
+                                <h3 className="text-xl font-bold text-white mb-2">{selectedTicket.subject}</h3>
+                                <div className="flex flex-wrap items-center gap-2">
+                                    <Badge className={`${selectedTicket.status === 'Completed' ? 'bg-green-500/20 text-green-500' :
+                                        selectedTicket.status === 'In Progress' ? 'bg-blue-500/20 text-blue-500' :
+                                            selectedTicket.status === 'In Review' ? 'bg-purple-500/20 text-purple-500' :
+                                                'bg-yellow-500/20 text-yellow-500'
+                                        }`}>
+                                        {selectedTicket.status}
+                                    </Badge>
+                                    <Badge className={`${selectedTicket.priority === 'High' ? 'bg-red-500/20 text-red-500' :
+                                        selectedTicket.priority === 'Medium' ? 'bg-yellow-500/20 text-yellow-500' :
+                                            'bg-blue-500/20 text-blue-500'
+                                        }`}>
+                                        Priority: {selectedTicket.priority}
+                                    </Badge>
+                                    <Badge variant="outline" className="border-white/20 text-gray-300">
+                                        Dept: {selectedTicket.department}
+                                    </Badge>
+                                </div>
+                            </div>
+                            <div className="text-right text-sm text-gray-400">
+                                <p className="mb-1"><span className="text-gray-500">From:</span> {selectedTicket.studentName}</p>
+                                <p><span className="text-gray-500">Date:</span> {new Date(selectedTicket.createdAt).toLocaleString()}</p>
+                                <div className="flex items-center justify-end gap-1 mt-2 text-yellow-500">
+                                    <ThumbsUp className="w-4 h-4" />
+                                    <span>{selectedTicket.votes || 0} Votes</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 className="font-semibold text-gray-300 mb-2">Description</h4>
+                            <div className="bg-black/30 p-4 rounded-lg border border-white/5 text-gray-300 whitespace-pre-wrap leading-relaxed">
+                                {selectedTicket.description}
+                            </div>
+                        </div>
+
+                        {selectedTicket.image && (
+                            <div>
+                                <h4 className="font-semibold text-gray-300 mb-2">Attached Image</h4>
+                                <div className="rounded-lg overflow-hidden border border-white/10 bg-black/40">
+                                    {/* Use a regular img tag inside the modal for simplicity, allowing it to scale naturally */}
+                                    <img src={selectedTicket.image} alt="Ticket Attachment" className="max-w-full h-auto max-h-[400px] object-contain mx-auto" />
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )}
+            </GlassModal>
+
             {
                 croppingImage && (
                     <ImageCropper

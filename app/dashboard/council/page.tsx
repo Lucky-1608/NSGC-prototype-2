@@ -1,17 +1,46 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Megaphone, Calendar, CheckCircle, XCircle, AlertCircle, LogOut, ThumbsUp } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { GlassModal } from '@/components/ui/glass-modal';
+import {
+    Megaphone, Calendar, CheckCircle, XCircle, AlertTriangle, LogOut, ThumbsUp, Plus, Trash2, Star, Menu, MessageSquare, FileText, Users, Eye, ExternalLink, Camera, Upload, X
+} from 'lucide-react';
 import { useTickets, TicketProvider } from '@/lib/ticket-context';
+import { useCouncil, CouncilProvider } from '@/lib/council-context';
+import Link from 'next/link';
+import { Announcement } from '@/hooks/useSharedData';
 
 function CouncilDashboardContent() {
     const router = useRouter();
     const [isAuthorized, setIsAuthorized] = useState(false);
+
+    // Contexts
     const { tickets, updateTicketStatus } = useTickets();
+    const { announcements, events, addAnnouncement, addEvent } = useCouncil();
+    // UI States
+    const [activeTab, setActiveTab] = useState('announcements');
+    const [selectedTicket, setSelectedTicket] = useState<any>(null); // For viewing full complaint details
+    const [viewingImage, setViewingImage] = useState<string | null>(null); // For standalone image views
+
+    // Modal States
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [addModalType, setAddModalType] = useState<'announcement' | 'event'>('announcement');
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [itemToDelete, setItemToDelete] = useState<{ type: string, id: string } | null>(null);
+    // Camera & Image State for Forms
+    const [isCameraOpen, setIsCameraOpen] = useState(false);
+    const videoRef = useRef<HTMLVideoElement>(null);
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const streamRef = useRef<MediaStream | null>(null);
+
+    const [formData, setFormData] = useState<Record<string, any>>({});
 
     useEffect(() => {
         const role = localStorage.getItem('userRole');
@@ -27,26 +56,127 @@ function CouncilDashboardContent() {
     }
 
     const pendingCount = tickets.filter(t => t.status === 'Pending').length;
+    const inProgressCount = tickets.filter(t => t.status === 'In Progress').length;
+
+    // Handlers
+    const openAddModal = (type: 'announcement' | 'event', data?: any) => {
+        setAddModalType(type);
+        setFormData(data || {});
+        setIsAddModalOpen(true);
+    };
+
+    const confirmDelete = (type: string, id: string) => {
+        setItemToDelete({ type, id });
+        setIsDeleteModalOpen(true);
+    };
+
+    const executeDelete = () => {
+        // Implement delete logic within context when available, for now just close modal
+        setIsDeleteModalOpen(false);
+        setItemToDelete(null);
+        alert(`Deletion for ${itemToDelete?.type} with id ${itemToDelete?.id} would happen here`);
+    };
+
+    // Camera Handlers
+    const startCamera = async () => {
+        setIsCameraOpen(true);
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            streamRef.current = stream;
+            if (videoRef.current) {
+                videoRef.current.srcObject = stream;
+            }
+        } catch (err) {
+            console.error("Error accessing camera:", err);
+            setIsCameraOpen(false);
+            alert("Could not access camera. Please check permissions.");
+        }
+    };
+
+    const stopCamera = () => {
+        if (streamRef.current) {
+            streamRef.current.getTracks().forEach(track => track.stop());
+            streamRef.current = null;
+        }
+        setIsCameraOpen(false);
+    };
+
+    const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            if (file.size > 5 * 1024 * 1024) {
+                alert("File size > 5MB");
+                return;
+            }
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setFormData(prev => ({ ...prev, image: reader.result as string }));
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const capturePhoto = () => {
+        if (videoRef.current && canvasRef.current) {
+            const context = canvasRef.current.getContext('2d');
+            if (context) {
+                canvasRef.current.width = videoRef.current.videoWidth;
+                canvasRef.current.height = videoRef.current.videoHeight;
+                context.drawImage(videoRef.current, 0, 0);
+                const imageData = canvasRef.current.toDataURL('image/jpeg');
+                setFormData(prev => ({ ...prev, image: imageData }));
+                stopCamera();
+            }
+        }
+    };
+
+    const removePhoto = () => {
+        setFormData(prev => {
+            const newData = { ...prev };
+            delete newData.image;
+            return newData;
+        });
+    };
+
+    const handleSave = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (addModalType === 'announcement') {
+            addAnnouncement(formData.title || 'Untitled', formData.content || '', 'Council User', formData.link, formData.category, formData.priority);
+        } else if (addModalType === 'event') {
+            addEvent(
+                formData.name || 'Untitled',
+                formData.date || new Date().toISOString().split('T')[0],
+                formData.location || 'TBA',
+                formData.type || 'Social',
+                formData.registrationLink,
+                formData.image
+            );
+        }
+        setIsAddModalOpen(false);
+    };
 
     return (
         <div className="min-h-screen bg-black text-white pt-10 pb-20">
             <div className="container mx-auto px-4">
 
-                <div className="flex justify-between items-center mb-12">
+                {/* Header */}
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-12 relative">
                     <div>
-                        <h1 className="text-3xl md:text-4xl font-bold mb-2">Council Dashboard</h1>
-                        <p className="text-gray-400">Manage announcements, events, and complaints.</p>
+                        <div className="flex items-center gap-3 mb-2">
+                            <h1 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-600">
+                                Council Dashboard
+                            </h1>
+                            <Badge className="bg-blue-500/20 text-blue-500 border-blue-500/50">Authorized</Badge>
+                        </div>
+                        <p className="text-gray-400">Manage announcements, events, and student complaints.</p>
                     </div>
-                    <div className="flex gap-4">
-                        <Button className="bg-blue-600 text-white hover:bg-blue-500">
-                            + New Announcement
-                        </Button>
+                    <div className="flex items-center gap-3">
                         <Button
                             variant="ghost"
                             className="text-gray-400 hover:text-white"
                             onClick={() => {
                                 localStorage.removeItem('userRole');
-                                router.push('/council/login');
+                                router.push('/login');
                             }}
                         >
                             <LogOut className="w-4 h-4 mr-2" /> Sign Out
@@ -55,11 +185,11 @@ function CouncilDashboardContent() {
                 </div>
 
                 {/* Stats */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                     {[
                         { label: 'Pending Complaints', value: pendingCount.toString(), color: 'text-red-500' },
-                        { label: 'Active Events', value: '3', color: 'text-blue-500' },
-                        { label: 'Total Announcements', value: '24', color: 'text-yellow-500' },
+                        { label: 'Active Events', value: events.length.toString(), color: 'text-blue-500' },
+                        { label: 'Total Announcements', value: announcements.length.toString(), color: 'text-yellow-500' },
                         { label: 'Feedback Responses', value: '150+', color: 'text-green-500' },
                     ].map((stat) => (
                         <Card key={stat.label} className="bg-white/5 border-white/10">
@@ -71,107 +201,530 @@ function CouncilDashboardContent() {
                     ))}
                 </div>
 
-                {/* Management Sections */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Tabs */}
+                <Tabs defaultValue="announcements" value={activeTab} onValueChange={setActiveTab} className="space-y-8">
+                    <div className="overflow-x-auto pb-2">
+                        <TabsList className="bg-white/5 border border-white/10 p-1">
+                            <TabsTrigger value="announcements" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white"><Megaphone className="w-4 h-4 mr-2" /> Announcements</TabsTrigger>
+                            <TabsTrigger value="events" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white"><Calendar className="w-4 h-4 mr-2" /> Events</TabsTrigger>
+                            <TabsTrigger value="complaints" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white"><MessageSquare className="w-4 h-4 mr-2" /> Complaints</TabsTrigger>
+                        </TabsList>
+                    </div>
 
-                    {/* Complaints Review */}
-                    <Card className="bg-white/5 border-white/10">
-                        <CardHeader className="flex flex-row items-center justify-between">
-                            <CardTitle>Complaints Review</CardTitle>
-                            <Badge variant="outline" className="text-red-500 border-red-500">{pendingCount} Pending</Badge>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2">
-                                {tickets.length === 0 ? (
-                                    <p className="text-gray-500 text-center py-4">No complaints found.</p>
-                                ) : (
-                                    tickets.map((item) => (
-                                        <div key={item.id} className="flex items-center justify-between p-4 rounded-lg bg-black/40 border border-white/5 hover:border-white/10 transition-colors">
-                                            <div className="flex-1 mr-4">
-                                                <div className="flex items-center gap-2 mb-1">
-                                                    <h4 className="font-medium truncate">{item.subject}</h4>
-                                                    <Badge variant="secondary" className="text-xs scale-90">{item.status}</Badge>
-                                                </div>
-                                                <div className="flex items-center gap-3 text-xs text-gray-400">
-                                                    <span>{item.id}</span>
-                                                    <span>•</span>
-                                                    <span>{item.department}</span>
-                                                    <span>•</span>
-                                                    <span className="flex items-center gap-1 text-yellow-500">
-                                                        <ThumbsUp className="w-3 h-3" /> {item.votes || 0}
-                                                    </span>
-                                                </div>
+                    {/* Announcements Content */}
+                    <TabsContent value="announcements" className="space-y-6">
+                        <div className="flex justify-between items-center">
+                            <h2 className="text-2xl font-bold">Public Announcements</h2>
+                            <Button onClick={() => openAddModal('announcement')} className="bg-blue-600 text-white hover:bg-blue-500"><Plus className="w-4 h-4 mr-2" /> New Announcement</Button>
+                        </div>
+                        <div className="grid gap-4">
+                            {announcements.map((item) => (
+                                <Card key={item.id} className="bg-white/5 border-white/10 hover:border-blue-500/50 transition-colors">
+                                    <div className="p-6 flex flex-col md:flex-row justify-between gap-4">
+                                        <div>
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <h3 className="text-xl font-bold">{item.title}</h3>
+                                                <Badge variant="outline" className={item.priority === 'High' ? 'text-red-500 border-red-500' : 'text-blue-500 border-blue-500'}>{item.priority || 'Low'}</Badge>
+                                                <Badge variant="secondary" className="bg-white/10 text-gray-300">{item.category || 'General'}</Badge>
                                             </div>
-                                            <div className="flex gap-2">
-                                                {item.status !== 'Completed' && (
-                                                    <Button
-                                                        size="icon"
-                                                        variant="ghost"
-                                                        onClick={() => updateTicketStatus(item.id, 'Completed')}
-                                                        className="h-8 w-8 text-green-500 hover:bg-green-500/20"
-                                                        title="Mark Resolved"
-                                                    >
-                                                        <CheckCircle className="w-4 h-4" />
+                                            <p className="text-gray-400 mb-2">{item.content}</p>
+                                            <p className="text-xs text-gray-500">Posted: {new Date(item.createdAt).toLocaleDateString()}</p>
+                                        </div>
+                                        <div className="flex flex-col gap-2">
+                                            {item.link && (
+                                                <a href={item.link.startsWith('http') ? item.link : `https://${item.link}`} target="_blank" rel="noopener noreferrer">
+                                                    <Button variant="outline" size="sm" className="w-full border-blue-500/20 text-blue-500 hover:bg-blue-500/10 hover:text-blue-400 mb-2 md:mb-0">
+                                                        <ExternalLink className="w-4 h-4 mr-2" /> View Link
                                                     </Button>
-                                                )}
-                                                {item.status !== 'Rejected' && (
-                                                    <Button
-                                                        size="icon"
-                                                        variant="ghost"
-                                                        onClick={() => updateTicketStatus(item.id, 'Rejected')}
-                                                        className="h-8 w-8 text-red-500 hover:bg-red-500/20"
-                                                        title="Reject"
-                                                    >
-                                                        <XCircle className="w-4 h-4" />
-                                                    </Button>
-                                                )}
+                                                </a>
+                                            )}
+                                            <Button variant="outline" size="sm" onClick={() => openAddModal('announcement', item)} className="border-white/20 text-gray-300 hover:text-white mb-2 md:mb-0">
+                                                Edit
+                                            </Button>
+                                            <Button variant="ghost" size="icon" onClick={() => confirmDelete('announcement', item.id)} className="text-red-500 hover:bg-red-500/10 hover:text-red-400 self-start md:self-center bg-black/20">
+                                                <Trash2 className="w-5 h-5" />
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </Card>
+                            ))}
+                            {announcements.length === 0 && <p className="text-gray-500 italic">No active announcements.</p>}
+                        </div>
+                    </TabsContent>
+
+                    {/* Events Content */}
+                    <TabsContent value="events" className="space-y-6">
+                        <div className="flex justify-between items-center">
+                            <h2 className="text-2xl font-bold">Upcoming Events</h2>
+                            <Button onClick={() => openAddModal('event')} className="bg-blue-600 text-white hover:bg-blue-500"><Plus className="w-4 h-4 mr-2" /> Create Event</Button>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {events.map((event) => (
+                                <Card key={event.id} className="bg-white/5 border-white/10 group relative overflow-hidden">
+                                    {event.image ? (
+                                        <div className="h-32 w-full relative">
+                                            <img src={event.image} alt={event.name} className="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity" />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent" />
+                                            <div className="absolute bottom-4 left-4 right-4">
+                                                <div className="flex justify-between items-start mb-2">
+                                                    <h3 className="font-bold text-lg">{event.name}</h3>
+                                                    <Badge className="bg-purple-500/20 text-purple-500 whitespace-nowrap">{event.type}</Badge>
+                                                </div>
                                             </div>
                                         </div>
-                                    ))
-                                )}
-                            </div>
-                            <div className="mt-4 pt-4 border-t border-white/5 text-center">
-                                <Button variant="link" className="text-blue-400 hover:text-blue-300">View All Complaints</Button>
-                            </div>
-                        </CardContent>
-                    </Card>
+                                    ) : (
+                                        <div className="p-6 pb-2">
+                                            <div className="flex justify-between items-start mb-4">
+                                                <h3 className="font-bold text-lg">{event.name}</h3>
+                                                <Badge className="bg-purple-500/20 text-purple-500">{event.type}</Badge>
+                                            </div>
+                                        </div>
+                                    )}
 
-                    {/* Announcement Creator (Placeholder) */}
-                    <Card className="bg-white/5 border-white/10">
-                        <CardHeader>
-                            <CardTitle>Quick Announcement</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="space-y-4">
+                                    <CardContent className="p-6 pt-4">
+                                        <div className="flex justify-between items-start mb-4">
+                                            <Badge variant="outline" className="border-white/20 text-blue-400">{event.type || 'Social Event'}</Badge>
+                                            <div className="flex items-center gap-1 -mt-2 -mr-2 ml-auto z-10 relative">
+                                                <Button variant="ghost" size="sm" onClick={() => openAddModal('event', event)} className="text-gray-300 hover:text-white h-8 px-2">
+                                                    Edit
+                                                </Button>
+                                                <Button variant="ghost" size="icon" onClick={() => confirmDelete('event', event.id)} className="text-red-500 hover:bg-red-500/10 h-8 w-8">
+                                                    <Trash2 className="w-4 h-4" />
+                                                </Button>
+                                            </div>
+                                        </div>
+                                        <h3 className="text-xl font-bold mb-2">{event.name}</h3>
+                                        <div className="flex items-center gap-2 text-sm text-gray-400">
+                                            <Calendar className="w-4 h-4" />
+                                            <span>{new Date(event.date).toLocaleDateString()}</span>
+                                        </div>
+                                        <div className="flex items-center gap-2 text-sm text-gray-400 mt-1">
+                                            <Star className="w-4 h-4" />
+                                            <span>{event.location}</span>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            ))}
+                            {events.length === 0 && <p className="text-gray-500 italic">No active events.</p>}
+                        </div>
+                    </TabsContent>
+
+                    {/* Complaints Content */}
+                    <TabsContent value="complaints" className="space-y-6">
+                        <div className="flex justify-between items-center">
+                            <h2 className="text-2xl font-bold">Student Complaints Review</h2>
+                            <div className="flex gap-2">
+                                <Badge variant="outline" className="border-red-500 text-red-500">
+                                    {pendingCount} Pending
+                                </Badge>
+                                <Badge variant="outline" className="border-blue-500 text-blue-500">
+                                    {inProgressCount} In Progress
+                                </Badge>
+                            </div>
+                        </div>
+                        <div className="grid gap-4">
+                            {tickets.length === 0 ? (
+                                <p className="text-gray-500 italic">No complaints found.</p>
+                            ) : (
+                                tickets.map((ticket) => (
+                                    <div key={ticket.id} onClick={() => setSelectedTicket(ticket)} className="cursor-pointer">
+                                        <Card className="bg-white/5 border-white/10 hover:border-blue-500/30 transition-all">
+                                            <CardContent className="p-6">
+                                                <div className="flex flex-col md:flex-row justify-between gap-6">
+                                                    <div className="flex-1 space-y-3">
+                                                        <div className="flex items-start justify-between">
+                                                            <div>
+                                                                <div className="flex items-center gap-2 mb-1">
+                                                                    <span className="font-mono text-xs text-gray-500">{ticket.id}</span>
+                                                                    <Badge className={`${ticket.priority === 'High' ? 'bg-red-500/20 text-red-500' :
+                                                                        ticket.priority === 'Medium' ? 'bg-yellow-500/20 text-yellow-500' :
+                                                                            'bg-blue-500/20 text-blue-500'
+                                                                        }`}>
+                                                                        {ticket.priority}
+                                                                    </Badge>
+                                                                    <span className="text-xs text-gray-500 flex items-center gap-1">
+                                                                        <ThumbsUp className="w-3 h-3 text-blue-500" />
+                                                                        {ticket.votes || 0} Votes
+                                                                    </span>
+                                                                    <Badge variant="outline" className="border-white/20 text-gray-400">
+                                                                        {ticket.department}
+                                                                    </Badge>
+                                                                </div>
+                                                                <h3 className="text-lg font-bold text-white">{ticket.subject}</h3>
+                                                            </div>
+                                                        </div>
+
+                                                        <p className="text-gray-400 text-sm line-clamp-3">{ticket.description}</p>
+
+                                                        {ticket.image && (
+                                                            <div className="mt-3">
+                                                                <div
+                                                                    className="relative h-32 w-48 rounded-lg overflow-hidden border border-white/10 cursor-pointer group bg-black/40"
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        setViewingImage(ticket.image!);
+                                                                    }}
+                                                                >
+                                                                    <img
+                                                                        src={ticket.image}
+                                                                        alt="Attachment"
+                                                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                                    />
+                                                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                                                                        <div className="bg-black/60 p-2 rounded-full backdrop-blur-sm">
+                                                                            <Eye className="w-5 h-5 text-white" />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
+                                                                    <FileText className="w-3 h-3" /> Click to view attachment
+                                                                </p>
+                                                            </div>
+                                                        )}
+
+                                                        <div className="flex items-center gap-4 text-xs text-gray-500 pt-2 border-t border-white/5">
+                                                            <div className="flex items-center gap-1">
+                                                                <Users className="w-3 h-3" />
+                                                                {ticket.studentName}
+                                                            </div>
+                                                            <div className="flex items-center gap-1">
+                                                                <Calendar className="w-3 h-3" />
+                                                                {new Date(ticket.createdAt).toLocaleDateString()}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="flex flex-col gap-3 min-w-[200px]">
+                                                        <div className="p-3 bg-black/40 rounded-lg border border-white/5">
+                                                            <span className="text-xs text-gray-500 block mb-2">Current Status</span>
+                                                            <Badge className={`w-full justify-center py-1 mb-3 ${ticket.status === 'Completed' ? 'bg-green-500 text-black' :
+                                                                ticket.status === 'In Progress' ? 'bg-blue-500 text-white' :
+                                                                    ticket.status === 'Rejected' ? 'bg-red-500 text-white' :
+                                                                        'bg-yellow-500 text-black'
+                                                                }`}>
+                                                                {ticket.status}
+                                                            </Badge>
+
+                                                            <div className="grid grid-cols-2 gap-2">
+                                                                {ticket.status !== 'In Progress' && ticket.status !== 'Completed' && ticket.status !== 'Rejected' && (
+                                                                    <Button
+                                                                        size="sm"
+                                                                        variant="outline"
+                                                                        className="h-8 text-xs border-blue-500/50 text-blue-500 hover:bg-blue-500/10"
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation();
+                                                                            updateTicketStatus(ticket.id, 'In Progress');
+                                                                        }}
+                                                                    >
+                                                                        Start
+                                                                    </Button>
+                                                                )}
+                                                                {ticket.status !== 'Completed' && ticket.status !== 'Rejected' && (
+                                                                    <Button
+                                                                        size="sm"
+                                                                        variant="outline"
+                                                                        className="h-8 text-xs border-green-500/50 text-green-500 hover:bg-green-500/10"
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation();
+                                                                            updateTicketStatus(ticket.id, 'Completed');
+                                                                        }}
+                                                                    >
+                                                                        Resolve
+                                                                    </Button>
+                                                                )}
+                                                                {ticket.status !== 'Rejected' && ticket.status !== 'Completed' && (
+                                                                    <Button
+                                                                        size="sm"
+                                                                        variant="outline"
+                                                                        className="h-8 text-xs border-red-500/50 text-red-500 hover:bg-red-500/10 col-span-2"
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation();
+                                                                            updateTicketStatus(ticket.id, 'Rejected', 'Rejected by Council');
+                                                                        }}
+                                                                    >
+                                                                        Reject
+                                                                    </Button>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </CardContent>
+                                        </Card>
+                                    </div>
+                                ))
+                            )}
+                        </div>
+                    </TabsContent>
+                </Tabs>
+
+                {/* Add/Edit Modal */}
+                <GlassModal
+                    isOpen={isAddModalOpen}
+                    onClose={() => setIsAddModalOpen(false)}
+                    title={formData.id ? `Edit ${addModalType}` : `New ${addModalType}`}
+                    footer={
+                        <>
+                            <Button variant="outline" onClick={() => setIsAddModalOpen(false)} className="border-white/20 hover:bg-white/10 hover:text-white">Cancel</Button>
+                            <Button onClick={handleSave} className="bg-blue-600 text-white hover:bg-blue-700 font-bold border-none">
+                                Save Details
+                            </Button>
+                        </>
+                    }
+                >
+                    <form className="space-y-4" onSubmit={handleSave}>
+                        {addModalType === 'announcement' && (
+                            <>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Title</label>
-                                    <input className="w-full bg-black/50 border border-white/10 rounded-md p-2 text-white" placeholder="Announcement Title" />
+                                    <Input required value={formData.title || ''} onChange={e => setFormData({ ...formData, title: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-blue-500/50" />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Content</label>
-                                    <textarea className="w-full bg-black/50 border border-white/10 rounded-md p-2 text-white h-24" placeholder="Type your message..." />
+                                    <Textarea required value={formData.content || ''} onChange={e => setFormData({ ...formData, content: e.target.value })} className="bg-black/50 border-white/10 text-white min-h-[100px] focus:border-blue-500/50" />
                                 </div>
-                                <Button className="w-full bg-blue-600 hover:bg-blue-500">
-                                    <Megaphone className="w-4 h-4 mr-2" /> Post Announcement
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-300">Category</label>
+                                    <select value={formData.category || 'General'} onChange={e => setFormData({ ...formData, category: e.target.value })} className="w-full bg-black/50 border border-white/10 rounded-md p-2 text-white focus:border-blue-500/50 outline-none">
+                                        <option value="General">General</option>
+                                        <option value="Academic">Academic</option>
+                                        <option value="Event">Event</option>
+                                        <option value="Emergency">Emergency</option>
+                                    </select>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-300">Priority</label>
+                                    <select value={formData.priority || 'Low'} onChange={e => setFormData({ ...formData, priority: e.target.value })} className="w-full bg-black/50 border border-white/10 rounded-md p-2 text-white focus:border-blue-500/50 outline-none">
+                                        <option value="Low">Low</option>
+                                        <option value="Medium">Medium</option>
+                                        <option value="High">High</option>
+                                    </select>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-300">Link (Optional)</label>
+                                    <Input value={formData.link || ''} onChange={e => setFormData({ ...formData, link: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-blue-500/50" placeholder="e.g. https://example.com" />
+                                </div>
+                            </>
+                        )}
+
+                        {addModalType === 'event' && (
+                            <>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-300">Event Name</label>
+                                    <Input required value={formData.name || ''} onChange={e => setFormData({ ...formData, name: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-300">Date</label>
+                                    <Input required type="date" value={formData.date || ''} onChange={e => setFormData({ ...formData, date: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" style={{ colorScheme: 'dark' }} />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-300">Location</label>
+                                    <Input required value={formData.location || ''} onChange={e => setFormData({ ...formData, location: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-300">Event Type</label>
+                                    <select value={formData.type || 'Social'} onChange={e => setFormData({ ...formData, type: e.target.value })} className="w-full bg-black/50 border border-white/10 rounded-md p-2 text-white focus:border-yellow-500/50 outline-none">
+                                        <option value="Academic">Academic</option>
+                                        <option value="Social">Social</option>
+                                        <option value="Sports">Sports</option>
+                                    </select>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-300">Registration Link (Optional)</label>
+                                    <Input type="url" placeholder="https://forms.gle/..." value={formData.registrationLink || ''} onChange={e => setFormData({ ...formData, registrationLink: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" />
+                                </div>
+
+                                {/* Photo Upload Section */}
+                                <div className="space-y-4 pt-2 border-t border-white/10">
+                                    <label className="text-sm font-medium text-gray-300">Event Photo (Optional)</label>
+
+                                    {!isCameraOpen && !formData.image && (
+                                        <div className="flex gap-4">
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                onClick={() => document.getElementById('event-file-upload')?.click()}
+                                                className="border-white/10 hover:bg-white/5 bg-black/50"
+                                            >
+                                                <input
+                                                    id="event-file-upload"
+                                                    type="file"
+                                                    accept="image/*"
+                                                    className="hidden"
+                                                    onChange={handleFileUpload}
+                                                />
+                                                <Upload className="w-4 h-4 mr-2" /> Upload Photo
+                                            </Button>
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                onClick={startCamera}
+                                                className="border-white/10 hover:bg-white/5 bg-black/50"
+                                            >
+                                                <Camera className="w-4 h-4 mr-2" /> Use Camera
+                                            </Button>
+                                        </div>
+                                    )}
+
+                                    {isCameraOpen && (
+                                        <div className="relative bg-black border border-white/10 rounded-lg overflow-hidden max-w-md mx-auto">
+                                            <video ref={videoRef} autoPlay playsInline className="w-full h-auto" />
+                                            <canvas ref={canvasRef} className="hidden" />
+                                            <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-4">
+                                                <Button type="button" onClick={capturePhoto} className="bg-yellow-500 text-black hover:bg-yellow-400">
+                                                    <Camera className="w-4 h-4 mr-2" /> Capture
+                                                </Button>
+                                                <Button type="button" onClick={stopCamera} variant="destructive" className="bg-red-500 hover:bg-red-600">
+                                                    <X className="w-4 h-4" />
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {formData.image && (
+                                        <div className="relative inline-block w-full">
+                                            <img src={formData.image} alt="Event Preview" className="h-32 w-full rounded-lg border border-yellow-500/50 object-cover" />
+                                            <button
+                                                type="button"
+                                                onClick={removePhoto}
+                                                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 shadow-lg"
+                                            >
+                                                <X className="w-3 h-3" />
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            </>
+                        )}
+                    </form>
+                </GlassModal>
+
+                {/* Delete Confirmation Modal */}
+                <GlassModal
+                    isOpen={isDeleteModalOpen}
+                    onClose={() => setIsDeleteModalOpen(false)}
+                    title="Confirm Deletion"
+                    variant="danger"
+                    footer={
+                        <>
+                            <Button variant="outline" onClick={() => setIsDeleteModalOpen(false)} className="border-white/20 hover:bg-white/10 hover:text-white">Cancel</Button>
+                            <Button onClick={executeDelete} className="bg-red-600 text-white hover:bg-red-700 font-bold border-none">
+                                <Trash2 className="w-4 h-4 mr-2" /> Delete
+                            </Button>
+                        </>
+                    }
+                >
+                    <div className="flex items-start gap-4">
+                        <div className="p-3 bg-red-500/10 rounded-full text-red-500">
+                            <AlertTriangle className="w-6 h-6" />
+                        </div>
+                        <div>
+                            <p className="text-lg font-medium text-white mb-2">Are you sure?</p>
+                            <p className="text-gray-400">
+                                This action cannot be undone. This item will be permanently removed.
+                            </p>
+                        </div>
+                    </div>
+                </GlassModal>
+
+                {/* View Complaint Details Modal */}
+                <GlassModal
+                    isOpen={!!selectedTicket}
+                    onClose={() => setSelectedTicket(null)}
+                    title="Complaint Details"
+                    className="max-w-2xl"
+                    footer={
+                        <>
+                            <Button variant="outline" onClick={() => setSelectedTicket(null)} className="border-white/20 hover:bg-white/10 hover:text-white">Close</Button>
+                            {selectedTicket?.status !== 'In Progress' && selectedTicket?.status !== 'Completed' && selectedTicket?.status !== 'Rejected' && (
+                                <Button
+                                    onClick={() => {
+                                        updateTicketStatus(selectedTicket.id, 'In Progress');
+                                        setSelectedTicket(null);
+                                    }}
+                                    className="bg-blue-600 text-white hover:bg-blue-700 font-bold border-none"
+                                >
+                                    Start Progress
                                 </Button>
+                            )}
+                            {selectedTicket?.status !== 'Completed' && selectedTicket?.status !== 'Rejected' && (
+                                <Button
+                                    onClick={() => {
+                                        updateTicketStatus(selectedTicket.id, 'Completed');
+                                        setSelectedTicket(null);
+                                    }}
+                                    className="bg-green-600 text-white hover:bg-green-700 font-bold border-none"
+                                >
+                                    Mark Resolved
+                                </Button>
+                            )}
+                            {selectedTicket?.status !== 'Rejected' && selectedTicket?.status !== 'Completed' && (
+                                <Button
+                                    onClick={() => {
+                                        updateTicketStatus(selectedTicket.id, 'Rejected', 'Rejected by Council');
+                                        setSelectedTicket(null);
+                                    }}
+                                    className="bg-red-600 text-white hover:bg-red-700 font-bold border-none"
+                                >
+                                    Reject Complaint
+                                </Button>
+                            )}
+                        </>
+                    }
+                >
+                    {selectedTicket && (
+                        <div className="space-y-6 text-sm">
+                            <div className="flex flex-col md:flex-row justify-between gap-4 pb-4 border-b border-white/10">
+                                <div>
+                                    <div className="text-gray-500 font-mono text-xs mb-1">Ticket ID: {selectedTicket.id}</div>
+                                    <h3 className="text-xl font-bold text-white mb-2">{selectedTicket.subject}</h3>
+                                    <div className="flex items-center gap-2">
+                                        <Badge className={`${selectedTicket.status === 'Completed' ? 'bg-green-500/20 text-green-500' :
+                                            selectedTicket.status === 'In Progress' ? 'bg-blue-500/20 text-blue-500' :
+                                                selectedTicket.status === 'Rejected' ? 'bg-red-500/20 text-red-500' :
+                                                    'bg-yellow-500/20 text-yellow-500'
+                                            }`}>
+                                            {selectedTicket.status}
+                                        </Badge>
+                                        <Badge className={`${selectedTicket.priority === 'High' ? 'bg-red-500/20 text-red-500' :
+                                            selectedTicket.priority === 'Medium' ? 'bg-yellow-500/20 text-yellow-500' :
+                                                'bg-blue-500/20 text-blue-500'
+                                            }`}>
+                                            Priority: {selectedTicket.priority}
+                                        </Badge>
+                                        <Badge variant="outline" className="border-white/20 text-gray-300">
+                                            Dept: {selectedTicket.department}
+                                        </Badge>
+                                    </div>
+                                </div>
+                                <div className="text-right text-sm text-gray-400">
+                                    <p className="mb-1"><span className="text-gray-500">From:</span> {selectedTicket.studentName}</p>
+                                    <p><span className="text-gray-500">Date:</span> {new Date(selectedTicket.createdAt).toLocaleString()}</p>
+                                    <div className="flex items-center justify-end gap-1 mt-2 text-blue-500">
+                                        <ThumbsUp className="w-4 h-4" />
+                                        <span>{selectedTicket.votes || 0} Votes</span>
+                                    </div>
+                                </div>
                             </div>
-                        </CardContent>
-                    </Card>
 
-                    {/* Upcoming Events Management */}
-                    <Card className="bg-white/5 border-white/10">
-                        <CardHeader className="flex flex-row items-center justify-between">
-                            <CardTitle>Upcoming Events</CardTitle>
-                            <Button variant="link" className="text-yellow-500">View All</Button>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="space-y-4">
-                                <p className="text-gray-500 text-center py-4">No upcoming events scheduled.</p>
+                            <div>
+                                <h4 className="font-semibold text-gray-300 mb-2">Description</h4>
+                                <div className="bg-black/30 p-4 rounded-lg border border-white/5 text-gray-300 whitespace-pre-wrap leading-relaxed">
+                                    {selectedTicket.description}
+                                </div>
                             </div>
-                        </CardContent>
-                    </Card>
 
-                </div>
+                            {selectedTicket.image && (
+                                <div>
+                                    <h4 className="font-semibold text-gray-300 mb-2">Attached Image</h4>
+                                    <div className="rounded-lg overflow-hidden border border-white/10 bg-black/40">
+                                        <img src={selectedTicket.image} alt="Ticket Attachment" className="max-w-full h-auto max-h-[400px] object-contain mx-auto" />
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </GlassModal>
 
             </div>
         </div>
@@ -181,7 +734,9 @@ function CouncilDashboardContent() {
 export default function CouncilDashboard() {
     return (
         <TicketProvider>
-            <CouncilDashboardContent />
+            <CouncilProvider>
+                <CouncilDashboardContent />
+            </CouncilProvider>
         </TicketProvider>
     );
 }

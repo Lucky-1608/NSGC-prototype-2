@@ -56,7 +56,7 @@ export const useTickets = () => {
     return context;
 };
 
-const STORAGE_KEY = 'nsgc_tickets_v1';
+const STORAGE_KEY = 'nsgc_tickets_v3';
 
 export const TicketProvider = ({ children }: { children: ReactNode }) => {
     const [tickets, setTickets] = useState<Ticket[]>([]);

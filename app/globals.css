@@ -1,14 +1,158 @@
 @import "tailwindcss";
 
+@theme {
+  --color-background: #000000;
+  --color-foreground: #ffffff;
+
+  /* Font Families */
+  --font-sans: var(--font-dm-mono), monospace;
+  --font-mono: var(--font-dm-mono), monospace;
+  --font-display: var(--font-orbitron), sans-serif;
+
+  /* Animations */
+  --animate-float-1: float-1 6s ease-in-out infinite;
+  --animate-float-2: float-2 7s ease-in-out infinite reverse;
+  --animate-float-3: float-3 8s ease-in-out infinite;
+  --animate-scanline: scanline 8s linear infinite;
+  --animate-pulse-slow: pulse-slow 3s ease-in-out infinite;
+}
+
+@keyframes float-1 {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes float-2 {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+@keyframes float-3 {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+@keyframes pulse-slow {
+
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes drift {
+  from {
+    background-position: 0 0;
+  }
+
+  to {
+    background-position: -100px 100px;
+  }
+}
+
 :root {
-  --background: #0a0a0a;
-  --foreground: #ededed;
+  --background: #000000;
+  --foreground: #ffffff;
+  --accent: #3b82f6;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
   overflow-x: hidden;
   scroll-behavior: smooth;
+}
+
+/* Atmospheric Background Elements */
+.bg-atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: -5;
+  background:
+    radial-gradient(circle at right top, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+    linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.8));
+  pointer-events: none;
+}
+
+.bg-noise {
+  position: fixed;
+  inset: 0;
+  z-index: -4;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+.bg-scanlines {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: linear-gradient(to bottom,
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 0) 50%,
+      rgba(0, 0, 0, 0.2) 50%,
+      rgba(0, 0, 0, 0.2));
+  background-size: 100% 4px;
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+.bg-grid {
+  position: fixed;
+  inset: 0;
+  z-index: -6;
+  background-image: linear-gradient(to right, rgba(59, 130, 246, 0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
+  background-size: 40px 40px;
+  transform: perspective(600px) rotateX(60deg) translateY(50px) scale(2.5);
+  transform-origin: center top;
+  /* Start from top to recede down */
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+/* Core Glass Panel aesthetics */
+.glass-panel {
+  background: rgba(10, 10, 15, 0.7);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--accent);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.8), 0 0 15px rgba(59, 130, 246, 0.15);
+  border-radius: 4px;
+  /* Keeping it angular, under 6px as requested */
 }
