@@ -34,11 +34,11 @@ export default function PresidentLoginPage() {
 
     return (
         <div className="min-h-screen bg-black text-white flex items-center justify-center p-4 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-yellow-900/20 via-black to-black pointer-events-none" />
+            <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-cyan-900/20 via-black to-black pointer-events-none" />
 
-            <Card className="w-full max-w-md bg-white/5 border-white/10 relative z-10 border-t-4 border-t-yellow-500">
+            <Card className="w-full max-w-md bg-white/5 border-white/10 relative z-10 border-t-4 border-t-cyan-500">
                 <CardHeader className="text-center">
-                    <div className="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4 text-black font-bold text-xl">
+                    <div className="w-12 h-12 bg-cyan-500 rounded-full flex items-center justify-center mx-auto mb-4 text-black font-bold text-xl">
                         <Crown className="w-6 h-6" />
                     </div>
                     <CardTitle className="text-2xl font-bold">Presidential Access</CardTitle>
@@ -54,7 +54,7 @@ export default function PresidentLoginPage() {
                                     type="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="w-full bg-black/50 border border-white/10 rounded-md pl-10 pr-4 py-2 text-white focus:outline-none focus:border-yellow-500 transition-colors"
+                                    className="w-full bg-black/50 border border-white/10 rounded-md pl-10 pr-4 py-2 text-white focus:outline-none focus:border-cyan-500 transition-colors"
                                     placeholder="president@nsgc.edu"
                                     required
                                 />
@@ -69,7 +69,7 @@ export default function PresidentLoginPage() {
                                     type="password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full bg-black/50 border border-white/10 rounded-md pl-10 pr-4 py-2 text-white focus:outline-none focus:border-yellow-500 transition-colors"
+                                    className="w-full bg-black/50 border border-white/10 rounded-md pl-10 pr-4 py-2 text-white focus:outline-none focus:border-cyan-500 transition-colors"
                                     placeholder="••••••••"
                                     required
                                 />
@@ -78,7 +78,7 @@ export default function PresidentLoginPage() {
 
                         <Button
                             type="submit"
-                            className="w-full bg-yellow-600 text-black hover:bg-yellow-500 font-bold"
+                            className="w-full bg-cyan-600 text-black hover:bg-cyan-500 font-bold"
                             disabled={loading}
                         >
                             {loading ? 'Verifying...' : 'Access Office'}

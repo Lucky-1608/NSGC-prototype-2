@@ -98,7 +98,7 @@ export function Navbar() {
                         <div className="w-10 h-10 bg-blue-500/10 border border-blue-500 rounded-sm flex items-center justify-center text-blue-400 font-bold text-xl relative overflow-hidden group-hover:bg-blue-500/20 transition-all shadow-[0_0_15px_rgba(59,130,246,0.2)]">
                             <span className="font-display font-bold tracking-widest relative z-10">N</span>
                         </div>
-                        <div className="hidden lg:flex flex-col">
+                        <div className="flex md:hidden lg:flex flex-col">
                             <span className="text-lg font-display tracking-[0.3em] text-white leading-none group-hover:text-blue-400 transition-colors uppercase">NSGC</span>
                             <span className="text-[10px] font-mono text-blue-500/80 tracking-[0.2em] mt-1">COMMAND</span>
                         </div>
@@ -121,8 +121,8 @@ export function Navbar() {
                                 >
                                     {isActive && <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-400 shadow-[0_0_10px_rgba(96,165,250,0.8)]" />}
                                     <Icon className={cn("w-5 h-5", isActive ? "animate-pulse-slow" : "")} />
-                                    <span className="hidden lg:block text-xs font-mono uppercase tracking-[0.2em]">{item.name}</span>
-                                    {isActive && <div className="hidden lg:block absolute right-2 w-1.5 h-1.5 bg-blue-400 animate-pulse-slow shadow-[0_0_5px_rgba(96,165,250,0.8)]" />}
+                                    <span className="block md:hidden lg:block text-xs font-mono uppercase tracking-[0.2em]">{item.name}</span>
+                                    {isActive && <div className="block md:hidden lg:block absolute right-2 w-1.5 h-1.5 bg-blue-400 animate-pulse-slow shadow-[0_0_5px_rgba(96,165,250,0.8)]" />}
                                 </Link>
                             )
                         })}
@@ -135,10 +135,10 @@ export function Navbar() {
                         <div className="flex flex-col gap-3">
                             {/* Dashboard link depending on role */}
                             {userRole === 'president' && (
-                                <Button variant="ghost" className="w-full justify-start gap-3 rounded-sm text-xs font-mono uppercase tracking-widest text-yellow-500 hover:text-yellow-400 hover:bg-yellow-500/10 border border-yellow-500/20" asChild onClick={() => setIsMobileMenuOpen(false)}>
+                                <Button variant="ghost" className="w-full justify-start gap-3 rounded-sm text-xs font-mono uppercase tracking-widest text-cyan-500 hover:text-cyan-400 hover:bg-cyan-500/10 border border-cyan-500/20" asChild onClick={() => setIsMobileMenuOpen(false)}>
                                     <Link href="/dashboard/president">
                                         <Crown className="w-4 h-4" />
-                                        <span className="hidden lg:inline">C-LEVEL</span>
+                                        <span className="inline md:hidden lg:inline">C-LEVEL</span>
                                     </Link>
                                 </Button>
                             )}
@@ -146,7 +146,7 @@ export function Navbar() {
                                 <Button variant="ghost" className="w-full justify-start gap-3 rounded-sm text-xs font-mono uppercase tracking-widest text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 border border-blue-500/20" asChild onClick={() => setIsMobileMenuOpen(false)}>
                                     <Link href="/dashboard/council">
                                         <Users className="w-4 h-4" />
-                                        <span className="hidden lg:inline">COUNCIL</span>
+                                        <span className="inline md:hidden lg:inline">COUNCIL</span>
                                     </Link>
                                 </Button>
                             )}
@@ -154,13 +154,13 @@ export function Navbar() {
                                 <Button variant="ghost" className="w-full justify-start gap-3 rounded-sm text-xs font-mono uppercase tracking-widest text-gray-300 hover:text-white hover:bg-white/5 border border-white/10" asChild onClick={() => setIsMobileMenuOpen(false)}>
                                     <Link href="/dashboard/student">
                                         <LayoutDashboard className="w-4 h-4" />
-                                        <span className="hidden lg:inline">DASHBOARD</span>
+                                        <span className="inline md:hidden lg:inline">DASHBOARD</span>
                                     </Link>
                                 </Button>
                             )}
 
                             {/* User Profile info */}
-                            <div className="hidden lg:flex flex-col mt-2">
+                            <div className="flex md:hidden lg:flex flex-col mt-2">
                                 <span className="text-[9px] font-mono text-blue-500/60 tracking-widest uppercase">Operator</span>
                                 <span className="text-sm font-mono text-white truncate">{userName}</span>
                             </div>
@@ -189,7 +189,7 @@ export function Navbar() {
                         <Button className="w-full justify-start lg:justify-center rounded-sm text-xs font-mono uppercase tracking-[0.2em] bg-blue-500/20 border border-blue-500/50 text-blue-400 hover:bg-blue-500/40" asChild onClick={() => setIsMobileMenuOpen(false)}>
                             <Link href="/login">
                                 <User className="w-4 h-4 mr-0 lg:mr-2" />
-                                <span className="hidden lg:inline block">LOGIN</span>
+                                <span className="inline md:hidden lg:inline">LOGIN</span>
                             </Link>
                         </Button>
                     )}

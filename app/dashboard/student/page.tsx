@@ -33,11 +33,11 @@ function StudentDashboardContent() {
     });
 
     if (!isLoaded) {
-        return <div className="min-h-screen bg-black text-white pt-10 pb-20 flex items-center justify-center">Loading...</div>;
+        return <div className="min-h-screen bg-black text-white pt-24 md:pt-10 pb-20 flex items-center justify-center">Loading...</div>;
     }
 
     return (
-        <div className="min-h-screen bg-black text-white pt-10 pb-20">
+        <div className="min-h-screen bg-black text-white pt-24 md:pt-10 pb-20">
             <div className="container mx-auto px-4">
 
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-12">
@@ -76,7 +76,7 @@ function StudentDashboardContent() {
                     </SpotlightCard>
                     <SpotlightCard className="bg-white/5 border-white/10">
                         <CardContent className="p-6 flex items-center gap-4">
-                            <div className="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-500">
+                            <div className="w-12 h-12 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-500">
                                 <ShoppingBag className="w-6 h-6" />
                             </div>
                             <div>
@@ -96,7 +96,7 @@ function StudentDashboardContent() {
                         <SpotlightCard className="bg-white/5 border-white/10">
                             <CardHeader className="flex flex-row items-center justify-between pb-2">
                                 <CardTitle className="text-lg flex items-center gap-2">
-                                    <Bell className="w-5 h-5 text-yellow-500" />
+                                    <Bell className="w-5 h-5 text-cyan-500" />
                                     Campus Announcements
                                 </CardTitle>
                             </CardHeader>
@@ -126,7 +126,7 @@ function StudentDashboardContent() {
                         <SpotlightCard className="bg-white/5 border-white/10">
                             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                 <CardTitle className="text-lg">Your Recent Complaints</CardTitle>
-                                <Link href="/complaints/history" className="text-sm text-yellow-500 hover:text-yellow-400">
+                                <Link href="/complaints/history" className="text-sm text-cyan-500 hover:text-cyan-400">
                                     View All
                                 </Link>
                             </CardHeader>
@@ -139,7 +139,7 @@ function StudentDashboardContent() {
                                                     <h4 className="font-medium">{item.type}</h4>
                                                     <p className="text-xs text-gray-400">{item.id} • {new Date(item.createdAt).toLocaleDateString()}</p>
                                                 </div>
-                                                <Badge variant={item.status === 'Completed' ? 'default' : 'secondary'} className={item.status === 'Completed' ? 'bg-green-500' : 'bg-yellow-500 text-black'}>
+                                                <Badge variant={item.status === 'Completed' ? 'default' : 'secondary'} className={item.status === 'Completed' ? 'bg-green-500' : 'bg-cyan-500 text-black'}>
                                                     {item.status}
                                                 </Badge>
                                             </div>
@@ -158,9 +158,9 @@ function StudentDashboardContent() {
                                     <div className="p-5 flex flex-col gap-3">
                                         <div className="flex justify-between items-start">
                                             <Badge variant="outline" className="text-xs border-white/20">{event.type}</Badge>
-                                            <span className="text-xs text-yellow-500 font-mono">{event.date}</span>
+                                            <span className="text-xs text-cyan-500 font-mono">{event.date}</span>
                                         </div>
-                                        <h4 className="font-bold text-lg group-hover:text-yellow-400 transition-colors">{event.name}</h4>
+                                        <h4 className="font-bold text-lg group-hover:text-cyan-400 transition-colors">{event.name}</h4>
                                         <div className="flex items-center gap-2 text-sm text-gray-400">
                                             <Clock className="w-3 h-3" /> {event.location}
                                         </div>
@@ -195,7 +195,7 @@ function StudentDashboardContent() {
                                 <Link href="/marketplace">
                                     <Button className="w-full justify-start h-auto py-4 bg-white/5 hover:bg-white/10 border border-white/10">
                                         <div className="flex items-center gap-4">
-                                            <div className="p-2 rounded-lg bg-yellow-500/20 text-yellow-500">
+                                            <div className="p-2 rounded-lg bg-cyan-500/20 text-cyan-500">
                                                 <ShoppingBag className="w-5 h-5" />
                                             </div>
                                             <div className="text-left">
@@ -226,7 +226,7 @@ function StudentDashboardContent() {
                         <SpotlightCard className="bg-white/5 border-white/10">
                             <CardHeader className="pb-2">
                                 <CardTitle className="text-lg flex items-center gap-2">
-                                    <Flag className="w-4 h-4 text-purple-500" /> Active Clubs
+                                    <Flag className="w-4 h-4 text-cyan-500" /> Active Clubs
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
@@ -237,7 +237,7 @@ function StudentDashboardContent() {
                                                 <h5 className="font-bold text-sm">{club.name}</h5>
                                                 <p className="text-xs text-gray-500">{club.lead}</p>
                                             </div>
-                                            <Badge variant="secondary" className="bg-purple-500/10 text-purple-400 text-[10px]">{club.members} members</Badge>
+                                            <Badge variant="secondary" className="bg-cyan-500/10 text-cyan-400 text-[10px]">{club.members} members</Badge>
                                         </div>
                                     ))}
                                 </div>
@@ -248,14 +248,14 @@ function StudentDashboardContent() {
                         <SpotlightCard className="bg-white/5 border-white/10">
                             <CardHeader className="pb-2">
                                 <CardTitle className="text-lg flex items-center gap-2">
-                                    <Users className="w-4 h-4 text-yellow-500" /> Student Council
+                                    <Users className="w-4 h-4 text-cyan-500" /> Student Council
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
                                 <div className="space-y-3">
                                     {members.map((member) => (
                                         <div key={member.id} className="flex items-center gap-3">
-                                            <div className="w-8 h-8 rounded-full bg-yellow-500/20 flex items-center justify-center text-xs font-bold text-yellow-500">
+                                            <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center text-xs font-bold text-cyan-500">
                                                 {member.name.charAt(0)}
                                             </div>
                                             <div>

@@ -11,14 +11,14 @@ export function ComingSoonBanner({
     description = "This section is currently being updated. New features will be available shortly."
 }: ComingSoonBannerProps) {
     return (
-        <div className="w-full bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4 mb-6 flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-yellow-500 mt-0.5 flex-shrink-0" />
+        <div className="w-full bg-cyan-500/10 border border-cyan-500/20 rounded-lg p-4 mb-6 flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-cyan-500 mt-0.5 flex-shrink-0" />
             <div>
-                <h3 className="font-semibold text-yellow-500 text-sm md:text-base">
+                <h3 className="font-semibold text-cyan-500 text-sm md:text-base">
                     {title}
                 </h3>
                 {description && (
-                    <p className="text-yellow-500/80 text-xs md:text-sm mt-1">
+                    <p className="text-cyan-500/80 text-xs md:text-sm mt-1">
                         {description}
                     </p>
                 )}

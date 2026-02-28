@@ -45,11 +45,11 @@ export default function LoginPage() {
     return (
         <div className="min-h-screen bg-black text-white flex items-center justify-center p-4 relative overflow-hidden">
             {/* Background Elements */}
-            <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-yellow-900/20 via-black to-black pointer-events-none" />
+            <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-cyan-900/20 via-black to-black pointer-events-none" />
 
             <Card className="w-full max-w-md bg-white/5 border-white/10 relative z-10">
                 <CardHeader className="text-center">
-                    <div className="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4 text-black font-bold text-xl">
+                    <div className="w-12 h-12 bg-cyan-500 rounded-full flex items-center justify-center mx-auto mb-4 text-black font-bold text-xl">
                         N
                     </div>
                     <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
@@ -65,7 +65,7 @@ export default function LoginPage() {
                                     type="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="w-full bg-black/50 border border-white/10 rounded-md pl-10 pr-4 py-2 text-white focus:outline-none focus:border-yellow-500 transition-colors"
+                                    className="w-full bg-black/50 border border-white/10 rounded-md pl-10 pr-4 py-2 text-white focus:outline-none focus:border-cyan-500 transition-colors"
                                     placeholder="student@university.edu"
                                     required
                                 />
@@ -80,7 +80,7 @@ export default function LoginPage() {
                                     type="password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full bg-black/50 border border-white/10 rounded-md pl-10 pr-4 py-2 text-white focus:outline-none focus:border-yellow-500 transition-colors"
+                                    className="w-full bg-black/50 border border-white/10 rounded-md pl-10 pr-4 py-2 text-white focus:outline-none focus:border-cyan-500 transition-colors"
                                     placeholder="••••••••"
                                     required
                                 />
@@ -92,7 +92,7 @@ export default function LoginPage() {
 
                         <Button
                             type="submit"
-                            className="w-full bg-yellow-500 text-black hover:bg-yellow-400 font-bold"
+                            className="w-full bg-cyan-500 text-black hover:bg-cyan-400 font-bold"
                             disabled={loading}
                         >
                             {loading ? 'Signing in...' : 'Sign In'}
@@ -102,7 +102,7 @@ export default function LoginPage() {
                 </CardContent>
                 <CardFooter className="justify-center">
                     <p className="text-sm text-gray-400">
-                        Don't have an account? <Link href="/signup" className="text-yellow-500 hover:underline">Sign up</Link>
+                        Don't have an account? <Link href="/signup" className="text-cyan-500 hover:underline">Sign up</Link>
                     </p>
 
                 </CardFooter>

@@ -47,6 +47,17 @@ export default function RootLayout({
           {children}
           <Footer />
         </main>
+        {/* Persistent Designer Credit */}
+        <div className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-[9999] pointer-events-none">
+          <div className="bg-black/80 backdrop-blur-md border border-cyan-500/20 px-3 py-1.5 md:px-4 md:py-2 rounded-full shadow-[0_0_15px_rgba(6,182,212,0.15)] flex items-center gap-1.5 pointer-events-auto cursor-default hover:border-cyan-500/50 transition-colors group">
+            <span className="text-[9px] md:text-[10px] font-mono text-gray-400 group-hover:text-gray-300 transition-colors uppercase tracking-wider">
+              Designed by
+            </span>
+            <span className="text-[10px] md:text-xs font-display font-bold text-cyan-500 tracking-[0.2em] uppercase group-hover:text-cyan-400 transition-colors drop-shadow-[0_0_8px_rgba(6,182,212,0.8)]">
+              V_Mach
+            </span>
+          </div>
+        </div>
       </body>
     </html>
   );

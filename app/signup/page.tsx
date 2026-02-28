@@ -13,7 +13,7 @@ export default function SignupPage() {
 
             <Card className="w-full max-w-md bg-white/5 border-white/10 relative z-10">
                 <CardHeader className="text-center">
-                    <div className="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4 text-black font-bold text-xl">
+                    <div className="w-12 h-12 bg-cyan-500 rounded-full flex items-center justify-center mx-auto mb-4 text-black font-bold text-xl">
                         N
                     </div>
                     <CardTitle className="text-2xl font-bold">Create Account</CardTitle>
@@ -26,7 +26,7 @@ export default function SignupPage() {
                                 <label className="text-sm font-medium text-gray-300">First Name</label>
                                 <input
                                     type="text"
-                                    className="w-full bg-black/50 border border-white/10 rounded-md px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
+                                    className="w-full bg-black/50 border border-white/10 rounded-md px-4 py-2 text-white focus:outline-none focus:border-cyan-500"
                                     placeholder="John"
                                 />
                             </div>
@@ -34,7 +34,7 @@ export default function SignupPage() {
                                 <label className="text-sm font-medium text-gray-300">Last Name</label>
                                 <input
                                     type="text"
-                                    className="w-full bg-black/50 border border-white/10 rounded-md px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
+                                    className="w-full bg-black/50 border border-white/10 rounded-md px-4 py-2 text-white focus:outline-none focus:border-cyan-500"
                                     placeholder="Doe"
                                 />
                             </div>
@@ -46,7 +46,7 @@ export default function SignupPage() {
                                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                                 <input
                                     type="email"
-                                    className="w-full bg-black/50 border border-white/10 rounded-md pl-10 pr-4 py-2 text-white focus:outline-none focus:border-yellow-500"
+                                    className="w-full bg-black/50 border border-white/10 rounded-md pl-10 pr-4 py-2 text-white focus:outline-none focus:border-cyan-500"
                                     placeholder="student@university.edu"
                                 />
                             </div>
@@ -58,20 +58,20 @@ export default function SignupPage() {
                                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                                 <input
                                     type="password"
-                                    className="w-full bg-black/50 border border-white/10 rounded-md pl-10 pr-4 py-2 text-white focus:outline-none focus:border-yellow-500"
+                                    className="w-full bg-black/50 border border-white/10 rounded-md pl-10 pr-4 py-2 text-white focus:outline-none focus:border-cyan-500"
                                     placeholder="••••••••"
                                 />
                             </div>
                         </div>
 
-                        <Button className="w-full bg-yellow-500 text-black hover:bg-yellow-400 font-bold">
+                        <Button className="w-full bg-cyan-500 text-black hover:bg-cyan-400 font-bold">
                             Create Account <ArrowRight className="ml-2 w-4 h-4" />
                         </Button>
                     </form>
                 </CardContent>
                 <CardFooter className="justify-center">
                     <p className="text-sm text-gray-400">
-                        Already have an account? <Link href="/login" className="text-yellow-500 hover:underline">Sign in</Link>
+                        Already have an account? <Link href="/login" className="text-cyan-500 hover:underline">Sign in</Link>
                     </p>
                 </CardFooter>
             </Card>

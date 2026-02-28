@@ -250,17 +250,17 @@ function PresidentDashboardContent() {
     }
 
     return (
-        <div className="min-h-screen bg-black text-white pt-10 pb-20">
+        <div className="min-h-screen bg-black text-white pt-24 md:pt-10 pb-20">
             <div className="container mx-auto px-4">
 
                 {/* Header */}
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-12 relative">
                     <div>
                         <div className="flex items-center gap-3 mb-2">
-                            <h1 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-yellow-600">
+                            <h1 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-cyan-600">
                                 President's Office
                             </h1>
-                            <Badge className="bg-yellow-500/20 text-yellow-500 border-yellow-500/50">Authorized</Badge>
+                            <Badge className="bg-cyan-500/20 text-cyan-500 border-cyan-500/50">Authorized</Badge>
                         </div>
                         <p className="text-gray-400">Manage campus activities, board members, and announcements.</p>
                     </div>
@@ -286,7 +286,7 @@ function PresidentDashboardContent() {
                                     </Link>
                                     <Link href="/marketplace">
                                         <div className="flex items-center gap-3 px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors cursor-pointer">
-                                            <ShoppingBag className="w-4 h-4 text-yellow-500" />
+                                            <ShoppingBag className="w-4 h-4 text-cyan-500" />
                                             Sell Item
                                         </div>
                                     </Link>
@@ -317,15 +317,15 @@ function PresidentDashboardContent() {
                 <Tabs defaultValue="announcements" value={activeTab} onValueChange={setActiveTab} className="space-y-8">
                     <div className="overflow-x-auto pb-2">
                         <TabsList className="bg-white/5 border border-white/10 p-1">
-                            <TabsTrigger value="announcements" className="data-[state=active]:bg-yellow-500 data-[state=active]:text-black"><Megaphone className="w-4 h-4 mr-2" /> Announcements</TabsTrigger>
-                            <TabsTrigger value="members" className="data-[state=active]:bg-yellow-500 data-[state=active]:text-black"><Users className="w-4 h-4 mr-2" /> Council Members</TabsTrigger>
-                            <TabsTrigger value="clubs" className="data-[state=active]:bg-yellow-500 data-[state=active]:text-black"><Flag className="w-4 h-4 mr-2" /> Clubs</TabsTrigger>
-                            <TabsTrigger value="events" className="data-[state=active]:bg-yellow-500 data-[state=active]:text-black"><Calendar className="w-4 h-4 mr-2" /> Events</TabsTrigger>
-                            <TabsTrigger value="elections" className="data-[state=active]:bg-yellow-500 data-[state=active]:text-black"><Vote className="w-4 h-4 mr-2" /> Elections</TabsTrigger>
-                            <TabsTrigger value="achievements" className="data-[state=active]:bg-yellow-500 data-[state=active]:text-black"><Trophy className="w-4 h-4 mr-2" /> Achievements</TabsTrigger>
-                            <TabsTrigger value="complaints" className="data-[state=active]:bg-yellow-500 data-[state=active]:text-black"><MessageSquare className="w-4 h-4 mr-2" /> Complaints</TabsTrigger>
-                            <TabsTrigger value="students" className="data-[state=active]:bg-yellow-500 data-[state=active]:text-black"><Users className="w-4 h-4 mr-2" /> Students</TabsTrigger>
-                            <TabsTrigger value="polls" className="data-[state=active]:bg-yellow-500 data-[state=active]:text-black"><BarChart2 className="w-4 h-4 mr-2" /> Feedback & Polls</TabsTrigger>
+                            <TabsTrigger value="announcements" className="data-[state=active]:bg-cyan-500 data-[state=active]:text-black"><Megaphone className="w-4 h-4 mr-2" /> Announcements</TabsTrigger>
+                            <TabsTrigger value="members" className="data-[state=active]:bg-cyan-500 data-[state=active]:text-black"><Users className="w-4 h-4 mr-2" /> Council Members</TabsTrigger>
+                            <TabsTrigger value="clubs" className="data-[state=active]:bg-cyan-500 data-[state=active]:text-black"><Flag className="w-4 h-4 mr-2" /> Clubs</TabsTrigger>
+                            <TabsTrigger value="events" className="data-[state=active]:bg-cyan-500 data-[state=active]:text-black"><Calendar className="w-4 h-4 mr-2" /> Events</TabsTrigger>
+                            <TabsTrigger value="elections" className="data-[state=active]:bg-cyan-500 data-[state=active]:text-black"><Vote className="w-4 h-4 mr-2" /> Elections</TabsTrigger>
+                            <TabsTrigger value="achievements" className="data-[state=active]:bg-cyan-500 data-[state=active]:text-black"><Trophy className="w-4 h-4 mr-2" /> Achievements</TabsTrigger>
+                            <TabsTrigger value="complaints" className="data-[state=active]:bg-cyan-500 data-[state=active]:text-black"><MessageSquare className="w-4 h-4 mr-2" /> Complaints</TabsTrigger>
+                            <TabsTrigger value="students" className="data-[state=active]:bg-cyan-500 data-[state=active]:text-black"><Users className="w-4 h-4 mr-2" /> Students</TabsTrigger>
+                            <TabsTrigger value="polls" className="data-[state=active]:bg-cyan-500 data-[state=active]:text-black"><BarChart2 className="w-4 h-4 mr-2" /> Feedback & Polls</TabsTrigger>
                         </TabsList>
                     </div>
 
@@ -333,11 +333,11 @@ function PresidentDashboardContent() {
                     <TabsContent value="announcements" className="space-y-6">
                         <div className="flex justify-between items-center">
                             <h2 className="text-2xl font-bold">Public Announcements</h2>
-                            <Button onClick={() => openAddModal('announcement')} className="bg-yellow-500 text-black hover:bg-yellow-400"><Plus className="w-4 h-4 mr-2" /> New Announcement</Button>
+                            <Button onClick={() => openAddModal('announcement')} className="bg-cyan-500 text-black hover:bg-cyan-400"><Plus className="w-4 h-4 mr-2" /> New Announcement</Button>
                         </div>
                         <div className="grid gap-4">
                             {announcements.map((item) => (
-                                <Card key={item.id} className="bg-white/5 border-white/10 hover:border-yellow-500/50 transition-colors">
+                                <Card key={item.id} className="bg-white/5 border-white/10 hover:border-cyan-500/50 transition-colors">
                                     <div className="p-6 flex flex-col md:flex-row justify-between gap-4">
                                         <div>
                                             <div className="flex items-center gap-2 mb-2">
@@ -351,7 +351,7 @@ function PresidentDashboardContent() {
                                         <div className="flex flex-col gap-2">
                                             {item.link && (
                                                 <a href={item.link.startsWith('http') ? item.link : `https://${item.link}`} target="_blank" rel="noopener noreferrer">
-                                                    <Button variant="outline" size="sm" className="w-full border-yellow-500/20 text-yellow-500 hover:bg-yellow-500/10 hover:text-yellow-400 mb-2 md:mb-0">
+                                                    <Button variant="outline" size="sm" className="w-full border-cyan-500/20 text-cyan-500 hover:bg-cyan-500/10 hover:text-cyan-400 mb-2 md:mb-0">
                                                         <ExternalLink className="w-4 h-4 mr-2" /> View Link
                                                     </Button>
                                                 </a>
@@ -374,13 +374,13 @@ function PresidentDashboardContent() {
                     <TabsContent value="members" className="space-y-6">
                         <div className="flex justify-between items-center">
                             <h2 className="text-2xl font-bold">Council Members</h2>
-                            <Button onClick={() => openAddModal('member')} className="bg-yellow-500 text-black hover:bg-yellow-400"><Plus className="w-4 h-4 mr-2" /> Add Member</Button>
+                            <Button onClick={() => openAddModal('member')} className="bg-cyan-500 text-black hover:bg-cyan-400"><Plus className="w-4 h-4 mr-2" /> Add Member</Button>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {members.map((member) => (
                                 <Card key={member.id} className="bg-white/5 border-white/10">
                                     <CardContent className="p-6 flex flex-col items-center text-center gap-3">
-                                        <div className="w-16 h-16 rounded-full bg-yellow-500/20 text-yellow-500 flex items-center justify-center mb-2 overflow-hidden border border-yellow-500/30">
+                                        <div className="w-16 h-16 rounded-full bg-cyan-500/20 text-cyan-500 flex items-center justify-center mb-2 overflow-hidden border border-cyan-500/30">
                                             {member.image ? (
                                                 <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
                                             ) : (
@@ -389,7 +389,7 @@ function PresidentDashboardContent() {
                                         </div>
                                         <div>
                                             <h3 className="font-bold text-lg">{member.name}</h3>
-                                            <p className="text-yellow-500 text-sm">{member.role}</p>
+                                            <p className="text-cyan-500 text-sm">{member.role}</p>
                                             <p className="text-gray-500 text-xs mt-1">{member.email}</p>
                                         </div>
                                         <div className="flex gap-2 w-full mt-2">
@@ -406,14 +406,14 @@ function PresidentDashboardContent() {
                     <TabsContent value="clubs" className="space-y-6">
                         <div className="flex justify-between items-center">
                             <h2 className="text-2xl font-bold">Student Clubs</h2>
-                            <Button onClick={() => openAddModal('club')} className="bg-yellow-500 text-black hover:bg-yellow-400"><Plus className="w-4 h-4 mr-2" /> Register Club</Button>
+                            <Button onClick={() => openAddModal('club')} className="bg-cyan-500 text-black hover:bg-cyan-400"><Plus className="w-4 h-4 mr-2" /> Register Club</Button>
                         </div>
                         <div className="grid gap-4">
                             {clubs.map((club) => (
                                 <Card key={club.id} className="bg-white/5 border-white/10">
                                     <CardContent className="p-6 flex flex-col md:flex-row justify-between items-center gap-4">
                                         <div className="flex items-center gap-4">
-                                            <div className="w-12 h-12 rounded-lg bg-purple-500/20 text-purple-500 flex items-center justify-center">
+                                            <div className="w-12 h-12 rounded-lg bg-cyan-500/20 text-cyan-500 flex items-center justify-center">
                                                 <Flag className="w-6 h-6" />
                                             </div>
                                             <div>
@@ -440,7 +440,7 @@ function PresidentDashboardContent() {
                     <TabsContent value="events" className="space-y-6">
                         <div className="flex justify-between items-center">
                             <h2 className="text-2xl font-bold">Upcoming Events</h2>
-                            <Button onClick={() => openAddModal('event')} className="bg-yellow-500 text-black hover:bg-yellow-400"><Plus className="w-4 h-4 mr-2" /> Create Event</Button>
+                            <Button onClick={() => openAddModal('event')} className="bg-cyan-500 text-black hover:bg-cyan-400"><Plus className="w-4 h-4 mr-2" /> Create Event</Button>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {events.map((event) => (
@@ -454,7 +454,7 @@ function PresidentDashboardContent() {
                                             </div>
                                         </div>
                                     ) : (
-                                        <div className="absolute top-0 left-0 w-1 h-full bg-yellow-500" />
+                                        <div className="absolute top-0 left-0 w-1 h-full bg-cyan-500" />
                                     )}
                                     <CardContent className={`p-6 ${event.image ? 'pt-4' : 'pl-8'}`}>
                                         <div className="flex justify-between items-start mb-4">
@@ -479,7 +479,7 @@ function PresidentDashboardContent() {
                                         </div>
                                         {event.registrationLink && (
                                             <div className="mt-3 pt-3 border-t border-white/10">
-                                                <a href={event.registrationLink} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-xs text-yellow-500 hover:text-yellow-400 font-medium">
+                                                <a href={event.registrationLink} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-xs text-cyan-500 hover:text-cyan-400 font-medium">
                                                     <ExternalLink className="w-3 h-3" />
                                                     Registration Link
                                                 </a>
@@ -495,7 +495,7 @@ function PresidentDashboardContent() {
                     <TabsContent value="elections" className="space-y-6">
                         <div className="flex justify-between items-center">
                             <h2 className="text-2xl font-bold">Elections</h2>
-                            <Button onClick={() => openAddModal('election')} className="bg-yellow-500 text-black hover:bg-yellow-400"><Plus className="w-4 h-4 mr-2" /> Schedule Election</Button>
+                            <Button onClick={() => openAddModal('election')} className="bg-cyan-500 text-black hover:bg-cyan-400"><Plus className="w-4 h-4 mr-2" /> Schedule Election</Button>
                         </div>
                         <div className="grid gap-4">
                             {elections.map((election) => (
@@ -525,11 +525,11 @@ function PresidentDashboardContent() {
                                                                 <div key={candidate.id} className="space-y-1">
                                                                     <div className="flex justify-between text-sm">
                                                                         <span className="text-gray-300">{candidate.name}</span>
-                                                                        <span className="font-mono text-yellow-500">{candidate.votes || 0} votes ({percentage}%)</span>
+                                                                        <span className="font-mono text-cyan-500">{candidate.votes || 0} votes ({percentage}%)</span>
                                                                     </div>
                                                                     <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
                                                                         <div
-                                                                            className="h-full bg-yellow-500 rounded-full transition-all duration-500"
+                                                                            className="h-full bg-cyan-500 rounded-full transition-all duration-500"
                                                                             style={{ width: `${percentage}%` }}
                                                                         />
                                                                     </div>
@@ -553,7 +553,7 @@ function PresidentDashboardContent() {
                     <TabsContent value="achievements" className="space-y-6">
                         <div className="flex justify-between items-center">
                             <h2 className="text-2xl font-bold">Hall of Fame</h2>
-                            <Button onClick={() => openAddModal('achievement')} className="bg-yellow-500 text-black hover:bg-yellow-400"><Plus className="w-4 h-4 mr-2" /> Add Achievement</Button>
+                            <Button onClick={() => openAddModal('achievement')} className="bg-cyan-500 text-black hover:bg-cyan-400"><Plus className="w-4 h-4 mr-2" /> Add Achievement</Button>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {achievements.map((achievement) => (
@@ -562,7 +562,7 @@ function PresidentDashboardContent() {
                                         {achievement.image ? (
                                             <img src={achievement.image} alt={achievement.title} className="w-full h-full object-cover opacity-80" />
                                         ) : (
-                                            <div className="w-full h-full flex items-center justify-center bg-yellow-500/10 text-yellow-500">
+                                            <div className="w-full h-full flex items-center justify-center bg-cyan-500/10 text-cyan-500">
                                                 <Trophy className="w-12 h-12" />
                                             </div>
                                         )}
@@ -574,7 +574,7 @@ function PresidentDashboardContent() {
                                         <div className="flex justify-between items-start mb-2">
                                             <div>
                                                 <h3 className="font-bold text-lg">{achievement.title}</h3>
-                                                <p className="text-yellow-500 text-sm">{achievement.student}</p>
+                                                <p className="text-cyan-500 text-sm">{achievement.student}</p>
                                             </div>
                                             <div className="flex items-center gap-1 -mt-2 -mr-2">
                                                 <Button variant="ghost" size="sm" onClick={() => openAddModal('achievement', achievement)} className="text-gray-300 hover:text-white h-8 px-2">
@@ -598,7 +598,7 @@ function PresidentDashboardContent() {
                         <div className="flex justify-between items-center">
                             <h2 className="text-2xl font-bold">Student Complaints</h2>
                             <div className="flex gap-2">
-                                <Badge variant="outline" className="border-yellow-500 text-yellow-500">
+                                <Badge variant="outline" className="border-cyan-500 text-cyan-500">
                                     {tickets.filter(t => t.status === 'Pending').length} Pending
                                 </Badge>
                                 <Badge variant="outline" className="border-blue-500 text-blue-500">
@@ -612,7 +612,7 @@ function PresidentDashboardContent() {
                             ) : (
                                 tickets.map((ticket) => (
                                     <div key={ticket.id} onClick={() => setSelectedTicket(ticket)} className="cursor-pointer">
-                                        <Card className="bg-white/5 border-white/10 hover:border-yellow-500/30 transition-all">
+                                        <Card className="bg-white/5 border-white/10 hover:border-cyan-500/30 transition-all">
                                             <CardContent className="p-6">
                                                 <div className="flex flex-col md:flex-row justify-between gap-6">
                                                     <div className="flex-1 space-y-3">
@@ -621,13 +621,13 @@ function PresidentDashboardContent() {
                                                                 <div className="flex items-center gap-2 mb-1">
                                                                     <span className="font-mono text-xs text-gray-500">{ticket.id}</span>
                                                                     <Badge className={`${ticket.priority === 'High' ? 'bg-red-500/20 text-red-500' :
-                                                                        ticket.priority === 'Medium' ? 'bg-yellow-500/20 text-yellow-500' :
+                                                                        ticket.priority === 'Medium' ? 'bg-cyan-500/20 text-cyan-500' :
                                                                             'bg-blue-500/20 text-blue-500'
                                                                         }`}>
                                                                         {ticket.priority}
                                                                     </Badge>
                                                                     <span className="text-xs text-gray-500 flex items-center gap-1">
-                                                                        <ThumbsUp className="w-3 h-3 text-yellow-500" />
+                                                                        <ThumbsUp className="w-3 h-3 text-cyan-500" />
                                                                         {ticket.votes || 0} Votes
                                                                     </span>
                                                                     <Badge variant="outline" className="border-white/20 text-gray-400">
@@ -683,8 +683,8 @@ function PresidentDashboardContent() {
                                                             <span className="text-xs text-gray-500 block mb-2">Current Status</span>
                                                             <Badge className={`w-full justify-center py-1 mb-3 ${ticket.status === 'Completed' ? 'bg-green-500 text-black' :
                                                                 ticket.status === 'In Progress' ? 'bg-blue-500 text-white' :
-                                                                    ticket.status === 'In Review' ? 'bg-purple-500 text-white' :
-                                                                        'bg-yellow-500 text-black'
+                                                                    ticket.status === 'In Review' ? 'bg-cyan-500 text-white' :
+                                                                        'bg-cyan-500 text-black'
                                                                 }`}>
                                                                 {ticket.status}
                                                             </Badge>
@@ -720,7 +720,7 @@ function PresidentDashboardContent() {
                                                                     <Button
                                                                         size="sm"
                                                                         variant="outline"
-                                                                        className="h-8 text-xs border-yellow-500/50 text-yellow-500 hover:bg-yellow-500/10 col-span-2"
+                                                                        className="h-8 text-xs border-cyan-500/50 text-cyan-500 hover:bg-cyan-500/10 col-span-2"
                                                                         onClick={(e) => {
                                                                             e.stopPropagation();
                                                                             updateTicketStatus(ticket.id, 'In Progress', 'Reopened by President');
@@ -811,7 +811,7 @@ function PresidentDashboardContent() {
                         <div className="space-y-4">
                             <div className="flex justify-between items-center">
                                 <h2 className="text-2xl font-bold">Active Polls</h2>
-                                <Button onClick={() => openAddModal('poll')} className="bg-yellow-500 text-black hover:bg-yellow-400"><Plus className="w-4 h-4 mr-2" /> New Poll</Button>
+                                <Button onClick={() => openAddModal('poll')} className="bg-cyan-500 text-black hover:bg-cyan-400"><Plus className="w-4 h-4 mr-2" /> New Poll</Button>
                             </div>
                             <div className="grid gap-4">
                                 {polls.map((poll) => (
@@ -838,7 +838,7 @@ function PresidentDashboardContent() {
                         <div className="space-y-4 pt-8 border-t border-white/10">
                             <div className="flex justify-between items-center">
                                 <h2 className="text-2xl font-bold">Surveys</h2>
-                                <Button onClick={() => openAddModal('survey')} className="bg-yellow-500 text-black hover:bg-yellow-400"><Plus className="w-4 h-4 mr-2" /> New Survey</Button>
+                                <Button onClick={() => openAddModal('survey')} className="bg-cyan-500 text-black hover:bg-cyan-400"><Plus className="w-4 h-4 mr-2" /> New Survey</Button>
                             </div>
                             <div className="grid gap-4">
                                 {surveys.map((survey) => (
@@ -896,7 +896,7 @@ function PresidentDashboardContent() {
                     footer={
                         <>
                             <Button variant="outline" onClick={() => setIsAddModalOpen(false)} className="border-white/20 hover:bg-white/10 hover:text-white">Cancel</Button>
-                            <Button onClick={handleSave} className="bg-yellow-500 text-black hover:bg-yellow-400 font-bold">
+                            <Button onClick={handleSave} className="bg-cyan-500 text-black hover:bg-cyan-400 font-bold">
                                 <CheckCircle className="w-4 h-4 mr-2" /> Save Item
                             </Button>
                         </>
@@ -907,15 +907,15 @@ function PresidentDashboardContent() {
                             <>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Title</label>
-                                    <Input required value={formData.title || ''} onChange={e => setFormData({ ...formData, title: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50 transition-colors" placeholder="e.g. Semester Dates" />
+                                    <Input required value={formData.title || ''} onChange={e => setFormData({ ...formData, title: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-cyan-500/50 transition-colors" placeholder="e.g. Semester Dates" />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Content</label>
-                                    <Textarea required value={formData.content || ''} onChange={(e: any) => setFormData({ ...formData, content: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50 transition-colors" placeholder="Announcement details..." />
+                                    <Textarea required value={formData.content || ''} onChange={(e: any) => setFormData({ ...formData, content: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-cyan-500/50 transition-colors" placeholder="Announcement details..." />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Category</label>
-                                    <select value={formData.category || 'General'} onChange={e => setFormData({ ...formData, category: e.target.value })} className="w-full bg-black/50 border border-white/10 rounded-md p-2 text-white focus:border-yellow-500/50 outline-none">
+                                    <select value={formData.category || 'General'} onChange={e => setFormData({ ...formData, category: e.target.value })} className="w-full bg-black/50 border border-white/10 rounded-md p-2 text-white focus:border-cyan-500/50 outline-none">
                                         <option value="General">General</option>
                                         <option value="Academic">Academic</option>
                                         <option value="Event">Event</option>
@@ -924,7 +924,7 @@ function PresidentDashboardContent() {
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Priority</label>
-                                    <select value={formData.priority || 'Low'} onChange={e => setFormData({ ...formData, priority: e.target.value })} className="w-full bg-black/50 border border-white/10 rounded-md p-2 text-white focus:border-yellow-500/50 outline-none">
+                                    <select value={formData.priority || 'Low'} onChange={e => setFormData({ ...formData, priority: e.target.value })} className="w-full bg-black/50 border border-white/10 rounded-md p-2 text-white focus:border-cyan-500/50 outline-none">
                                         <option value="Low">Low</option>
                                         <option value="Medium">Medium</option>
                                         <option value="High">High</option>
@@ -932,7 +932,7 @@ function PresidentDashboardContent() {
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Link (Optional)</label>
-                                    <Input value={formData.link || ''} onChange={e => setFormData({ ...formData, link: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50 transition-colors" placeholder="e.g. https://example.com" />
+                                    <Input value={formData.link || ''} onChange={e => setFormData({ ...formData, link: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-cyan-500/50 transition-colors" placeholder="e.g. https://example.com" />
                                 </div>
                             </>
                         )}
@@ -941,15 +941,15 @@ function PresidentDashboardContent() {
                             <>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Full Name</label>
-                                    <Input required value={formData.name || ''} onChange={e => setFormData({ ...formData, name: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" />
+                                    <Input required value={formData.name || ''} onChange={e => setFormData({ ...formData, name: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-cyan-500/50" />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Role</label>
-                                    <Input required value={formData.role || ''} onChange={e => setFormData({ ...formData, role: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" placeholder="e.g. Secretary" />
+                                    <Input required value={formData.role || ''} onChange={e => setFormData({ ...formData, role: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-cyan-500/50" placeholder="e.g. Secretary" />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Email</label>
-                                    <Input type="email" required value={formData.email || ''} onChange={e => setFormData({ ...formData, email: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" />
+                                    <Input type="email" required value={formData.email || ''} onChange={e => setFormData({ ...formData, email: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-cyan-500/50" />
                                 </div>
 
                                 {/* Photo Upload Section */}
@@ -989,7 +989,7 @@ function PresidentDashboardContent() {
                                             <video ref={videoRef} autoPlay playsInline className="w-full h-auto" />
                                             <canvas ref={canvasRef} className="hidden" />
                                             <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-4">
-                                                <Button type="button" onClick={() => capturePhoto(false)} className="bg-yellow-500 text-black hover:bg-yellow-400">
+                                                <Button type="button" onClick={() => capturePhoto(false)} className="bg-cyan-500 text-black hover:bg-cyan-400">
                                                     <Camera className="w-4 h-4 mr-2" /> Capture
                                                 </Button>
                                                 <Button type="button" onClick={stopCamera} variant="destructive" className="bg-red-500 hover:bg-red-600">
@@ -1001,7 +1001,7 @@ function PresidentDashboardContent() {
 
                                     {formData.image && (
                                         <div className="relative inline-block">
-                                            <img src={formData.image} alt="Member Preview" className="h-24 w-24 rounded-full border-2 border-yellow-500/50 object-cover" />
+                                            <img src={formData.image} alt="Member Preview" className="h-24 w-24 rounded-full border-2 border-cyan-500/50 object-cover" />
                                             <button
                                                 type="button"
                                                 onClick={() => removePhoto(false)}
@@ -1047,7 +1047,7 @@ function PresidentDashboardContent() {
                             <>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Question</label>
-                                    <Input required value={formData.question || ''} onChange={e => setFormData({ ...formData, question: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" />
+                                    <Input required value={formData.question || ''} onChange={e => setFormData({ ...formData, question: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-cyan-500/50" />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Status</label>
@@ -1102,11 +1102,11 @@ function PresidentDashboardContent() {
                             <>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Title</label>
-                                    <Input required value={formData.title || ''} onChange={e => setFormData({ ...formData, title: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" />
+                                    <Input required value={formData.title || ''} onChange={e => setFormData({ ...formData, title: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-cyan-500/50" />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Description</label>
-                                    <Input required value={formData.description || ''} onChange={e => setFormData({ ...formData, description: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" />
+                                    <Input required value={formData.description || ''} onChange={e => setFormData({ ...formData, description: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-cyan-500/50" />
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-2">
@@ -1136,19 +1136,19 @@ function PresidentDashboardContent() {
                             <>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Club Name</label>
-                                    <Input required value={formData.name || ''} onChange={e => setFormData({ ...formData, name: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" />
+                                    <Input required value={formData.name || ''} onChange={e => setFormData({ ...formData, name: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-cyan-500/50" />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Description</label>
-                                    <Input required value={formData.description || ''} onChange={e => setFormData({ ...formData, description: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" />
+                                    <Input required value={formData.description || ''} onChange={e => setFormData({ ...formData, description: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-cyan-500/50" />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Lead Student</label>
-                                    <Input required value={formData.lead || ''} onChange={e => setFormData({ ...formData, lead: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" />
+                                    <Input required value={formData.lead || ''} onChange={e => setFormData({ ...formData, lead: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-cyan-500/50" />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Club Website (Optional)</label>
-                                    <Input type="url" placeholder="https://" value={formData.website || ''} onChange={e => setFormData({ ...formData, website: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" />
+                                    <Input type="url" placeholder="https://" value={formData.website || ''} onChange={e => setFormData({ ...formData, website: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-cyan-500/50" />
                                 </div>
                                 <div className="space-y-4 pt-2 border-t border-white/10">
                                     <label className="text-sm font-medium text-gray-300">Club Logo (Optional)</label>
@@ -1186,7 +1186,7 @@ function PresidentDashboardContent() {
                                             <video ref={videoRef} autoPlay playsInline className="w-full h-auto" />
                                             <canvas ref={canvasRef} className="hidden" />
                                             <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-4">
-                                                <Button type="button" onClick={() => capturePhoto(false)} className="bg-yellow-500 text-black hover:bg-yellow-400">
+                                                <Button type="button" onClick={() => capturePhoto(false)} className="bg-cyan-500 text-black hover:bg-cyan-400">
                                                     <Camera className="w-4 h-4 mr-2" /> Capture
                                                 </Button>
                                                 <Button type="button" onClick={stopCamera} variant="destructive" className="bg-red-500 hover:bg-red-600">
@@ -1198,7 +1198,7 @@ function PresidentDashboardContent() {
 
                                     {formData.image && (
                                         <div className="relative inline-block">
-                                            <img src={formData.image} alt="Club Logo" className="h-24 w-24 rounded-full border-2 border-yellow-500/50 object-cover" />
+                                            <img src={formData.image} alt="Club Logo" className="h-24 w-24 rounded-full border-2 border-cyan-500/50 object-cover" />
                                             <button
                                                 type="button"
                                                 onClick={() => removePhoto(false)}
@@ -1217,19 +1217,19 @@ function PresidentDashboardContent() {
                             <>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Event Name</label>
-                                    <Input required value={formData.name || ''} onChange={e => setFormData({ ...formData, name: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" />
+                                    <Input required value={formData.name || ''} onChange={e => setFormData({ ...formData, name: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-cyan-500/50" />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Date</label>
-                                    <Input type="date" required value={formData.date || ''} onChange={e => setFormData({ ...formData, date: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" style={{ colorScheme: 'dark' }} />
+                                    <Input type="date" required value={formData.date || ''} onChange={e => setFormData({ ...formData, date: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-cyan-500/50" style={{ colorScheme: 'dark' }} />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Location</label>
-                                    <Input required value={formData.location || ''} onChange={e => setFormData({ ...formData, location: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" />
+                                    <Input required value={formData.location || ''} onChange={e => setFormData({ ...formData, location: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-cyan-500/50" />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Type</label>
-                                    <select value={formData.type || 'Social'} onChange={e => setFormData({ ...formData, type: e.target.value })} className="w-full bg-black/50 border border-white/10 rounded-md p-2 text-white focus:border-yellow-500/50 outline-none">
+                                    <select value={formData.type || 'Social'} onChange={e => setFormData({ ...formData, type: e.target.value })} className="w-full bg-black/50 border border-white/10 rounded-md p-2 text-white focus:border-cyan-500/50 outline-none">
                                         <option value="Social">Social</option>
                                         <option value="Academic">Academic</option>
                                         <option value="Sports">Sports</option>
@@ -1237,7 +1237,7 @@ function PresidentDashboardContent() {
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Registration Link (Optional)</label>
-                                    <Input type="url" placeholder="https://forms.gle/..." value={formData.registrationLink || ''} onChange={e => setFormData({ ...formData, registrationLink: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" />
+                                    <Input type="url" placeholder="https://forms.gle/..." value={formData.registrationLink || ''} onChange={e => setFormData({ ...formData, registrationLink: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-cyan-500/50" />
                                 </div>
 
                                 {/* Photo Upload Section */}
@@ -1277,7 +1277,7 @@ function PresidentDashboardContent() {
                                             <video ref={videoRef} autoPlay playsInline className="w-full h-auto" />
                                             <canvas ref={canvasRef} className="hidden" />
                                             <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-4">
-                                                <Button type="button" onClick={() => capturePhoto(false)} className="bg-yellow-500 text-black hover:bg-yellow-400">
+                                                <Button type="button" onClick={() => capturePhoto(false)} className="bg-cyan-500 text-black hover:bg-cyan-400">
                                                     <Camera className="w-4 h-4 mr-2" /> Capture
                                                 </Button>
                                                 <Button type="button" onClick={stopCamera} variant="destructive" className="bg-red-500 hover:bg-red-600">
@@ -1289,7 +1289,7 @@ function PresidentDashboardContent() {
 
                                     {formData.image && (
                                         <div className="relative inline-block w-full">
-                                            <img src={formData.image} alt="Event Preview" className="h-32 w-full rounded-lg border border-yellow-500/50 object-cover" />
+                                            <img src={formData.image} alt="Event Preview" className="h-32 w-full rounded-lg border border-cyan-500/50 object-cover" />
                                             <button
                                                 type="button"
                                                 onClick={() => removePhoto(false)}
@@ -1307,18 +1307,18 @@ function PresidentDashboardContent() {
                             <>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Election Title</label>
-                                    <Input required value={formData.title || ''} onChange={e => setFormData({ ...formData, title: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" />
+                                    <Input required value={formData.title || ''} onChange={e => setFormData({ ...formData, title: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-cyan-500/50" />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Description</label>
-                                    <Textarea required value={formData.description || ''} onChange={(e: any) => setFormData({ ...formData, description: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" />
+                                    <Textarea required value={formData.description || ''} onChange={(e: any) => setFormData({ ...formData, description: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-cyan-500/50" />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Date</label>
-                                    <Input type="date" required value={formData.date || ''} onChange={e => setFormData({ ...formData, date: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" style={{ colorScheme: 'dark' }} />
+                                    <Input type="date" required value={formData.date || ''} onChange={e => setFormData({ ...formData, date: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-cyan-500/50" style={{ colorScheme: 'dark' }} />
                                 </div>
                                 <div className="space-y-2">
-                                    <select value={formData.status || 'Upcoming'} onChange={e => setFormData({ ...formData, status: e.target.value })} className="w-full bg-black/50 border border-white/10 rounded-md p-2 text-white focus:border-yellow-500/50 outline-none">
+                                    <select value={formData.status || 'Upcoming'} onChange={e => setFormData({ ...formData, status: e.target.value })} className="w-full bg-black/50 border border-white/10 rounded-md p-2 text-white focus:border-cyan-500/50 outline-none">
                                         <option value="Upcoming">Upcoming</option>
                                         <option value="Ongoing">Ongoing</option>
                                         <option value="Completed">Completed</option>
@@ -1335,7 +1335,7 @@ function PresidentDashboardContent() {
                                                     value={tempCandidateName}
                                                     onChange={(e) => setTempCandidateName(e.target.value)}
                                                     placeholder="Candidate Name"
-                                                    className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50"
+                                                    className="bg-black/50 border-white/10 text-white focus:border-cyan-500/50"
                                                 />
                                                 <Button
                                                     type="button"
@@ -1356,7 +1356,7 @@ function PresidentDashboardContent() {
                                                             setTempCandidateImage(undefined);
                                                         }
                                                     }}
-                                                    className="bg-yellow-500 text-black hover:bg-yellow-400"
+                                                    className="bg-cyan-500 text-black hover:bg-cyan-400"
                                                 >
                                                     <Plus className="w-4 h-4" /> Add
                                                 </Button>
@@ -1401,7 +1401,7 @@ function PresidentDashboardContent() {
                                                         <video ref={videoRef} autoPlay playsInline className="w-full h-auto" />
                                                         <canvas ref={canvasRef} className="hidden" />
                                                         <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-2">
-                                                            <Button size="sm" type="button" onClick={() => capturePhoto(true)} className="bg-yellow-500 text-black hover:bg-yellow-400 text-xs">
+                                                            <Button size="sm" type="button" onClick={() => capturePhoto(true)} className="bg-cyan-500 text-black hover:bg-cyan-400 text-xs">
                                                                 Capture
                                                             </Button>
                                                             <Button size="sm" type="button" onClick={stopCamera} variant="destructive" className="bg-red-500 hover:bg-red-600 text-xs">
@@ -1414,7 +1414,7 @@ function PresidentDashboardContent() {
                                                 {/* Image Preview */}
                                                 {tempCandidateImage && (
                                                     <div className="relative inline-block mt-2">
-                                                        <img src={tempCandidateImage} alt="Candidate Preview" className="h-16 w-16 rounded-full border border-yellow-500/50 object-cover" />
+                                                        <img src={tempCandidateImage} alt="Candidate Preview" className="h-16 w-16 rounded-full border border-cyan-500/50 object-cover" />
                                                         <button
                                                             type="button"
                                                             onClick={() => removePhoto(true)}
@@ -1461,19 +1461,19 @@ function PresidentDashboardContent() {
                             <>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Achievement Title</label>
-                                    <Input required value={formData.title || ''} onChange={e => setFormData({ ...formData, title: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" />
+                                    <Input required value={formData.title || ''} onChange={e => setFormData({ ...formData, title: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-cyan-500/50" />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Student/Team Name</label>
-                                    <Input required value={formData.student || ''} onChange={e => setFormData({ ...formData, student: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" />
+                                    <Input required value={formData.student || ''} onChange={e => setFormData({ ...formData, student: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-cyan-500/50" />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Description</label>
-                                    <Textarea required value={formData.description || ''} onChange={(e: any) => setFormData({ ...formData, description: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" />
+                                    <Textarea required value={formData.description || ''} onChange={(e: any) => setFormData({ ...formData, description: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-cyan-500/50" />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Category</label>
-                                    <select value={formData.category || 'Academic'} onChange={e => setFormData({ ...formData, category: e.target.value })} className="w-full bg-black/50 border border-white/10 rounded-md p-2 text-white focus:border-yellow-500/50 outline-none">
+                                    <select value={formData.category || 'Academic'} onChange={e => setFormData({ ...formData, category: e.target.value })} className="w-full bg-black/50 border border-white/10 rounded-md p-2 text-white focus:border-cyan-500/50 outline-none">
                                         <option value="Academic">Academic</option>
                                         <option value="Sports">Sports</option>
                                         <option value="Research">Research</option>
@@ -1482,7 +1482,7 @@ function PresidentDashboardContent() {
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Date</label>
-                                    <Input required value={formData.date || ''} onChange={e => setFormData({ ...formData, date: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" placeholder="e.g. March 2025" />
+                                    <Input required value={formData.date || ''} onChange={e => setFormData({ ...formData, date: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-cyan-500/50" placeholder="e.g. March 2025" />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Image (Max 500KB)</label>
@@ -1505,7 +1505,7 @@ function PresidentDashboardContent() {
                                                 reader.readAsDataURL(file);
                                             }
                                         }}
-                                        className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50 file:bg-yellow-500 file:text-black file:border-0 file:rounded-md file:mr-4 file:px-2 file:py-1 file:text-sm file:font-semibold hover:file:bg-yellow-400"
+                                        className="bg-black/50 border-white/10 text-white focus:border-cyan-500/50 file:bg-cyan-500 file:text-black file:border-0 file:rounded-md file:mr-4 file:px-2 file:py-1 file:text-sm file:font-semibold hover:file:bg-cyan-400"
                                     />
                                     {formData.image && (
                                         <p className="text-xs text-green-500 mt-1">Image loaded successfully!</p>
@@ -1589,13 +1589,13 @@ function PresidentDashboardContent() {
                                 <div className="flex flex-wrap items-center gap-2">
                                     <Badge className={`${selectedTicket.status === 'Completed' ? 'bg-green-500/20 text-green-500' :
                                         selectedTicket.status === 'In Progress' ? 'bg-blue-500/20 text-blue-500' :
-                                            selectedTicket.status === 'In Review' ? 'bg-purple-500/20 text-purple-500' :
-                                                'bg-yellow-500/20 text-yellow-500'
+                                            selectedTicket.status === 'In Review' ? 'bg-cyan-500/20 text-cyan-500' :
+                                                'bg-cyan-500/20 text-cyan-500'
                                         }`}>
                                         {selectedTicket.status}
                                     </Badge>
                                     <Badge className={`${selectedTicket.priority === 'High' ? 'bg-red-500/20 text-red-500' :
-                                        selectedTicket.priority === 'Medium' ? 'bg-yellow-500/20 text-yellow-500' :
+                                        selectedTicket.priority === 'Medium' ? 'bg-cyan-500/20 text-cyan-500' :
                                             'bg-blue-500/20 text-blue-500'
                                         }`}>
                                         Priority: {selectedTicket.priority}
@@ -1608,7 +1608,7 @@ function PresidentDashboardContent() {
                             <div className="text-right text-sm text-gray-400">
                                 <p className="mb-1"><span className="text-gray-500">From:</span> {selectedTicket.studentName}</p>
                                 <p><span className="text-gray-500">Date:</span> {new Date(selectedTicket.createdAt).toLocaleString()}</p>
-                                <div className="flex items-center justify-end gap-1 mt-2 text-yellow-500">
+                                <div className="flex items-center justify-end gap-1 mt-2 text-cyan-500">
                                     <ThumbsUp className="w-4 h-4" />
                                     <span>{selectedTicket.votes || 0} Votes</span>
                                 </div>

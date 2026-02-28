@@ -5,14 +5,14 @@ import { TiltCard } from '@/components/ui/TiltCard';
 
 export function PresidentSection() {
     return (
-        <section id="meet-president" className="py-32 relative overflow-visible bg-black/40 z-10" style={{ clipPath: "polygon(0 0, 100% 5%, 100% 100%, 0 95%)" }}>
+        <section id="meet-president" className="py-20 md:py-32 relative overflow-visible bg-black/40 z-10" style={{ clipPath: "polygon(0 0, 100% 5%, 100% 100%, 0 95%)" }}>
             {/* Ambient Background Elements */}
             <div className="absolute top-1/2 left-0 w-1/3 h-[150%] bg-blue-900/10 blur-[150px] -translate-y-1/2 pointer-events-none z-[-1]" />
-            <div className="absolute top-[-10%] right-[-5%] w-[40%] h-[80%] bg-yellow-900/5 blur-[120px] pointer-events-none z-[-1]" />
+            <div className="absolute top-[-10%] right-[-5%] w-[40%] h-[80%] bg-cyan-900/5 blur-[120px] pointer-events-none z-[-1]" />
 
             {/* Skewed Divider Line Top/Bottom overlay equivalent */}
             <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-blue-500/50 via-transparent to-transparent hidden md:block" />
-            <div className="absolute bottom-0 right-0 w-full h-px bg-gradient-to-l from-yellow-500/50 via-transparent to-transparent hidden md:block" />
+            <div className="absolute bottom-0 right-0 w-full h-px bg-gradient-to-l from-cyan-500/50 via-transparent to-transparent hidden md:block" />
 
             <div className="container mx-auto px-4 lg:px-12 relative z-10">
                 <div className="flex flex-col-reverse md:flex-row items-center gap-16 md:gap-8 lg:gap-24">
@@ -25,13 +25,13 @@ export function PresidentSection() {
                         viewport={{ once: true }}
                         transition={{ duration: 0.8, ease: "easeOut" }}
                     >
-                        <div className="text-[10px] text-yellow-500 font-mono tracking-[0.3em] uppercase mb-4 border-l-[2px] border-yellow-500 pl-4">
+                        <div className="text-[10px] text-cyan-500 font-mono tracking-[0.3em] uppercase mb-4 border-l-[2px] border-cyan-500 pl-4">
                             [ PROFILE // COMMANDER ]
                         </div>
 
                         <h2 className="text-4xl md:text-5xl lg:text-7xl font-display font-bold uppercase text-white mb-8 tracking-widest leading-none drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]">
                             Meet the <br className="hidden md:block" />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">President</span>
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-cyan-600">President</span>
                         </h2>
 
                         <div className="glass-panel p-6 sm:p-8 mb-8 relative group">
@@ -52,7 +52,7 @@ export function PresidentSection() {
                                     whileInView={{ opacity: 1, scale: 1, y: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ delay: 0.4 + index * 0.15 }}
-                                    className="px-3 py-1 bg-black border border-white/10 border-l-[2px] border-l-yellow-500 text-[10px] font-mono tracking-widest uppercase text-gray-400 hover:text-white hover:bg-white/5 transition-all cursor-crosshair animate-float-3"
+                                    className="px-3 py-1 bg-black border border-white/10 border-l-[2px] border-l-cyan-500 text-[10px] font-mono tracking-widest uppercase text-gray-400 hover:text-white hover:bg-white/5 transition-all cursor-crosshair animate-float-3"
                                     style={{ animationDelay: `${index * 0.2}s` }}
                                 >
                                     {tag}
@@ -61,8 +61,8 @@ export function PresidentSection() {
                         </div>
 
                         <div className="flex items-center gap-6 group">
-                            <span className="text-yellow-500/80 font-signature text-2xl lg:text-3xl tracking-widest group-hover:text-yellow-400 transition-colors">Sadu Vinil</span>
-                            <div className="h-[2px] w-24 bg-gradient-to-r from-yellow-500/50 to-transparent group-hover:w-48 transition-all duration-700" />
+                            <span className="text-cyan-500/80 font-signature text-2xl lg:text-3xl tracking-widest group-hover:text-cyan-400 transition-colors whitespace-nowrap">Sadu Vinil</span>
+                            <div className="h-[2px] w-24 bg-gradient-to-r from-cyan-500/50 to-transparent group-hover:w-48 transition-all duration-700" />
                         </div>
                     </motion.div>
 
@@ -76,7 +76,7 @@ export function PresidentSection() {
                     >
                         <TiltCard className="w-full max-w-[320px] lg:max-w-sm relative animate-float-2 z-20" tiltIntensity={15}>
                             <div className="relative aspect-[4/5] w-full bg-black/80 border border-blue-500/30 p-2 shadow-[0_20px_50px_-15px_rgba(0,0,0,1)] group">
-                                <div className="absolute -inset-2 bg-yellow-500/10 blur border border-yellow-500/20 opacity-0 group-hover:opacity-100 transition duration-700" />
+                                <div className="absolute -inset-2 bg-cyan-500/10 blur border border-cyan-500/20 opacity-0 group-hover:opacity-100 transition duration-700" />
 
                                 <div className="relative w-full h-full overflow-hidden border border-white/10 filter grayscale group-hover:grayscale-0 transition-all duration-700">
                                     <div className="absolute inset-0 bg-blue-500/20 mix-blend-overlay group-hover:opacity-0 transition-opacity duration-700 z-10" />
@@ -94,7 +94,7 @@ export function PresidentSection() {
                                             ONLINE
                                         </div>
                                         <h3 className="text-2xl font-display font-bold text-white uppercase tracking-widest mb-1">Sadu Vinil</h3>
-                                        <p className="text-yellow-500/80 font-mono text-[10px] tracking-widest uppercase">President / 25-26</p>
+                                        <p className="text-cyan-500/80 font-mono text-[10px] tracking-widest uppercase">President / 25-26</p>
                                     </div>
 
                                     {/* Overlay Scanline for the image alone */}

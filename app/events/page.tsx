@@ -37,7 +37,7 @@ export default function EventsPage() {
     );
 
     return (
-        <div className="min-h-screen bg-black text-white pt-10 pb-20">
+        <div className="min-h-screen bg-black text-white pt-24 md:pt-10 pb-20">
             <div className="container mx-auto px-4">
 
                 <div className="text-center mb-12">
@@ -55,7 +55,7 @@ export default function EventsPage() {
                         <button
                             onClick={() => setActiveTab('upcoming')}
                             className={`px-6 py-2 rounded-md text-sm font-medium transition-all ${activeTab === 'upcoming'
-                                ? 'bg-yellow-500 text-black shadow-lg'
+                                ? 'bg-cyan-500 text-black shadow-lg'
                                 : 'text-gray-400 hover:text-white'
                                 }`}
                         >
@@ -64,7 +64,7 @@ export default function EventsPage() {
                         <button
                             onClick={() => setActiveTab('past')}
                             className={`px-6 py-2 rounded-md text-sm font-medium transition-all ${activeTab === 'past'
-                                ? 'bg-yellow-500 text-black shadow-lg'
+                                ? 'bg-cyan-500 text-black shadow-lg'
                                 : 'text-gray-400 hover:text-white'
                                 }`}
                         >
@@ -81,25 +81,25 @@ export default function EventsPage() {
                 ) : (
                     <StaggeredList className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" key={activeTab}>
                         {filteredEvents.map((event) => (
-                            <Card key={event.id} className="bg-white/5 border-white/10 overflow-hidden hover:border-yellow-500/50 transition-colors h-full flex flex-col group">
+                            <Card key={event.id} className="bg-white/5 border-white/10 overflow-hidden hover:border-cyan-500/50 transition-colors h-full flex flex-col group">
                                 <div className="h-48 overflow-hidden relative bg-gradient-to-br from-gray-800 to-black">
                                     {/* Placeholder specific image logic could go here if we had images in the data model */}
                                     <div className="absolute inset-0 flex items-center justify-center text-gray-600">
                                         <Calendar className="w-16 h-16 opacity-20" />
                                     </div>
-                                    <div className="absolute top-4 right-4 bg-black/80 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-yellow-500 border border-yellow-500/20">
+                                    <div className="absolute top-4 right-4 bg-black/80 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-cyan-500 border border-cyan-500/20">
                                         {event.type}
                                     </div>
                                 </div>
                                 <CardHeader>
-                                    <CardTitle className="text-xl mb-2 group-hover:text-yellow-500 transition-colors">{event.name}</CardTitle>
+                                    <CardTitle className="text-xl mb-2 group-hover:text-cyan-500 transition-colors">{event.name}</CardTitle>
                                     <CardDescription className="flex flex-col gap-2 text-gray-400">
                                         <span className="flex items-center gap-2">
-                                            <Calendar className="w-4 h-4 text-yellow-500" />
+                                            <Calendar className="w-4 h-4 text-cyan-500" />
                                             {event.date}
                                         </span>
                                         <span className="flex items-center gap-2">
-                                            <MapPin className="w-4 h-4 text-yellow-500" />
+                                            <MapPin className="w-4 h-4 text-cyan-500" />
                                             {event.location}
                                         </span>
                                     </CardDescription>
@@ -108,7 +108,7 @@ export default function EventsPage() {
                                     {activeTab === 'upcoming' ? (
                                         event.registrationLink ? (
                                             <Button
-                                                className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-bold border-none"
+                                                className="w-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold border-none"
                                                 onClick={() => window.open(event.registrationLink, '_blank')}
                                             >
                                                 Register Now

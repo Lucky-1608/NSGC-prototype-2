@@ -15,7 +15,7 @@ const images = [
 
 export default function GalleryPage() {
     return (
-        <div className="min-h-screen bg-black text-white pt-10 pb-20">
+        <div className="min-h-screen bg-black text-white pt-24 md:pt-10 pb-20">
             <div className="container mx-auto px-4">
 
                 <div className="text-center mb-16">

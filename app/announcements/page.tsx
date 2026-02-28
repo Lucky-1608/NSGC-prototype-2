@@ -27,7 +27,7 @@ export default function AnnouncementsPage() {
     });
 
     return (
-        <div className="min-h-screen bg-black text-white pt-10 pb-20">
+        <div className="min-h-screen bg-black text-white pt-24 md:pt-10 pb-20">
             <div className="container mx-auto px-4">
 
                 <div className="text-center mb-12">
@@ -44,7 +44,7 @@ export default function AnnouncementsPage() {
                                 variant={filter === cat ? "default" : "outline"}
                                 onClick={() => setFilter(cat)}
                                 size="sm"
-                                className={filter === cat ? "bg-yellow-500 text-black hover:bg-yellow-400" : "border-white/20 text-gray-300"}
+                                className={filter === cat ? "bg-cyan-500 text-black hover:bg-cyan-400" : "border-white/20 text-gray-300"}
                             >
                                 {cat}
                             </Button>
@@ -56,7 +56,7 @@ export default function AnnouncementsPage() {
                         <input
                             type="text"
                             placeholder="Search announcements..."
-                            className="w-full bg-white/5 border border-white/10 rounded-md pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-yellow-500 transition-colors"
+                            className="w-full bg-white/5 border border-white/10 rounded-md pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-cyan-500 transition-colors"
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                         />
@@ -79,7 +79,7 @@ export default function AnnouncementsPage() {
                                             <div className="flex items-center gap-3 mb-2">
                                                 <Badge variant="outline" className={`
                           ${announcement.priority === 'High' ? 'border-red-500 text-red-500' :
-                                                        announcement.priority === 'Medium' ? 'border-yellow-500 text-yellow-500' :
+                                                        announcement.priority === 'Medium' ? 'border-cyan-500 text-cyan-500' :
                                                             'border-green-500 text-green-500'}
                         `}>
                                                     {announcement.priority} Priority
@@ -103,7 +103,7 @@ export default function AnnouncementsPage() {
                                     <p className="text-gray-300">{announcement.content}</p>
                                 </CardContent>
                                 <CardFooter>
-                                    <Button variant="link" className="text-yellow-500 p-0 h-auto hover:text-yellow-400">
+                                    <Button variant="link" className="text-cyan-500 p-0 h-auto hover:text-cyan-400">
                                         Read full notice &rarr;
                                     </Button>
                                 </CardFooter>

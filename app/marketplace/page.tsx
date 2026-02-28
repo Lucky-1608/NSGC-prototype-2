@@ -13,8 +13,8 @@ export default function MarketplacePage() {
                 className="text-center max-w-lg"
             >
                 <div className="flex justify-center mb-6">
-                    <div className="bg-yellow-500/10 p-6 rounded-full border border-yellow-500/20">
-                        <Rocket className="w-12 h-12 text-yellow-500" />
+                    <div className="bg-cyan-500/10 p-6 rounded-full border border-cyan-500/20">
+                        <Rocket className="w-12 h-12 text-cyan-500" />
                     </div>
                 </div>
 

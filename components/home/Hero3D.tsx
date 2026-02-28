@@ -7,7 +7,7 @@ import { CyberSolarSystem } from '@/components/solar/CyberSolarSystem';
 
 export function Hero3D() {
     return (
-        <section className="relative w-full h-[100vh] flex items-center justify-center overflow-hidden bg-transparent perspective-1000">
+        <section className="relative w-full h-[85vh] md:h-[100vh] flex items-center justify-center overflow-hidden bg-transparent perspective-1000">
             {/* 3D Solar System Scene - DO NOT TOUCH */}
             <div className="absolute inset-0 z-0">
                 <CyberSolarSystem />
@@ -27,8 +27,8 @@ export function Hero3D() {
             <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-20 w-full max-w-2xl px-4 flex flex-col items-center">
 
                 {/* Orbital Rings around console */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[300%] border border-blue-500/10 rounded-[50%] animate-[spin_10s_linear_infinite] pointer-events-none z-0" />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[250%] border-t border-b border-blue-500/5 rounded-[50%] animate-[spin_15s_linear_infinite_reverse] pointer-events-none z-0" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] max-w-[100vw] h-[300%] border border-blue-500/10 rounded-[50%] animate-[spin_10s_linear_infinite] pointer-events-none z-0" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] max-w-[100vw] h-[250%] border-t border-b border-blue-500/5 rounded-[50%] animate-[spin_15s_linear_infinite_reverse] pointer-events-none z-0" />
 
                 <motion.div
                     initial={{ opacity: 0, y: 100, rotateX: 30 }}

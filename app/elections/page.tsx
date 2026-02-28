@@ -47,7 +47,7 @@ export default function ElectionsPage() {
     };
 
     return (
-        <div className="min-h-screen bg-black text-white pt-10 pb-20">
+        <div className="min-h-screen bg-black text-white pt-24 md:pt-10 pb-20">
             <div className="container mx-auto px-4">
 
                 <div className="text-center mb-16">
@@ -68,7 +68,7 @@ export default function ElectionsPage() {
                                 {elections.map((election) => {
                                     const hasVoted = userVotes.includes(election.id);
                                     return (
-                                        <Card key={election.id} className="bg-white/5 border-white/10 p-6 flex flex-col md:flex-row justify-between items-center gap-4 text-left hover:border-yellow-500/30 transition-colors">
+                                        <Card key={election.id} className="bg-white/5 border-white/10 p-6 flex flex-col md:flex-row justify-between items-center gap-4 text-left hover:border-cyan-500/30 transition-colors">
                                             <div>
                                                 <div className="flex items-center gap-3 mb-2">
                                                     <h3 className="text-xl font-bold">{election.title}</h3>
@@ -85,7 +85,7 @@ export default function ElectionsPage() {
                                                     disabled={hasVoted}
                                                     className={`px-6 py-2 rounded-full font-bold transition-all ${hasVoted
                                                         ? 'bg-green-500/20 text-green-500 cursor-not-allowed'
-                                                        : 'bg-yellow-500 text-black hover:bg-yellow-400'
+                                                        : 'bg-cyan-500 text-black hover:bg-cyan-400'
                                                         }`}
                                                 >
                                                     {hasVoted ? (
@@ -101,7 +101,7 @@ export default function ElectionsPage() {
                             </div>
                         ) : (
                             <div className="flex flex-col items-center gap-4 text-center">
-                                <Vote className="w-16 h-16 text-yellow-500" />
+                                <Vote className="w-16 h-16 text-cyan-500" />
                                 <h2 className="text-2xl font-bold">No Upcoming Elections</h2>
                                 <p className="text-gray-400">
                                     Election schedules and candidate information will be announced soon.
@@ -123,7 +123,7 @@ export default function ElectionsPage() {
                             <Button
                                 onClick={handleVote}
                                 disabled={!selectedCandidate}
-                                className="bg-yellow-500 text-black hover:bg-yellow-400 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="bg-cyan-500 text-black hover:bg-cyan-400 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <Vote className="w-4 h-4 mr-2" /> Confirm Vote
                             </Button>
@@ -139,20 +139,20 @@ export default function ElectionsPage() {
                                         key={candidate.id}
                                         onClick={() => setSelectedCandidate(candidate.id)}
                                         className={`flex flex-col items-center text-center p-6 rounded-xl border cursor-pointer transition-all relative overflow-hidden group ${selectedCandidate === candidate.id
-                                            ? 'bg-yellow-500/20 border-yellow-500 text-yellow-500 shadow-[0_0_20px_rgba(234,179,8,0.2)]'
+                                            ? 'bg-cyan-500/20 border-cyan-500 text-cyan-500 shadow-[0_0_20px_rgba(234,179,8,0.2)]'
                                             : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20 text-gray-300'
                                             }`}
                                     >
                                         <div className="mb-3 relative">
                                             {candidate.image ? (
-                                                <img src={candidate.image} alt={candidate.name} className="w-24 h-24 rounded-full object-cover border-2 border-white/10 group-hover:border-yellow-500/50 transition-colors" />
+                                                <img src={candidate.image} alt={candidate.name} className="w-24 h-24 rounded-full object-cover border-2 border-white/10 group-hover:border-cyan-500/50 transition-colors" />
                                             ) : (
-                                                <div className="w-24 h-24 rounded-full bg-white/5 flex items-center justify-center border-2 border-white/10 group-hover:border-yellow-500/50 transition-colors">
+                                                <div className="w-24 h-24 rounded-full bg-white/5 flex items-center justify-center border-2 border-white/10 group-hover:border-cyan-500/50 transition-colors">
                                                     <Vote className="w-10 h-10 text-gray-500" />
                                                 </div>
                                             )}
                                             {selectedCandidate === candidate.id && (
-                                                <div className="absolute top-0 right-0 bg-yellow-500 text-black rounded-full p-1 shadow-lg transform translate-x-1/4 -translate-y-1/4">
+                                                <div className="absolute top-0 right-0 bg-cyan-500 text-black rounded-full p-1 shadow-lg transform translate-x-1/4 -translate-y-1/4">
                                                     <CheckCircle className="w-4 h-4" />
                                                 </div>
                                             )}

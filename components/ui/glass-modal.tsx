@@ -37,17 +37,17 @@ export function GlassModal({ isOpen, onClose, title, children, footer, variant =
                             className={`
                                 relative w-full pointer-events-auto overflow-hidden rounded-2xl 
                                 border bg-black/80 shadow-2xl
-                                ${variant === 'danger' ? 'border-red-500/30' : 'border-yellow-500/30'}
+                                ${variant === 'danger' ? 'border-red-500/30' : 'border-cyan-500/30'}
                                 ${className || 'max-w-lg'}
                             `}
                         >
                             {/* Glow Effects */}
-                            <div className={`absolute top-0 left-0 w-full h-1 ${variant === 'danger' ? 'bg-red-500' : 'bg-yellow-500'} opacity-50 shadow-[0_0_20px_rgba(234,179,8,0.5)]`} />
+                            <div className={`absolute top-0 left-0 w-full h-1 ${variant === 'danger' ? 'bg-red-500' : 'bg-cyan-500'} opacity-50 shadow-[0_0_20px_rgba(234,179,8,0.5)]`} />
                             <div className="absolute -top-[200px] -left-[200px] w-[400px] h-[400px] bg-white/5 blur-[100px] rounded-full pointer-events-none" />
 
                             {/* Header */}
                             <div className="relative flex items-center justify-between p-6 pb-2">
-                                <h2 className={`text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r ${variant === 'danger' ? 'from-red-400 to-rose-600' : 'from-yellow-400 to-amber-600'}`}>
+                                <h2 className={`text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r ${variant === 'danger' ? 'from-red-400 to-rose-600' : 'from-cyan-400 to-amber-600'}`}>
                                     {title}
                                 </h2>
                                 <Button

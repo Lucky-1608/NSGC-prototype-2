@@ -154,7 +154,7 @@ export default function AdminDashboard() {
     }
 
     return (
-        <div className={`min-h-screen text-white pt-10 pb-20 transition-colors duration-500 ${lockdownMode ? 'bg-red-950/20' : 'bg-black'}`}>
+        <div className={`min-h-screen text-white pt-24 md:pt-10 pb-20 transition-colors duration-500 ${lockdownMode ? 'bg-red-950/20' : 'bg-black'}`}>
             <div className="container mx-auto px-4">
 
                 <div className="flex justify-between items-center mb-12">
@@ -205,7 +205,7 @@ export default function AdminDashboard() {
                     </Card>
                     <Card className="bg-white/5 border-white/10">
                         <CardContent className="p-6 flex items-center gap-4">
-                            <div className="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-500">
+                            <div className="w-12 h-12 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-500">
                                 <Settings className="w-6 h-6" />
                             </div>
                             <div>
@@ -245,7 +245,7 @@ export default function AdminDashboard() {
                                 <Download className="w-4 h-4 mr-2" />
                                 Export CSV
                             </Button>
-                            <Button size="sm" onClick={handleAddUser} className="bg-yellow-500 text-black hover:bg-yellow-400">+ Add User</Button>
+                            <Button size="sm" onClick={handleAddUser} className="bg-cyan-500 text-black hover:bg-cyan-400">+ Add User</Button>
                         </div>
                     </CardHeader>
                     <CardContent>
@@ -276,7 +276,7 @@ export default function AdminDashboard() {
                                                 <Button
                                                     variant="ghost"
                                                     size="sm"
-                                                    className="text-yellow-500 hover:text-yellow-400 mr-2"
+                                                    className="text-cyan-500 hover:text-cyan-400 mr-2"
                                                     onClick={() => handleEditUser(user)}
                                                 >
                                                     Edit
@@ -321,7 +321,7 @@ export default function AdminDashboard() {
                                             type="text"
                                             value={formData.name}
                                             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                            className="w-full bg-black/50 border border-white/10 rounded-md px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
+                                            className="w-full bg-black/50 border border-white/10 rounded-md px-4 py-2 text-white focus:outline-none focus:border-cyan-500"
                                             required
                                         />
                                     </div>
@@ -331,7 +331,7 @@ export default function AdminDashboard() {
                                             type="email"
                                             value={formData.email}
                                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                            className="w-full bg-black/50 border border-white/10 rounded-md px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
+                                            className="w-full bg-black/50 border border-white/10 rounded-md px-4 py-2 text-white focus:outline-none focus:border-cyan-500"
                                             required
                                         />
                                     </div>
@@ -341,7 +341,7 @@ export default function AdminDashboard() {
                                             <select
                                                 value={formData.role}
                                                 onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                                                className="w-full bg-black/50 border border-white/10 rounded-md px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
+                                                className="w-full bg-black/50 border border-white/10 rounded-md px-4 py-2 text-white focus:outline-none focus:border-cyan-500"
                                             >
                                                 <option value="Student">Student</option>
                                                 <option value="Admin">Admin</option>
@@ -355,7 +355,7 @@ export default function AdminDashboard() {
                                             <select
                                                 value={formData.status}
                                                 onChange={(e) => setFormData({ ...formData, status: e.target.value as 'Active' | 'Suspended' })}
-                                                className="w-full bg-black/50 border border-white/10 rounded-md px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
+                                                className="w-full bg-black/50 border border-white/10 rounded-md px-4 py-2 text-white focus:outline-none focus:border-cyan-500"
                                             >
                                                 <option value="Active">Active</option>
                                                 <option value="Suspended">Suspended</option>
@@ -366,7 +366,7 @@ export default function AdminDashboard() {
                                         <Button type="button" variant="outline" className="w-full border-white/20" onClick={() => setIsModalOpen(false)}>
                                             Cancel
                                         </Button>
-                                        <Button type="submit" className="w-full bg-yellow-500 text-black hover:bg-yellow-400 font-bold">
+                                        <Button type="submit" className="w-full bg-cyan-500 text-black hover:bg-cyan-400 font-bold">
                                             <Save className="w-4 h-4 mr-2" /> Save User
                                         </Button>
                                     </div>

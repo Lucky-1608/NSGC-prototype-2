@@ -156,7 +156,7 @@ function CouncilDashboardContent() {
     };
 
     return (
-        <div className="min-h-screen bg-black text-white pt-10 pb-20">
+        <div className="min-h-screen bg-black text-white pt-24 md:pt-10 pb-20">
             <div className="container mx-auto px-4">
 
                 {/* Header */}
@@ -189,7 +189,7 @@ function CouncilDashboardContent() {
                     {[
                         { label: 'Pending Complaints', value: pendingCount.toString(), color: 'text-red-500' },
                         { label: 'Active Events', value: events.length.toString(), color: 'text-blue-500' },
-                        { label: 'Total Announcements', value: announcements.length.toString(), color: 'text-yellow-500' },
+                        { label: 'Total Announcements', value: announcements.length.toString(), color: 'text-cyan-500' },
                         { label: 'Feedback Responses', value: '150+', color: 'text-green-500' },
                     ].map((stat) => (
                         <Card key={stat.label} className="bg-white/5 border-white/10">
@@ -268,7 +268,7 @@ function CouncilDashboardContent() {
                                             <div className="absolute bottom-4 left-4 right-4">
                                                 <div className="flex justify-between items-start mb-2">
                                                     <h3 className="font-bold text-lg">{event.name}</h3>
-                                                    <Badge className="bg-purple-500/20 text-purple-500 whitespace-nowrap">{event.type}</Badge>
+                                                    <Badge className="bg-cyan-500/20 text-cyan-500 whitespace-nowrap">{event.type}</Badge>
                                                 </div>
                                             </div>
                                         </div>
@@ -276,7 +276,7 @@ function CouncilDashboardContent() {
                                         <div className="p-6 pb-2">
                                             <div className="flex justify-between items-start mb-4">
                                                 <h3 className="font-bold text-lg">{event.name}</h3>
-                                                <Badge className="bg-purple-500/20 text-purple-500">{event.type}</Badge>
+                                                <Badge className="bg-cyan-500/20 text-cyan-500">{event.type}</Badge>
                                             </div>
                                         </div>
                                     )}
@@ -337,7 +337,7 @@ function CouncilDashboardContent() {
                                                                 <div className="flex items-center gap-2 mb-1">
                                                                     <span className="font-mono text-xs text-gray-500">{ticket.id}</span>
                                                                     <Badge className={`${ticket.priority === 'High' ? 'bg-red-500/20 text-red-500' :
-                                                                        ticket.priority === 'Medium' ? 'bg-yellow-500/20 text-yellow-500' :
+                                                                        ticket.priority === 'Medium' ? 'bg-cyan-500/20 text-cyan-500' :
                                                                             'bg-blue-500/20 text-blue-500'
                                                                         }`}>
                                                                         {ticket.priority}
@@ -400,7 +400,7 @@ function CouncilDashboardContent() {
                                                             <Badge className={`w-full justify-center py-1 mb-3 ${ticket.status === 'Completed' ? 'bg-green-500 text-black' :
                                                                 ticket.status === 'In Progress' ? 'bg-blue-500 text-white' :
                                                                     ticket.status === 'Rejected' ? 'bg-red-500 text-white' :
-                                                                        'bg-yellow-500 text-black'
+                                                                        'bg-cyan-500 text-black'
                                                                 }`}>
                                                                 {ticket.status}
                                                             </Badge>
@@ -511,19 +511,19 @@ function CouncilDashboardContent() {
                             <>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Event Name</label>
-                                    <Input required value={formData.name || ''} onChange={e => setFormData({ ...formData, name: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" />
+                                    <Input required value={formData.name || ''} onChange={e => setFormData({ ...formData, name: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-cyan-500/50" />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Date</label>
-                                    <Input required type="date" value={formData.date || ''} onChange={e => setFormData({ ...formData, date: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" style={{ colorScheme: 'dark' }} />
+                                    <Input required type="date" value={formData.date || ''} onChange={e => setFormData({ ...formData, date: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-cyan-500/50" style={{ colorScheme: 'dark' }} />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Location</label>
-                                    <Input required value={formData.location || ''} onChange={e => setFormData({ ...formData, location: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" />
+                                    <Input required value={formData.location || ''} onChange={e => setFormData({ ...formData, location: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-cyan-500/50" />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Event Type</label>
-                                    <select value={formData.type || 'Social'} onChange={e => setFormData({ ...formData, type: e.target.value })} className="w-full bg-black/50 border border-white/10 rounded-md p-2 text-white focus:border-yellow-500/50 outline-none">
+                                    <select value={formData.type || 'Social'} onChange={e => setFormData({ ...formData, type: e.target.value })} className="w-full bg-black/50 border border-white/10 rounded-md p-2 text-white focus:border-cyan-500/50 outline-none">
                                         <option value="Academic">Academic</option>
                                         <option value="Social">Social</option>
                                         <option value="Sports">Sports</option>
@@ -531,7 +531,7 @@ function CouncilDashboardContent() {
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Registration Link (Optional)</label>
-                                    <Input type="url" placeholder="https://forms.gle/..." value={formData.registrationLink || ''} onChange={e => setFormData({ ...formData, registrationLink: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" />
+                                    <Input type="url" placeholder="https://forms.gle/..." value={formData.registrationLink || ''} onChange={e => setFormData({ ...formData, registrationLink: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-cyan-500/50" />
                                 </div>
 
                                 {/* Photo Upload Section */}
@@ -571,7 +571,7 @@ function CouncilDashboardContent() {
                                             <video ref={videoRef} autoPlay playsInline className="w-full h-auto" />
                                             <canvas ref={canvasRef} className="hidden" />
                                             <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-4">
-                                                <Button type="button" onClick={capturePhoto} className="bg-yellow-500 text-black hover:bg-yellow-400">
+                                                <Button type="button" onClick={capturePhoto} className="bg-cyan-500 text-black hover:bg-cyan-400">
                                                     <Camera className="w-4 h-4 mr-2" /> Capture
                                                 </Button>
                                                 <Button type="button" onClick={stopCamera} variant="destructive" className="bg-red-500 hover:bg-red-600">
@@ -583,7 +583,7 @@ function CouncilDashboardContent() {
 
                                     {formData.image && (
                                         <div className="relative inline-block w-full">
-                                            <img src={formData.image} alt="Event Preview" className="h-32 w-full rounded-lg border border-yellow-500/50 object-cover" />
+                                            <img src={formData.image} alt="Event Preview" className="h-32 w-full rounded-lg border border-cyan-500/50 object-cover" />
                                             <button
                                                 type="button"
                                                 onClick={removePhoto}
@@ -682,12 +682,12 @@ function CouncilDashboardContent() {
                                         <Badge className={`${selectedTicket.status === 'Completed' ? 'bg-green-500/20 text-green-500' :
                                             selectedTicket.status === 'In Progress' ? 'bg-blue-500/20 text-blue-500' :
                                                 selectedTicket.status === 'Rejected' ? 'bg-red-500/20 text-red-500' :
-                                                    'bg-yellow-500/20 text-yellow-500'
+                                                    'bg-cyan-500/20 text-cyan-500'
                                             }`}>
                                             {selectedTicket.status}
                                         </Badge>
                                         <Badge className={`${selectedTicket.priority === 'High' ? 'bg-red-500/20 text-red-500' :
-                                            selectedTicket.priority === 'Medium' ? 'bg-yellow-500/20 text-yellow-500' :
+                                            selectedTicket.priority === 'Medium' ? 'bg-cyan-500/20 text-cyan-500' :
                                                 'bg-blue-500/20 text-blue-500'
                                             }`}>
                                             Priority: {selectedTicket.priority}

@@ -110,7 +110,7 @@ function SettingsContent() {
                                             className={cn(
                                                 "flex items-center gap-3 px-4 py-3 rounded-md text-sm font-medium transition-all duration-200",
                                                 activeTab === tab.id
-                                                    ? "bg-yellow-500 text-black shadow-lg"
+                                                    ? "bg-cyan-500 text-black shadow-lg"
                                                     : "text-gray-400 hover:text-white hover:bg-white/5"
                                             )}
                                         >
@@ -154,7 +154,7 @@ function SettingsContent() {
                                             {activeTab === 'profile' && (
                                                 <div className="space-y-6">
                                                     <div className="flex items-center gap-6 mb-8">
-                                                        <div className="w-24 h-24 rounded-full bg-yellow-500/20 flex items-center justify-center text-yellow-500 text-3xl font-bold relative group cursor-pointer overflow-hidden">
+                                                        <div className="w-24 h-24 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-500 text-3xl font-bold relative group cursor-pointer overflow-hidden">
                                                             {profile.name.charAt(0)}
                                                             <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                                                 <Camera className="w-6 h-6 text-white" />
@@ -200,7 +200,7 @@ function SettingsContent() {
                                                             />
                                                         </div>
 
-                                                        <Button onClick={handleSaveProfile} className="mt-4 bg-yellow-500 text-black hover:bg-yellow-400 w-fit" disabled={isLoading}>
+                                                        <Button onClick={handleSaveProfile} className="mt-4 bg-cyan-500 text-black hover:bg-cyan-400 w-fit" disabled={isLoading}>
                                                             <Save className="w-4 h-4 mr-2" />
                                                             {isLoading ? 'Saving...' : 'Save Changes'}
                                                         </Button>
@@ -285,11 +285,11 @@ function SettingsContent() {
                                                             Customize how NSGC looks on your device.
                                                         </p>
                                                         <div className="grid grid-cols-2 gap-4">
-                                                            <div className="border border-yellow-500 rounded-lg p-4 bg-black/50 cursor-pointer flex flex-col items-center gap-2">
+                                                            <div className="border border-cyan-500 rounded-lg p-4 bg-black/50 cursor-pointer flex flex-col items-center gap-2">
                                                                 <div className="w-full h-20 bg-black rounded border border-white/10 flex items-center justify-center">
-                                                                    <Moon className="w-6 h-6 text-yellow-500" />
+                                                                    <Moon className="w-6 h-6 text-cyan-500" />
                                                                 </div>
-                                                                <span className="font-medium text-yellow-500">Dark Mode</span>
+                                                                <span className="font-medium text-cyan-500">Dark Mode</span>
                                                             </div>
                                                             <div className="border border-white/10 rounded-lg p-4 bg-white/5 cursor-not-allowed opacity-50 flex flex-col items-center gap-2">
                                                                 <div className="w-full h-20 bg-white rounded border border-gray-200 flex items-center justify-center">

@@ -51,7 +51,7 @@ export function ImageCropper({ image, aspectRatio = 1, onCropComplete, onCancel 
                     <Button variant="outline" onClick={onCancel} className="flex-1 border-white/20 hover:bg-white/10 text-white">
                         <X className="w-4 h-4 mr-2" /> Cancel
                     </Button>
-                    <Button onClick={createCroppedImage} className="flex-1 bg-yellow-500 text-black hover:bg-yellow-400 font-bold">
+                    <Button onClick={createCroppedImage} className="flex-1 bg-cyan-500 text-black hover:bg-cyan-400 font-bold">
                         <Check className="w-4 h-4 mr-2" /> Apply Crop
                     </Button>
                 </div>
@@ -85,7 +85,7 @@ export function ImageCropper({ image, aspectRatio = 1, onCropComplete, onCancel 
                             step={0.1}
                             aria-labelledby="Zoom"
                             onChange={(e) => setZoom(Number(e.target.value))}
-                            className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-yellow-500"
+                            className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-cyan-500"
                         />
                     </div>
                 </div>

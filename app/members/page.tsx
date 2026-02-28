@@ -15,7 +15,7 @@ export default function MembersPage() {
     // For now, let's keep it simple and just show the list.
 
     return (
-        <div className="min-h-screen bg-black text-white pt-10 pb-20">
+        <div className="min-h-screen bg-black text-white pt-24 md:pt-10 pb-20">
             <div className="container mx-auto px-4">
 
                 <div className="text-center mb-12">
@@ -43,17 +43,17 @@ export default function MembersPage() {
                                     exit={{ opacity: 0, scale: 0.9 }}
                                     transition={{ duration: 0.3 }}
                                 >
-                                    <Card className="bg-white/5 border-white/10 overflow-hidden group hover:border-yellow-500/50 transition-colors h-full flex flex-col">
+                                    <Card className="bg-white/5 border-white/10 overflow-hidden group hover:border-cyan-500/50 transition-colors h-full flex flex-col">
                                         <div className="aspect-square overflow-hidden relative bg-neutral-900 flex items-center justify-center">
                                             {/* Placeholder Avatar since we don't have images in shared data yet */}
-                                            <div className="w-32 h-32 rounded-full bg-yellow-500/20 flex items-center justify-center text-4xl font-bold text-yellow-500">
+                                            <div className="w-32 h-32 rounded-full bg-cyan-500/20 flex items-center justify-center text-4xl font-bold text-cyan-500">
                                                 {member.name.charAt(0)}
                                             </div>
 
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-60" />
 
                                             <div className="absolute bottom-0 left-0 w-full p-6">
-                                                <Badge className="mb-2 bg-yellow-500 text-black hover:bg-yellow-400">{member.role}</Badge>
+                                                <Badge className="mb-2 bg-cyan-500 text-black hover:bg-cyan-400">{member.role}</Badge>
                                                 <h3 className="text-2xl font-bold text-white">{member.name}</h3>
                                                 {/* <p className="text-sm text-gray-300">{member.department} • {member.year}</p> */}
                                                 {/* Department/Year not in current schema */}
@@ -64,7 +64,7 @@ export default function MembersPage() {
                                             {/* Bio not in current schema */}
                                             <div className="flex gap-4 pt-4 border-t border-white/5">
                                                 <div className="flex items-center gap-2 text-gray-400 text-sm">
-                                                    <Mail className="w-4 h-4 text-yellow-500" />
+                                                    <Mail className="w-4 h-4 text-cyan-500" />
                                                     {member.email}
                                                 </div>
                                             </div>

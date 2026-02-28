@@ -10,7 +10,7 @@ export default function AchievementsPage() {
     const { achievements } = useSharedData();
 
     return (
-        <div className="min-h-screen bg-black text-white pt-10 pb-20">
+        <div className="min-h-screen bg-black text-white pt-24 md:pt-10 pb-20">
             <div className="container mx-auto px-4">
 
                 <div className="text-center mb-16">
@@ -36,11 +36,11 @@ export default function AchievementsPage() {
                                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                         />
                                         <div className="absolute top-4 left-4">
-                                            <Badge className="bg-yellow-500 text-black hover:bg-yellow-400">{item.category}</Badge>
+                                            <Badge className="bg-cyan-500 text-black hover:bg-cyan-400">{item.category}</Badge>
                                         </div>
                                     </div>
                                     <div className="w-full md:w-3/5 p-8 flex flex-col justify-center">
-                                        <div className="flex items-center gap-2 text-yellow-500 mb-2">
+                                        <div className="flex items-center gap-2 text-cyan-500 mb-2">
                                             <Trophy className="w-5 h-5" />
                                             <span className="font-bold tracking-widest uppercase text-sm">Achievement</span>
                                         </div>

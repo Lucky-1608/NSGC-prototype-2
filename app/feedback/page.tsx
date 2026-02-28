@@ -28,7 +28,7 @@ export default function FeedbackPage() {
     };
 
     return (
-        <div className="min-h-screen bg-black text-white pt-10 pb-20">
+        <div className="min-h-screen bg-black text-white pt-24 md:pt-10 pb-20">
             <div className="container mx-auto px-4">
 
                 <div className="text-center mb-16">
@@ -41,7 +41,7 @@ export default function FeedbackPage() {
                     {/* Polls Section */}
                     <div>
                         <div className="flex items-center gap-3 mb-8">
-                            <BarChart2 className="w-6 h-6 text-yellow-500" />
+                            <BarChart2 className="w-6 h-6 text-cyan-500" />
                             <h2 className="text-2xl font-bold">Active Polls</h2>
                         </div>
 
@@ -68,7 +68,7 @@ export default function FeedbackPage() {
                                                         return (
                                                             <div key={option.id} className="space-y-2">
                                                                 <div className="flex justify-between text-sm">
-                                                                    <span className={isSelected ? "text-yellow-500 font-bold" : "text-gray-300"}>
+                                                                    <span className={isSelected ? "text-cyan-500 font-bold" : "text-gray-300"}>
                                                                         {option.text} {isSelected && "(You voted)"}
                                                                     </span>
                                                                     <span className="text-gray-400">{percentage}%</span>
@@ -76,7 +76,7 @@ export default function FeedbackPage() {
                                                                 {poll.userVoted ? (
                                                                     <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden">
                                                                         <motion.div
-                                                                            className={`h-full ${isSelected ? 'bg-yellow-500' : 'bg-gray-600'}`}
+                                                                            className={`h-full ${isSelected ? 'bg-cyan-500' : 'bg-gray-600'}`}
                                                                             initial={{ width: 0 }}
                                                                             animate={{ width: `${percentage}%` }}
                                                                             transition={{ duration: 1 }}
@@ -85,7 +85,7 @@ export default function FeedbackPage() {
                                                                 ) : (
                                                                     <Button
                                                                         variant="outline"
-                                                                        className="w-full justify-start border-white/20 hover:bg-yellow-500 hover:text-black hover:border-yellow-500"
+                                                                        className="w-full justify-start border-white/20 hover:bg-cyan-500 hover:text-black hover:border-cyan-500"
                                                                         onClick={() => handleVote(poll.id, option.id)}
                                                                     >
                                                                         Vote
@@ -108,7 +108,7 @@ export default function FeedbackPage() {
                     {/* Surveys Section */}
                     <div>
                         <div className="flex items-center gap-3 mb-8">
-                            <MessageSquare className="w-6 h-6 text-yellow-500" />
+                            <MessageSquare className="w-6 h-6 text-cyan-500" />
                             <h2 className="text-2xl font-bold">Feedback Forms</h2>
                         </div>
 
@@ -123,7 +123,7 @@ export default function FeedbackPage() {
                                             viewport={{ once: true }}
                                             transition={{ delay: index * 0.1 }}
                                         >
-                                            <Card className="bg-white/5 border-white/10 hover:border-yellow-500/50 transition-colors">
+                                            <Card className="bg-white/5 border-white/10 hover:border-cyan-500/50 transition-colors">
                                                 <CardHeader>
                                                     <CardTitle className="text-xl">{survey.title}</CardTitle>
                                                     <CardDescription>{survey.description}</CardDescription>

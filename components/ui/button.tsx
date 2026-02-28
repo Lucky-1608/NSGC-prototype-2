@@ -13,7 +13,7 @@ const buttonVariants = cva(
                 default: "bg-blue-900/20 border border-blue-500/30 border-l-blue-500 text-blue-400 hover:text-white shadow-[0_0_15px_rgba(59,130,246,0.15)] hover:shadow-[0_0_20px_rgba(59,130,246,0.3)]",
                 destructive: "bg-red-900/20 border border-red-500/30 border-l-red-500 text-red-400 hover:text-white",
                 outline: "border border-blue-500/20 border-l-blue-500/50 bg-black/50 text-blue-300 hover:text-blue-400 hover:border-l-blue-500",
-                secondary: "bg-yellow-500/10 border border-yellow-500/20 border-l-yellow-500 text-yellow-500 hover:text-yellow-400",
+                secondary: "bg-cyan-500/10 border border-cyan-500/20 border-l-cyan-500 text-cyan-500 hover:text-cyan-400",
                 ghost: "border-transparent border-l-transparent hover:bg-blue-500/10 hover:border-l-blue-500 hover:text-blue-400 text-gray-400",
                 link: "border-transparent border-l-transparent text-blue-400 underline-offset-4 hover:underline",
             },

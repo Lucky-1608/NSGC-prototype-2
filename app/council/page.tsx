@@ -22,7 +22,7 @@ export default function CouncilPage() {
                         <TextReveal text="About the Council" />
                     </h1>
                     <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-                        The National Student Governance Council (NSGC) is the premier student body dedicated to representing student interests, fostering leadership, and driving positive change on campus.
+                        The NxtWave Students General Council (NSGC) is the premier student body dedicated to representing student interests, fostering leadership, and driving positive change on campus.
                     </p>
                 </ScrollAnimation>
 
@@ -31,7 +31,7 @@ export default function CouncilPage() {
                     <ScrollAnimation variant="slide-in-left">
                         <Card className="h-full bg-white/5 border-white/10 backdrop-blur-md">
                             <CardHeader>
-                                <div className="w-12 h-12 rounded-full bg-yellow-500/20 flex items-center justify-center mb-4 text-yellow-500">
+                                <div className="w-12 h-12 rounded-full bg-cyan-500/20 flex items-center justify-center mb-4 text-cyan-500">
                                     <Target className="w-6 h-6" />
                                 </div>
                                 <CardTitle className="text-3xl">Our Mission</CardTitle>
@@ -47,7 +47,7 @@ export default function CouncilPage() {
                     <ScrollAnimation variant="slide-in-right">
                         <Card className="h-full bg-white/5 border-white/10 backdrop-blur-md">
                             <CardHeader>
-                                <div className="w-12 h-12 rounded-full bg-yellow-500/20 flex items-center justify-center mb-4 text-yellow-500">
+                                <div className="w-12 h-12 rounded-full bg-cyan-500/20 flex items-center justify-center mb-4 text-cyan-500">
                                     <Lightbulb className="w-6 h-6" />
                                 </div>
                                 <CardTitle className="text-3xl">Our Vision</CardTitle>
@@ -72,9 +72,9 @@ export default function CouncilPage() {
                             { title: "Inclusivity", icon: Users, desc: "Representing the diverse tapestry of our student community." },
                             { title: "Innovation", icon: Lightbulb, desc: "Embracing new ideas to solve old problems effectively." },
                         ].map((value) => (
-                            <Card key={value.title} className="bg-black/50 border border-white/10 hover:border-yellow-500/50 transition-colors backdrop-blur-md h-full">
+                            <Card key={value.title} className="bg-black/50 border border-white/10 hover:border-cyan-500/50 transition-colors backdrop-blur-md h-full">
                                 <CardContent className="pt-6 text-center">
-                                    <value.icon className="w-10 h-10 mx-auto mb-4 text-yellow-500" />
+                                    <value.icon className="w-10 h-10 mx-auto mb-4 text-cyan-500" />
                                     <h3 className="text-xl font-bold mb-2">{value.title}</h3>
                                     <p className="text-gray-400">{value.desc}</p>
                                 </CardContent>
@@ -96,14 +96,14 @@ export default function CouncilPage() {
                     ) : (
                         <StaggeredList className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" itemVariant="fade-up">
                             {members.map((member) => (
-                                <Card key={member.id} className="bg-white/5 border-white/10 hover:border-yellow-500/50 transition-all group">
+                                <Card key={member.id} className="bg-white/5 border-white/10 hover:border-cyan-500/50 transition-all group">
                                     <CardContent className="p-6 flex items-start gap-4">
-                                        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-yellow-400 to-orange-600 flex items-center justify-center text-black font-bold text-2xl shadow-lg shrink-0">
+                                        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-cyan-400 to-orange-600 flex items-center justify-center text-black font-bold text-2xl shadow-lg shrink-0">
                                             {member.name.charAt(0)}
                                         </div>
                                         <div>
-                                            <h3 className="text-xl font-bold group-hover:text-yellow-500 transition-colors">{member.name}</h3>
-                                            <Badge variant="outline" className="mt-1 border-yellow-500/50 text-yellow-500 bg-yellow-500/10">
+                                            <h3 className="text-xl font-bold group-hover:text-cyan-500 transition-colors">{member.name}</h3>
+                                            <Badge variant="outline" className="mt-1 border-cyan-500/50 text-cyan-500 bg-cyan-500/10">
                                                 {member.role}
                                             </Badge>
                                             <p className="text-sm text-gray-500 mt-2 flex items-center gap-2">
@@ -124,7 +124,7 @@ export default function CouncilPage() {
                         <h2 className="text-3xl font-bold text-center mb-12">Organizational Structure</h2>
                     </ScrollAnimation>
                     <ScrollAnimation variant="scale-up" className="flex flex-col items-center gap-8 max-w-4xl mx-auto">
-                        <Badge className="px-6 py-2 text-lg bg-yellow-500 text-black hover:bg-yellow-400">President</Badge>
+                        <Badge className="px-6 py-2 text-lg bg-cyan-500 text-black hover:bg-cyan-400">President</Badge>
                         <div className="h-8 w-px bg-white/20" />
                         <div className="flex gap-4 md:gap-16 flex-wrap justify-center">
                             <Badge variant="outline" className="px-4 py-2 text-base border-white/20 bg-black/50 backdrop-blur-sm">Vice President</Badge>

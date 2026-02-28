@@ -272,7 +272,7 @@ function ComplaintsContent() {
     if (loading) {
         return (
             <div className="min-h-screen bg-black text-white flex items-center justify-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-yellow-500"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-cyan-500"></div>
             </div>
         );
     }
@@ -283,7 +283,7 @@ function ComplaintsContent() {
                 <Card className="w-full max-w-md bg-white/5 border-white/10">
                     <CardHeader className="text-center">
                         <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <Lock className="w-8 h-8 text-yellow-500" />
+                            <Lock className="w-8 h-8 text-cyan-500" />
                         </div>
                         <CardTitle className="text-2xl font-bold">Authentication Required</CardTitle>
                         <CardDescription>
@@ -292,7 +292,7 @@ function ComplaintsContent() {
                     </CardHeader>
                     <CardContent>
                         <Link href="/login">
-                            <Button className="w-full bg-yellow-500 text-black hover:bg-yellow-400 font-bold">
+                            <Button className="w-full bg-cyan-500 text-black hover:bg-cyan-400 font-bold">
                                 Login to Continue
                             </Button>
                         </Link>
@@ -303,7 +303,7 @@ function ComplaintsContent() {
     }
 
     return (
-        <div className="min-h-screen bg-black text-white pt-10 pb-20">
+        <div className="min-h-screen bg-black text-white pt-24 md:pt-10 pb-20">
             <div className="container mx-auto px-4 max-w-4xl">
 
                 <div className="text-center mb-12">
@@ -317,7 +317,7 @@ function ComplaintsContent() {
                         <button
                             onClick={() => setActiveTab('submit')}
                             className={`px-4 sm:px-8 py-3 rounded-md text-sm font-medium transition-all flex items-center gap-2 whitespace-nowrap ${activeTab === 'submit'
-                                ? 'bg-yellow-500 text-black shadow-lg'
+                                ? 'bg-cyan-500 text-black shadow-lg'
                                 : 'text-gray-400 hover:text-white'
                                 }`}
                         >
@@ -327,7 +327,7 @@ function ComplaintsContent() {
                         <button
                             onClick={() => setActiveTab('track')}
                             className={`px-4 sm:px-8 py-3 rounded-md text-sm font-medium transition-all flex items-center gap-2 whitespace-nowrap ${activeTab === 'track'
-                                ? 'bg-yellow-500 text-black shadow-lg'
+                                ? 'bg-cyan-500 text-black shadow-lg'
                                 : 'text-gray-400 hover:text-white'
                                 }`}
                         >
@@ -337,7 +337,7 @@ function ComplaintsContent() {
                         <button
                             onClick={() => setActiveTab('community')}
                             className={`px-4 sm:px-8 py-3 rounded-md text-sm font-medium transition-all flex items-center gap-2 whitespace-nowrap ${activeTab === 'community'
-                                ? 'bg-yellow-500 text-black shadow-lg'
+                                ? 'bg-cyan-500 text-black shadow-lg'
                                 : 'text-gray-400 hover:text-white'
                                 }`}
                         >
@@ -376,7 +376,7 @@ function ComplaintsContent() {
                                         </p>
                                         <div className="bg-black/50 p-4 rounded-md border border-white/10 inline-block">
                                             <span className="text-gray-400 text-sm block mb-1">Ticket ID</span>
-                                            <span className="text-2xl font-mono text-yellow-500 font-bold tracking-wider">{submittedId}</span>
+                                            <span className="text-2xl font-mono text-cyan-500 font-bold tracking-wider">{submittedId}</span>
                                         </div>
                                         <div className="pt-4 flex gap-4 justify-center">
                                             <Button
@@ -387,7 +387,7 @@ function ComplaintsContent() {
                                                 Submit Another
                                             </Button>
                                             <Button
-                                                className="bg-yellow-500 text-black hover:bg-yellow-400"
+                                                className="bg-cyan-500 text-black hover:bg-cyan-400"
                                                 onClick={() => {
                                                     setComplaintId(submittedId); // Auto-fill tracking ID
                                                     setSubmittedId(null);
@@ -408,7 +408,7 @@ function ComplaintsContent() {
                                                     name="category"
                                                     value={formData.category}
                                                     onChange={handleChange}
-                                                    className="w-full bg-black/50 border border-white/10 rounded-md px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
+                                                    className="w-full bg-black/50 border border-white/10 rounded-md px-4 py-2 text-white focus:outline-none focus:border-cyan-500"
                                                 >
                                                     <option value="Academic">Academic</option>
                                                     <option value="Hostel">Hostel</option>
@@ -424,7 +424,7 @@ function ComplaintsContent() {
                                                     name="department"
                                                     value={formData.department}
                                                     onChange={handleChange}
-                                                    className="w-full bg-black/50 border border-white/10 rounded-md px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
+                                                    className="w-full bg-black/50 border border-white/10 rounded-md px-4 py-2 text-white focus:outline-none focus:border-cyan-500"
                                                     placeholder="e.g. Computer Science"
                                                     required
                                                 />
@@ -438,7 +438,7 @@ function ComplaintsContent() {
                                                 name="subject"
                                                 value={formData.subject}
                                                 onChange={handleChange}
-                                                className="w-full bg-black/50 border border-white/10 rounded-md px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
+                                                className="w-full bg-black/50 border border-white/10 rounded-md px-4 py-2 text-white focus:outline-none focus:border-cyan-500"
                                                 placeholder="Brief summary of the issue"
                                                 required
                                             />
@@ -451,7 +451,7 @@ function ComplaintsContent() {
                                                 value={formData.description}
                                                 onChange={handleChange}
                                                 rows={5}
-                                                className="w-full bg-black/50 border border-white/10 rounded-md px-4 py-2 text-white focus:outline-none focus:border-yellow-500"
+                                                className="w-full bg-black/50 border border-white/10 rounded-md px-4 py-2 text-white focus:outline-none focus:border-cyan-500"
                                                 placeholder="Detailed explanation..."
                                                 required
                                             />
@@ -464,7 +464,7 @@ function ComplaintsContent() {
                                                 name="isAnonymous"
                                                 checked={formData.isAnonymous}
                                                 onChange={handleCheckboxChange}
-                                                className="rounded border-gray-600 text-yellow-500 focus:ring-yellow-500 bg-black/50"
+                                                className="rounded border-gray-600 text-cyan-500 focus:ring-cyan-500 bg-black/50"
                                             />
                                             <label htmlFor="anonymous" className="text-sm text-gray-300">Submit Anonymously</label>
                                         </div>
@@ -506,7 +506,7 @@ function ComplaintsContent() {
                                                     <video ref={videoRef} autoPlay playsInline className="w-full h-auto" />
                                                     <canvas ref={canvasRef} className="hidden" />
                                                     <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-4">
-                                                        <Button type="button" onClick={capturePhoto} className="bg-yellow-500 text-black hover:bg-yellow-400">
+                                                        <Button type="button" onClick={capturePhoto} className="bg-cyan-500 text-black hover:bg-cyan-400">
                                                             <Camera className="w-4 h-4 mr-2" /> Capture
                                                         </Button>
                                                         <Button type="button" onClick={stopCamera} variant="destructive" className="bg-red-500 hover:bg-red-600">
@@ -534,7 +534,7 @@ function ComplaintsContent() {
                                             <Button
                                                 type="submit"
                                                 disabled={isSubmitting}
-                                                className="w-full bg-yellow-500 text-black hover:bg-yellow-400 font-bold py-6 text-lg"
+                                                className="w-full bg-cyan-500 text-black hover:bg-cyan-400 font-bold py-6 text-lg"
                                             >
                                                 {isSubmitting ? (editId ? 'Updating...' : 'Submitting...') : (editId ? 'Update Complaint' : 'Submit Complaint')} <Send className="ml-2 w-5 h-5" />
                                             </Button>
@@ -574,7 +574,7 @@ function ComplaintsContent() {
                                         <CardDescription>Details of your submission.</CardDescription>
                                     </div>
                                     <Link href={`/complaints?track=${trackingResult.id}`} onClick={(e) => { e.preventDefault(); setActiveTab('track'); setComplaintId(trackingResult.id); }} className="w-full sm:w-auto">
-                                        <Button variant="outline" className="w-full sm:w-auto border-white/20 text-yellow-500 hover:text-yellow-400 hover:bg-white/10">
+                                        <Button variant="outline" className="w-full sm:w-auto border-white/20 text-cyan-500 hover:text-cyan-400 hover:bg-white/10">
                                             Track Status
                                         </Button>
                                     </Link>
@@ -635,10 +635,10 @@ function ComplaintsContent() {
                                             type="text"
                                             value={complaintId}
                                             onChange={(e) => setComplaintId(e.target.value)}
-                                            className="flex-grow bg-black/50 border border-white/10 rounded-md px-4 py-2 text-white focus:outline-none focus:border-yellow-500 w-full"
+                                            className="flex-grow bg-black/50 border border-white/10 rounded-md px-4 py-2 text-white focus:outline-none focus:border-cyan-500 w-full"
                                             placeholder="e.g. CMP-2025-001"
                                         />
-                                        <Button type="submit" className="bg-yellow-500 text-black hover:bg-yellow-400 w-full sm:w-auto">
+                                        <Button type="submit" className="bg-cyan-500 text-black hover:bg-cyan-400 w-full sm:w-auto">
                                             Track
                                         </Button>
                                     </form>
@@ -650,18 +650,18 @@ function ComplaintsContent() {
                                     initial={{ opacity: 0, height: 0 }}
                                     animate={{ opacity: 1, height: 'auto' }}
                                 >
-                                    <Card className="bg-white/5 border-white/10 border-l-4 border-l-yellow-500">
+                                    <Card className="bg-white/5 border-white/10 border-l-4 border-l-cyan-500">
                                         <CardHeader>
                                             <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
                                                 <div>
-                                                    <Badge variant="outline" className="mb-2 border-yellow-500 text-yellow-500">
+                                                    <Badge variant="outline" className="mb-2 border-cyan-500 text-cyan-500">
                                                         {trackingResult.status}
                                                     </Badge>
                                                     <CardTitle className="text-xl break-words">{trackingResult.subject || trackingResult.title}</CardTitle>
                                                     <CardDescription>ID: {trackingResult.id} • Submitted on {trackingResult.date}</CardDescription>
                                                 </div>
                                                 <Link href={`/complaints?view=${trackingResult.id}`} onClick={(e) => { e.preventDefault(); setActiveTab('details'); }} className="w-full sm:w-auto">
-                                                    <Button variant="ghost" className="w-full sm:w-auto text-yellow-500 hover:bg-white/10 justify-start sm:justify-center px-0 sm:px-4">
+                                                    <Button variant="ghost" className="w-full sm:w-auto text-cyan-500 hover:bg-white/10 justify-start sm:justify-center px-0 sm:px-4">
                                                         View Details
                                                     </Button>
                                                 </Link>
@@ -695,7 +695,7 @@ function ComplaintsContent() {
                                             <div className="relative pl-8 border-l border-white/10 space-y-8">
                                                 {trackingResult.timeline.map((step: any, index: number) => (
                                                     <div key={index} className="relative">
-                                                        <div className={`absolute -left-[37px] w-4 h-4 rounded-full border-2 ${step.completed ? 'bg-yellow-500 border-yellow-500' : 'bg-black border-gray-600'}`} />
+                                                        <div className={`absolute -left-[37px] w-4 h-4 rounded-full border-2 ${step.completed ? 'bg-cyan-500 border-cyan-500' : 'bg-black border-gray-600'}`} />
                                                         <h4 className={`font-medium ${step.completed ? 'text-white' : 'text-gray-500'}`}>{step.status}</h4>
                                                         <p className="text-xs text-gray-500">{step.date}</p>
                                                     </div>
@@ -720,7 +720,7 @@ function ComplaintsContent() {
                             {[...tickets]
                                 .sort((a, b) => (b.votes || 0) - (a.votes || 0)) // Sort by votes desc
                                 .map((ticket) => (
-                                    <Card key={ticket.id} className="bg-white/5 border-white/10 hover:border-yellow-500/30 transition-colors">
+                                    <Card key={ticket.id} className="bg-white/5 border-white/10 hover:border-cyan-500/30 transition-colors">
                                         <CardContent className="pt-6">
                                             <div className="flex gap-4">
                                                 {/* Vote Section */}
@@ -736,7 +736,7 @@ function ComplaintsContent() {
                                                             // Let's use 'demo-user' if nothing else.
                                                             upvoteTicket(ticket.id, 'demo-user');
                                                         }}
-                                                        className={`h-auto p-2 flex flex-col gap-1 hover:bg-white/10 ${ticket.votedBy?.includes('demo-user') ? 'text-yellow-500' : 'text-gray-400'}`}
+                                                        className={`h-auto p-2 flex flex-col gap-1 hover:bg-white/10 ${ticket.votedBy?.includes('demo-user') ? 'text-cyan-500' : 'text-gray-400'}`}
                                                     >
                                                         <ThumbsUp className={`w-5 h-5 ${ticket.votedBy?.includes('demo-user') ? 'fill-current' : ''}`} />
                                                         <span className="font-bold text-sm">{ticket.votes || 0}</span>
@@ -749,7 +749,7 @@ function ComplaintsContent() {
                                                             <div className="flex items-center gap-2 mb-1">
                                                                 <Badge variant="outline" className={`
                                                                     ${ticket.priority === 'High' ? 'border-red-500 text-red-500' :
-                                                                        ticket.priority === 'Medium' ? 'border-yellow-500 text-yellow-500' :
+                                                                        ticket.priority === 'Medium' ? 'border-cyan-500 text-cyan-500' :
                                                                             'border-blue-500 text-blue-500'}
                                                                 `}>
                                                                     {ticket.priority} Priority
@@ -790,9 +790,9 @@ function ComplaintsContent() {
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 animate={{ opacity: 1, scale: 1 }}
-                                className="bg-gray-900 border border-yellow-500 rounded-lg max-w-sm w-full p-6 text-center shadow-2xl"
+                                className="bg-gray-900 border border-cyan-500 rounded-lg max-w-sm w-full p-6 text-center shadow-2xl"
                             >
-                                <div className="w-16 h-16 bg-yellow-500/20 text-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <div className="w-16 h-16 bg-cyan-500/20 text-cyan-500 rounded-full flex items-center justify-center mx-auto mb-4">
                                     <CheckCircle2 className="w-8 h-8" />
                                 </div>
                                 <h3 className="text-2xl font-bold text-white mb-2">Update Successful!</h3>
@@ -800,7 +800,7 @@ function ComplaintsContent() {
                                     Your complaint details have been updated successfully.
                                 </p>
                                 <Button
-                                    className="w-full bg-yellow-500 text-black hover:bg-yellow-400 font-bold"
+                                    className="w-full bg-cyan-500 text-black hover:bg-cyan-400 font-bold"
                                     onClick={() => {
                                         setShowUpdateSuccess(false);
                                         router.push('/complaints/history');
@@ -820,7 +820,7 @@ function ComplaintsContent() {
 export default function ComplaintsPage() {
     return (
         <TicketProvider>
-            <Suspense fallback={<div className="min-h-screen bg-black text-white flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-yellow-500"></div></div>}>
+            <Suspense fallback={<div className="min-h-screen bg-black text-white flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-cyan-500"></div></div>}>
                 <ComplaintsContent />
             </Suspense>
         </TicketProvider>
