@@ -15,7 +15,7 @@ import {
 import { useTickets, TicketProvider } from '@/lib/ticket-context';
 import { useCouncil, CouncilProvider } from '@/lib/council-context';
 import Link from 'next/link';
-import { Announcement } from '@/hooks/useSharedData';
+import { useSharedData, Announcement, Achievement } from '@/hooks/useSharedData';
 
 function CouncilDashboardContent() {
     const router = useRouter();
@@ -24,6 +24,7 @@ function CouncilDashboardContent() {
     // Contexts
     const { tickets, updateTicketStatus } = useTickets();
     const { announcements, events, addAnnouncement, addEvent } = useCouncil();
+    const { achievements, setAchievements } = useSharedData();
     // UI States
     const [activeTab, setActiveTab] = useState('announcements');
     const [selectedTicket, setSelectedTicket] = useState<any>(null); // For viewing full complaint details
@@ -31,7 +32,7 @@ function CouncilDashboardContent() {
 
     // Modal States
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-    const [addModalType, setAddModalType] = useState<'announcement' | 'event'>('announcement');
+    const [addModalType, setAddModalType] = useState<'announcement' | 'event' | 'achievement'>('announcement');
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [itemToDelete, setItemToDelete] = useState<{ type: string, id: string } | null>(null);
     // Camera & Image State for Forms
@@ -44,10 +45,18 @@ function CouncilDashboardContent() {
 
     useEffect(() => {
         const role = localStorage.getItem('userRole');
-        if (role !== 'council') {
-            router.push('/council/login');
-        } else {
+        if (role === 'council') {
             setIsAuthorized(true);
+        } else if (role === 'president') {
+            router.push('/dashboard/president');
+        } else if (role === 'admin') {
+            router.push('/dashboard/admin');
+        } else if (role === 'clubs') {
+            router.push('/dashboard/clubs');
+        } else if (role === 'student') {
+            router.push('/dashboard/student');
+        } else {
+            router.push('/login');
         }
     }, [router]);
 
@@ -59,7 +68,7 @@ function CouncilDashboardContent() {
     const inProgressCount = tickets.filter(t => t.status === 'In Progress').length;
 
     // Handlers
-    const openAddModal = (type: 'announcement' | 'event', data?: any) => {
+    const openAddModal = (type: 'announcement' | 'event' | 'achievement', data?: any) => {
         setAddModalType(type);
         setFormData(data || {});
         setIsAddModalOpen(true);
@@ -71,10 +80,14 @@ function CouncilDashboardContent() {
     };
 
     const executeDelete = () => {
-        // Implement delete logic within context when available, for now just close modal
+        if (itemToDelete?.type === 'achievement') {
+            setAchievements(prev => prev.filter(a => a.id !== itemToDelete.id));
+        } else {
+            // Existing logic or alert for other types
+            alert(`Deletion for ${itemToDelete?.type} with id ${itemToDelete?.id} would happen here`);
+        }
         setIsDeleteModalOpen(false);
         setItemToDelete(null);
-        alert(`Deletion for ${itemToDelete?.type} with id ${itemToDelete?.id} would happen here`);
     };
 
     // Camera Handlers
@@ -140,6 +153,10 @@ function CouncilDashboardContent() {
 
     const handleSave = (e: React.FormEvent) => {
         e.preventDefault();
+        const isEditing = !!formData.id;
+        const itemId = isEditing ? formData.id : Math.random().toString(36).slice(2, 11);
+        const newData = { ...formData, id: itemId };
+
         if (addModalType === 'announcement') {
             addAnnouncement(formData.title || 'Untitled', formData.content || '', 'Council User', formData.link, formData.category, formData.priority);
         } else if (addModalType === 'event') {
@@ -151,6 +168,13 @@ function CouncilDashboardContent() {
                 formData.registrationLink,
                 formData.image
             );
+        } else if (addModalType === 'achievement') {
+            setAchievements(prev => {
+                const updated = isEditing
+                    ? prev.map(item => item.id === itemId ? { ...item, ...newData } as Achievement : item)
+                    : [...prev, { ...newData, image: formData.image || '', addedByRole: 'Council' } as Achievement];
+                return updated;
+            });
         }
         setIsAddModalOpen(false);
     };
@@ -190,7 +214,7 @@ function CouncilDashboardContent() {
                         { label: 'Pending Complaints', value: pendingCount.toString(), color: 'text-red-500' },
                         { label: 'Active Events', value: events.length.toString(), color: 'text-blue-500' },
                         { label: 'Total Announcements', value: announcements.length.toString(), color: 'text-cyan-500' },
-                        { label: 'Feedback Responses', value: '150+', color: 'text-green-500' },
+                        { label: 'Total Achievements', value: achievements.length.toString(), color: 'text-yellow-500' },
                     ].map((stat) => (
                         <Card key={stat.label} className="bg-white/5 border-white/10">
                             <CardContent className="p-6 text-center">
@@ -208,6 +232,7 @@ function CouncilDashboardContent() {
                             <TabsTrigger value="announcements" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white"><Megaphone className="w-4 h-4 mr-2" /> Announcements</TabsTrigger>
                             <TabsTrigger value="events" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white"><Calendar className="w-4 h-4 mr-2" /> Events</TabsTrigger>
                             <TabsTrigger value="complaints" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white"><MessageSquare className="w-4 h-4 mr-2" /> Complaints</TabsTrigger>
+                            <TabsTrigger value="achievements" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white"><Star className="w-4 h-4 mr-2" /> Achievements</TabsTrigger>
                         </TabsList>
                     </div>
 
@@ -306,6 +331,51 @@ function CouncilDashboardContent() {
                                 </Card>
                             ))}
                             {events.length === 0 && <p className="text-gray-500 italic">No active events.</p>}
+                        </div>
+                    </TabsContent>
+
+                    {/* Achievements Content */}
+                    <TabsContent value="achievements" className="space-y-6">
+                        <div className="flex justify-between items-center">
+                            <h2 className="text-2xl font-bold">Student Achievements</h2>
+                            <Button onClick={() => openAddModal('achievement')} className="bg-yellow-600 text-white hover:bg-yellow-500"><Plus className="w-4 h-4 mr-2" /> Add Achievement</Button>
+                        </div>
+                        <div className="grid gap-4 md:grid-cols-2">
+                            {achievements.map((item) => (
+                                <Card key={item.id} className="bg-white/5 border-white/10 hover:border-yellow-500/50 transition-colors">
+                                    {item.image && (
+                                        <div className="h-48 w-full overflow-hidden rounded-t-lg">
+                                            <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+                                        </div>
+                                    )}
+                                    <CardContent className="p-6">
+                                        <div className="flex justify-between items-start mb-4">
+                                            <Badge variant="outline" className="border-white/20 text-yellow-400">{item.category}</Badge>
+                                            <div className="flex items-center gap-1 -mt-2 -mr-2 ml-auto z-10 relative">
+                                                <Button variant="ghost" size="sm" onClick={() => openAddModal('achievement', item)} className="text-gray-300 hover:text-white h-8 px-2">
+                                                    Edit
+                                                </Button>
+                                                <Button variant="ghost" size="icon" onClick={() => confirmDelete('achievement', item.id)} className="text-red-500 hover:bg-red-500/10 h-8 w-8">
+                                                    <Trash2 className="w-4 h-4" />
+                                                </Button>
+                                            </div>
+                                        </div>
+                                        <h3 className="text-xl font-bold mb-2">{item.title}</h3>
+                                        <p className="text-gray-400 mb-4">{item.description}</p>
+                                        <div className="flex items-center gap-4 text-sm text-gray-500">
+                                            <div className="flex items-center gap-1">
+                                                <Users className="w-4 h-4" />
+                                                <span>{item.student}</span>
+                                            </div>
+                                            <div className="flex items-center gap-1">
+                                                <Calendar className="w-4 h-4" />
+                                                <span>{item.date}</span>
+                                            </div>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            ))}
+                            {achievements.length === 0 && <p className="text-gray-500 italic">No achievements recorded yet.</p>}
                         </div>
                     </TabsContent>
 
@@ -584,6 +654,97 @@ function CouncilDashboardContent() {
                                     {formData.image && (
                                         <div className="relative inline-block w-full">
                                             <img src={formData.image} alt="Event Preview" className="h-32 w-full rounded-lg border border-cyan-500/50 object-cover" />
+                                            <button
+                                                type="button"
+                                                onClick={removePhoto}
+                                                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 shadow-lg"
+                                            >
+                                                <X className="w-3 h-3" />
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            </>
+                        )}
+
+                        {addModalType === 'achievement' && (
+                            <>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-300">Achievement Title</label>
+                                    <Input required value={formData.title || ''} onChange={e => setFormData({ ...formData, title: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-300">Student/Team Name</label>
+                                    <Input required value={formData.student || ''} onChange={e => setFormData({ ...formData, student: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-300">Description</label>
+                                    <Textarea required value={formData.description || ''} onChange={(e: any) => setFormData({ ...formData, description: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-300">Category</label>
+                                    <select value={formData.category || 'Academic'} onChange={e => setFormData({ ...formData, category: e.target.value })} className="w-full bg-black/50 border border-white/10 rounded-md p-2 text-white focus:border-yellow-500/50 outline-none">
+                                        <option value="Academic">Academic</option>
+                                        <option value="Sports">Sports</option>
+                                        <option value="Research">Research</option>
+                                        <option value="Cultural">Cultural</option>
+                                    </select>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-300">Date</label>
+                                    <Input required value={formData.date || ''} onChange={e => setFormData({ ...formData, date: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-yellow-500/50" placeholder="e.g. March 2025" />
+                                </div>
+
+                                {/* Photo Upload Section */}
+                                <div className="space-y-4 pt-2 border-t border-white/10">
+                                    <label className="text-sm font-medium text-gray-300">Achievement Photo (Optional)</label>
+
+                                    {!isCameraOpen && !formData.image && (
+                                        <div className="flex gap-4">
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                onClick={() => document.getElementById('achievement-file-upload')?.click()}
+                                                className="border-white/10 hover:bg-white/5 bg-black/50"
+                                            >
+                                                <input
+                                                    id="achievement-file-upload"
+                                                    type="file"
+                                                    accept="image/*"
+                                                    className="hidden"
+                                                    onChange={handleFileUpload}
+                                                />
+                                                <Upload className="w-4 h-4 mr-2" /> Upload Photo
+                                            </Button>
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                onClick={startCamera}
+                                                className="border-white/10 hover:bg-white/5 bg-black/50"
+                                            >
+                                                <Camera className="w-4 h-4 mr-2" /> Use Camera
+                                            </Button>
+                                        </div>
+                                    )}
+
+                                    {isCameraOpen && (
+                                        <div className="relative bg-black border border-white/10 rounded-lg overflow-hidden max-w-md mx-auto">
+                                            <video ref={videoRef} autoPlay playsInline className="w-full h-auto" />
+                                            <canvas ref={canvasRef} className="hidden" />
+                                            <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-4">
+                                                <Button type="button" onClick={capturePhoto} className="bg-yellow-500 text-black hover:bg-yellow-400">
+                                                    <Camera className="w-4 h-4 mr-2" /> Capture
+                                                </Button>
+                                                <Button type="button" onClick={stopCamera} variant="destructive" className="bg-red-500 hover:bg-red-600">
+                                                    <X className="w-4 h-4" />
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {formData.image && (
+                                        <div className="relative inline-block w-full">
+                                            <img src={formData.image} alt="Achievement Preview" className="h-32 w-full rounded-lg border border-yellow-500/50 object-cover" />
                                             <button
                                                 type="button"
                                                 onClick={removePhoto}

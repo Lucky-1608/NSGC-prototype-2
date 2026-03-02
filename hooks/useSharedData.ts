@@ -11,6 +11,8 @@ export interface Announcement {
     priority: 'Low' | 'Medium' | 'High';
     category: 'General' | 'Academic' | 'Event' | 'Emergency';
     link?: string; // Optional external link
+    author?: string; // Optional author/club name
+    addedByRole?: string;
 }
 
 export interface CouncilMember {
@@ -22,12 +24,20 @@ export interface CouncilMember {
     image?: string; // Base64 image string
 }
 
+export interface ClubTeamMember {
+    id: string;
+    name: string;
+    role: string;
+    image?: string;
+}
+
 export interface Club {
     id: string;
     name: string;
     description: string;
     lead: string;
     members: number;
+    teamMembers?: ClubTeamMember[];
     image?: string; // Base64 image string
     website?: string;
 }
@@ -40,6 +50,8 @@ export interface Event {
     type: 'Academic' | 'Social' | 'Sports';
     image?: string; // Base64 image string
     registrationLink?: string; // Optional registration link
+    organizer?: string; // Optional organizer/club name
+    addedByRole?: string;
 }
 
 export interface Candidate {
@@ -66,6 +78,7 @@ export interface Achievement {
     date: string;
     description: string;
     image?: string; // Optional image URL
+    addedByRole?: string;
 }
 
 export interface User {
@@ -91,6 +104,7 @@ export interface Poll {
     userVoted: boolean; // Note: In a real backend, this would be per-user. For local demo, it's global.
     userChoice?: string;
     status: 'Active' | 'Closed';
+    dueDate?: string;
 }
 
 export interface Survey {
@@ -101,6 +115,7 @@ export interface Survey {
     time: string; // e.g. "2 mins"
     link?: string; // Optional external link
     status: 'Active' | 'Closed';
+    dueDate?: string;
 }
 
 // Default Data (Empty)
@@ -196,7 +211,7 @@ export function useSharedData() {
     const updateAnnouncements = (newData: Announcement[] | ((prev: Announcement[]) => Announcement[])) => {
         setAnnouncements(prev => {
             const updated = typeof newData === 'function' ? newData(prev) : newData;
-            localStorage.setItem('nsgc_announcements', JSON.stringify(updated));
+            localStorage.setItem('nsgc_v3_announcements', JSON.stringify(updated));
             window.dispatchEvent(new Event('nsgc-data-update'));
             return updated;
         });
@@ -205,7 +220,7 @@ export function useSharedData() {
     const updateMembers = (newData: CouncilMember[] | ((prev: CouncilMember[]) => CouncilMember[])) => {
         setMembers(prev => {
             const updated = typeof newData === 'function' ? newData(prev) : newData;
-            localStorage.setItem('nsgc_members', JSON.stringify(updated));
+            localStorage.setItem('nsgc_v3_members', JSON.stringify(updated));
             window.dispatchEvent(new Event('nsgc-data-update'));
             return updated;
         });
@@ -214,7 +229,7 @@ export function useSharedData() {
     const updateClubs = (newData: Club[] | ((prev: Club[]) => Club[])) => {
         setClubs(prev => {
             const updated = typeof newData === 'function' ? newData(prev) : newData;
-            localStorage.setItem('nsgc_clubs', JSON.stringify(updated));
+            localStorage.setItem('nsgc_v3_clubs', JSON.stringify(updated));
             window.dispatchEvent(new Event('nsgc-data-update'));
             return updated;
         });
@@ -223,7 +238,7 @@ export function useSharedData() {
     const updateEvents = (newData: Event[] | ((prev: Event[]) => Event[])) => {
         setEvents(prev => {
             const updated = typeof newData === 'function' ? newData(prev) : newData;
-            localStorage.setItem('nsgc_events', JSON.stringify(updated));
+            localStorage.setItem('nsgc_v3_events', JSON.stringify(updated));
             window.dispatchEvent(new Event('nsgc-data-update'));
             return updated;
         });
@@ -232,7 +247,7 @@ export function useSharedData() {
     const updateElections = (newData: Election[] | ((prev: Election[]) => Election[])) => {
         setElections(prev => {
             const updated = typeof newData === 'function' ? newData(prev) : newData;
-            localStorage.setItem('nsgc_elections', JSON.stringify(updated));
+            localStorage.setItem('nsgc_v3_elections', JSON.stringify(updated));
             window.dispatchEvent(new Event('nsgc-data-update'));
             return updated;
         });
@@ -241,7 +256,7 @@ export function useSharedData() {
     const updateAchievements = (newData: Achievement[] | ((prev: Achievement[]) => Achievement[])) => {
         setAchievements(prev => {
             const updated = typeof newData === 'function' ? newData(prev) : newData;
-            localStorage.setItem('nsgc_achievements', JSON.stringify(updated));
+            localStorage.setItem('nsgc_v3_achievements', JSON.stringify(updated));
             window.dispatchEvent(new Event('nsgc-data-update'));
             return updated;
         });
@@ -250,7 +265,7 @@ export function useSharedData() {
     const updateUsers = (newData: User[] | ((prev: User[]) => User[])) => {
         setUsers(prev => {
             const updated = typeof newData === 'function' ? newData(prev) : newData;
-            localStorage.setItem('nsgc_users', JSON.stringify(updated));
+            localStorage.setItem('nsgc_v3_users', JSON.stringify(updated));
             window.dispatchEvent(new Event('nsgc-data-update'));
             return updated;
         });
@@ -259,7 +274,7 @@ export function useSharedData() {
     const updatePolls = (newData: Poll[] | ((prev: Poll[]) => Poll[])) => {
         setPolls(prev => {
             const updated = typeof newData === 'function' ? newData(prev) : newData;
-            localStorage.setItem('nsgc_polls', JSON.stringify(updated));
+            localStorage.setItem('nsgc_v3_polls', JSON.stringify(updated));
             window.dispatchEvent(new Event('nsgc-data-update'));
             return updated;
         });
@@ -268,7 +283,7 @@ export function useSharedData() {
     const updateSurveys = (newData: Survey[] | ((prev: Survey[]) => Survey[])) => {
         setSurveys(prev => {
             const updated = typeof newData === 'function' ? newData(prev) : newData;
-            localStorage.setItem('nsgc_surveys', JSON.stringify(updated));
+            localStorage.setItem('nsgc_v3_surveys', JSON.stringify(updated));
             window.dispatchEvent(new Event('nsgc-data-update'));
             return updated;
         });

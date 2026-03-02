@@ -46,10 +46,16 @@ export default function AdminDashboard() {
 
     useEffect(() => {
         const role = localStorage.getItem('userRole');
-        if (role !== 'admin') {
-            router.push('/admin/login');
-        } else {
+        if (role === 'admin') {
             setIsAuthorized(true);
+        } else if (role === 'president') {
+            router.push('/dashboard/president');
+        } else if (role === 'clubs') {
+            router.push('/dashboard/clubs');
+        } else if (role === 'student') {
+            router.push('/dashboard/student');
+        } else {
+            router.push('/login');
         }
 
         // Check for persisted lockdown state

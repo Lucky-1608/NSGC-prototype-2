@@ -79,22 +79,25 @@ export default function ElectionsPage() {
                                                 <p className="text-gray-400 text-sm mb-2">{election.description}</p>
                                                 <p className="text-xs text-gray-500">Date: {election.date}</p>
                                             </div>
-                                            {election.status === 'Ongoing' && (
-                                                <Button
-                                                    onClick={() => !hasVoted && setSelectedElection(election)}
-                                                    disabled={hasVoted}
-                                                    className={`px-6 py-2 rounded-full font-bold transition-all ${hasVoted
-                                                        ? 'bg-green-500/20 text-green-500 cursor-not-allowed'
-                                                        : 'bg-cyan-500 text-black hover:bg-cyan-400'
-                                                        }`}
-                                                >
-                                                    {hasVoted ? (
-                                                        <><CheckCircle className="w-4 h-4 mr-2" /> Voted</>
-                                                    ) : (
-                                                        <><Vote className="w-4 h-4 mr-2" /> Vote Now</>
-                                                    )}
-                                                </Button>
-                                            )}
+                                            <Button
+                                                onClick={() => setSelectedElection(election)}
+                                                className={`px-6 py-2 rounded-full font-bold transition-all ${hasVoted
+                                                    ? 'bg-green-500/20 text-green-500'
+                                                    : election.status === 'Completed' ? 'bg-gray-500/20 text-gray-400'
+                                                        : election.status === 'Upcoming' ? 'bg-blue-500/20 text-blue-500'
+                                                            : 'bg-cyan-500 text-black hover:bg-cyan-400'
+                                                    }`}
+                                            >
+                                                {hasVoted ? (
+                                                    <><CheckCircle className="w-4 h-4 mr-2" /> Voted (View Results)</>
+                                                ) : election.status === 'Completed' ? (
+                                                    <><CheckCircle className="w-4 h-4 mr-2" /> View Results</>
+                                                ) : election.status === 'Upcoming' ? (
+                                                    <><Vote className="w-4 h-4 mr-2" /> View Candidates</>
+                                                ) : (
+                                                    <><Vote className="w-4 h-4 mr-2" /> Vote Now</>
+                                                )}
+                                            </Button>
                                         </Card>
                                     );
                                 })}
@@ -115,51 +118,80 @@ export default function ElectionsPage() {
                 {/* Voting Modal */}
                 <GlassModal
                     isOpen={!!selectedElection}
-                    onClose={() => setSelectedElection(null)}
-                    title={`Vote: ${selectedElection?.title}`}
+                    onClose={() => { setSelectedElection(null); setSelectedCandidate(null); }}
+                    title={selectedElection?.status === 'Ongoing' && !userVotes.includes(selectedElection?.id || '') ? `Vote: ${selectedElection?.title}` : selectedElection?.title || 'Election Details'}
                     footer={
                         <>
-                            <Button variant="outline" onClick={() => setSelectedElection(null)} className="border-white/20 hover:bg-white/10 hover:text-white">Cancel</Button>
-                            <Button
-                                onClick={handleVote}
-                                disabled={!selectedCandidate}
-                                className="bg-cyan-500 text-black hover:bg-cyan-400 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                <Vote className="w-4 h-4 mr-2" /> Confirm Vote
-                            </Button>
+                            <Button variant="outline" onClick={() => { setSelectedElection(null); setSelectedCandidate(null); }} className="border-white/20 hover:bg-white/10 hover:text-white">Close</Button>
+                            {selectedElection?.status === 'Ongoing' && !userVotes.includes(selectedElection.id) && (
+                                <Button
+                                    onClick={handleVote}
+                                    disabled={!selectedCandidate}
+                                    className="bg-cyan-500 text-black hover:bg-cyan-400 font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                    <Vote className="w-4 h-4 mr-2" /> Confirm Vote
+                                </Button>
+                            )}
                         </>
                     }
                 >
                     <div className="space-y-4">
-                        <p className="text-gray-300 text-sm">Select a candidate to cast your vote. This action cannot be undone.</p>
+                        {selectedElection?.status === 'Ongoing' && !userVotes.includes(selectedElection.id) ? (
+                            <p className="text-gray-300 text-sm">Select a candidate to cast your vote. This action cannot be undone.</p>
+                        ) : (
+                            <p className="text-gray-300 text-sm">
+                                {selectedElection?.status === 'Upcoming' ? "Voting hasn't started yet. Here are the candidates:" : "Election results:"}
+                            </p>
+                        )}
                         <div className="grid grid-cols-2 gap-4">
                             {selectedElection?.candidates && selectedElection.candidates.length > 0 ? (
-                                selectedElection?.candidates.map((candidate) => (
-                                    <div
-                                        key={candidate.id}
-                                        onClick={() => setSelectedCandidate(candidate.id)}
-                                        className={`flex flex-col items-center text-center p-6 rounded-xl border cursor-pointer transition-all relative overflow-hidden group ${selectedCandidate === candidate.id
-                                            ? 'bg-cyan-500/20 border-cyan-500 text-cyan-500 shadow-[0_0_20px_rgba(234,179,8,0.2)]'
-                                            : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20 text-gray-300'
-                                            }`}
-                                    >
-                                        <div className="mb-3 relative">
-                                            {candidate.image ? (
-                                                <img src={candidate.image} alt={candidate.name} className="w-24 h-24 rounded-full object-cover border-2 border-white/10 group-hover:border-cyan-500/50 transition-colors" />
-                                            ) : (
-                                                <div className="w-24 h-24 rounded-full bg-white/5 flex items-center justify-center border-2 border-white/10 group-hover:border-cyan-500/50 transition-colors">
-                                                    <Vote className="w-10 h-10 text-gray-500" />
-                                                </div>
-                                            )}
-                                            {selectedCandidate === candidate.id && (
-                                                <div className="absolute top-0 right-0 bg-cyan-500 text-black rounded-full p-1 shadow-lg transform translate-x-1/4 -translate-y-1/4">
-                                                    <CheckCircle className="w-4 h-4" />
+                                selectedElection?.candidates.map((candidate) => {
+                                    const totalVotes = selectedElection.candidates.reduce((sum, c) => sum + (c.votes || 0), 0);
+                                    const percentage = totalVotes > 0 ? Math.round(((candidate.votes || 0) / totalVotes) * 100) : 0;
+                                    const showResults = userVotes.includes(selectedElection.id) || selectedElection.status === 'Completed';
+                                    const canVote = selectedElection.status === 'Ongoing' && !userVotes.includes(selectedElection.id);
+
+                                    return (
+                                        <div
+                                            key={candidate.id}
+                                            onClick={() => { if (canVote) setSelectedCandidate(candidate.id); }}
+                                            className={`flex flex-col items-center text-center p-6 rounded-xl border transition-all relative overflow-hidden group ${canVote ? 'cursor-pointer' : ''} ${selectedCandidate === candidate.id
+                                                ? 'bg-cyan-500/20 border-cyan-500 text-cyan-500 shadow-[0_0_20px_rgba(234,179,8,0.2)]'
+                                                : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20 text-gray-300'
+                                                }`}
+                                        >
+                                            <div className="mb-3 relative">
+                                                {candidate.image ? (
+                                                    <img src={candidate.image} alt={candidate.name} className="w-24 h-24 rounded-full object-cover border-2 border-white/10 group-hover:border-cyan-500/50 transition-colors" />
+                                                ) : (
+                                                    <div className="w-24 h-24 rounded-full bg-white/5 flex items-center justify-center border-2 border-white/10 group-hover:border-cyan-500/50 transition-colors">
+                                                        <Vote className="w-10 h-10 text-gray-500" />
+                                                    </div>
+                                                )}
+                                                {selectedCandidate === candidate.id && (
+                                                    <div className="absolute top-0 right-0 bg-cyan-500 text-black rounded-full p-1 shadow-lg transform translate-x-1/4 -translate-y-1/4">
+                                                        <CheckCircle className="w-4 h-4" />
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <span className="font-bold text-lg mb-1">{candidate.name}</span>
+                                            {showResults && (
+                                                <div className="w-full mt-2">
+                                                    <div className="flex justify-between text-xs mb-1 text-gray-400">
+                                                        <span>{candidate.votes || 0} votes</span>
+                                                        <span>{percentage}%</span>
+                                                    </div>
+                                                    <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+                                                        <div
+                                                            className={`h-full rounded-full transition-all duration-500 ${selectedCandidate === candidate.id ? 'bg-cyan-500' : 'bg-gray-500'}`}
+                                                            style={{ width: `${percentage}%` }}
+                                                        />
+                                                    </div>
                                                 </div>
                                             )}
                                         </div>
-                                        <span className="font-bold text-lg">{candidate.name}</span>
-                                    </div>
-                                ))
+                                    );
+                                })
                             ) : (
                                 <div className="col-span-2 text-center p-8 text-gray-500 bg-white/5 rounded-xl border border-white/10 border-dashed">
                                     <Lock className="w-8 h-8 mx-auto mb-3 opacity-50" />

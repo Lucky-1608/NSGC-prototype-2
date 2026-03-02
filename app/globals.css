@@ -154,5 +154,35 @@ body {
   border-top: 1px solid var(--accent);
   box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.8), 0 0 15px rgba(59, 130, 246, 0.15);
   border-radius: 4px;
-  /* Keeping it angular, under 6px as requested */
+}
+
+/* Aggressive Scrollbar Hide Utility */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Global Custom Scrollbar Fallback */
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 10px;
+}
+
+*::-webkit-scrollbar-corner {
+  background: rgba(0, 0, 0, 0.5);
 }

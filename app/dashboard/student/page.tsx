@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -12,6 +14,23 @@ import { useSharedData } from '@/hooks/useSharedData';
 import { useCouncil, CouncilProvider } from '@/lib/council-context';
 
 function StudentDashboardContent() {
+    const router = useRouter();
+    const [isAuthorized, setIsAuthorized] = useState(false);
+
+    useEffect(() => {
+        const role = localStorage.getItem('userRole');
+        if (role === 'student') {
+            setIsAuthorized(true);
+        } else if (role === 'president') {
+            router.push('/dashboard/president');
+        } else if (role === 'admin') {
+            router.push('/dashboard/admin');
+        } else if (role === 'clubs') {
+            router.push('/dashboard/clubs');
+        } else {
+            router.push('/login');
+        }
+    }, [router]);
     const { tickets } = useTickets();
     const { announcements: sharedAnnouncements, events: sharedEvents, clubs, members, isLoaded } = useSharedData();
     const { announcements: councilAnnouncements, events: councilEvents } = useCouncil();
@@ -32,7 +51,7 @@ function StudentDashboardContent() {
         return dateA - dateB;
     });
 
-    if (!isLoaded) {
+    if (!isLoaded || !isAuthorized) {
         return <div className="min-h-screen bg-black text-white pt-24 md:pt-10 pb-20 flex items-center justify-center">Loading...</div>;
     }
 

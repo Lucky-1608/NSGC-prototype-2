@@ -84,6 +84,28 @@ export const CouncilProvider = ({ children }: { children: ReactNode }) => {
             createdAt: new Date().toISOString()
         };
         setAnnouncements(prev => [newAnnouncement, ...prev]);
+
+        // Also add to global shared announcements so President and others can see them
+        try {
+            const savedShared = localStorage.getItem('nsgc_v3_announcements');
+            const sharedAnnouncements = savedShared ? JSON.parse(savedShared) : [];
+            const newSharedAnnouncement = {
+                id: newAnnouncement.id,
+                title,
+                content,
+                author,
+                link,
+                category: category || 'General',
+                priority: priority || 'Low',
+                date: new Date().toISOString().split('T')[0], // Shared data uses 'date' instead of 'createdAt'
+                addedByRole: 'Council'
+            };
+            sharedAnnouncements.unshift(newSharedAnnouncement); // Add to beginning
+            localStorage.setItem('nsgc_v3_announcements', JSON.stringify(sharedAnnouncements));
+            window.dispatchEvent(new Event('nsgc-data-update'));
+        } catch (e) {
+            console.error('Failed to update shared announcements', e);
+        }
     };
 
     const deleteAnnouncement = (id: string) => {
@@ -101,6 +123,27 @@ export const CouncilProvider = ({ children }: { children: ReactNode }) => {
             image
         };
         setEvents(prev => [...prev, newEvent]);
+
+        // Also add to global shared events so President can see them
+        try {
+            const savedShared = localStorage.getItem('nsgc_v3_events');
+            const sharedEvents = savedShared ? JSON.parse(savedShared) : [];
+            const newSharedEvent = {
+                id: newEvent.id, // Keep the same ID
+                name,
+                date,
+                location,
+                type: type || 'Social',
+                registrationLink,
+                image,
+                addedByRole: 'Council'
+            };
+            sharedEvents.push(newSharedEvent);
+            localStorage.setItem('nsgc_v3_events', JSON.stringify(sharedEvents));
+            window.dispatchEvent(new Event('nsgc-data-update'));
+        } catch (e) {
+            console.error('Failed to update shared events', e);
+        }
     };
 
     const deleteEvent = (id: string) => {

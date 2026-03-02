@@ -62,5 +62,12 @@ export async function universalLogin(email: string, pass: string) {
         return { success: true, role: 'council', userName: 'Council Member' };
     }
 
+    // Check Clubs
+    if (process.env.CLUB_EMAIL &&
+        email.toLowerCase() === process.env.CLUB_EMAIL.toLowerCase() &&
+        pass === process.env.CLUB_PASSWORD) {
+        return { success: true, role: 'clubs', userName: 'Club Lead' };
+    }
+
     return { success: false };
 }

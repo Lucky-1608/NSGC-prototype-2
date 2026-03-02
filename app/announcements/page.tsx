@@ -6,9 +6,10 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input'; // Need to create Input component or use standard input
-import { Megaphone, Calendar, Search, Filter } from 'lucide-react';
+import { Megaphone, Calendar, Search, Filter, ExternalLink } from 'lucide-react';
+import { GlassModal } from '@/components/ui/glass-modal';
 
-import { useSharedData } from '@/hooks/useSharedData';
+import { useSharedData, Announcement } from '@/hooks/useSharedData';
 
 const categories = ["All", "Academic", "Events", "Facility", "Hostel", "Sports", "General"];
 
@@ -16,6 +17,7 @@ export default function AnnouncementsPage() {
     const { announcements } = useSharedData();
     const [filter, setFilter] = useState("All");
     const [search, setSearch] = useState("");
+    const [selectedAnnouncement, setSelectedAnnouncement] = useState<Announcement | null>(null);
 
     const filteredAnnouncements = announcements.map(a => ({
         ...a,
@@ -102,10 +104,17 @@ export default function AnnouncementsPage() {
                                 <CardContent>
                                     <p className="text-gray-300">{announcement.content}</p>
                                 </CardContent>
-                                <CardFooter>
-                                    <Button variant="link" className="text-cyan-500 p-0 h-auto hover:text-cyan-400">
+                                <CardFooter className="flex flex-wrap items-center gap-4">
+                                    <Button variant="link" className="text-cyan-500 p-0 h-auto hover:text-cyan-400" onClick={() => setSelectedAnnouncement(announcement)}>
                                         Read full notice &rarr;
                                     </Button>
+                                    {announcement.link && (
+                                        <a href={announcement.link.startsWith('http') ? announcement.link : `https://${announcement.link}`} target="_blank" rel="noopener noreferrer">
+                                            <Button variant="outline" size="sm" className="border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10">
+                                                Open Link
+                                            </Button>
+                                        </a>
+                                    )}
                                 </CardFooter>
                             </Card>
                         </motion.div>
@@ -117,6 +126,55 @@ export default function AnnouncementsPage() {
                         </div>
                     )}
                 </div>
+
+                <GlassModal
+                    isOpen={!!selectedAnnouncement}
+                    onClose={() => setSelectedAnnouncement(null)}
+                    title={selectedAnnouncement?.title || "Announcement Details"}
+                    footer={
+                        <>
+                            <Button variant="outline" onClick={() => setSelectedAnnouncement(null)} className="border-white/20 hover:bg-white/10 hover:text-white">
+                                Close
+                            </Button>
+                            {selectedAnnouncement?.link && (
+                                <a href={selectedAnnouncement.link.startsWith('http') ? selectedAnnouncement.link : `https://${selectedAnnouncement.link}`} target="_blank" rel="noopener noreferrer">
+                                    <Button className="bg-cyan-500 text-black hover:bg-cyan-400 font-bold border-none">
+                                        <ExternalLink className="w-4 h-4 mr-2" /> Open Link
+                                    </Button>
+                                </a>
+                            )}
+                        </>
+                    }
+                >
+                    {selectedAnnouncement && (
+                        <div className="space-y-6 text-sm">
+                            <div className="flex flex-col gap-2 pb-4 border-b border-white/10">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                    <Badge variant="outline" className={`
+                    ${selectedAnnouncement.priority === 'High' ? 'border-red-500 text-red-500' :
+                                            selectedAnnouncement.priority === 'Medium' ? 'border-cyan-500 text-cyan-500' :
+                                                'border-green-500 text-green-500'}
+                  `}>
+                                        {selectedAnnouncement.priority} Priority
+                                    </Badge>
+                                    <Badge variant="secondary" className="bg-white/10 text-gray-300">
+                                        {selectedAnnouncement.category}
+                                    </Badge>
+                                </div>
+                                <div className="text-gray-400 flex items-center gap-2 mt-2">
+                                    <Calendar className="w-4 h-4" />
+                                    <span>Date: {selectedAnnouncement.date}</span>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 className="font-semibold text-gray-300 mb-2">Description</h4>
+                                <div className="bg-black/30 p-4 rounded-lg border border-white/5 text-gray-300 whitespace-pre-wrap leading-relaxed text-base">
+                                    {selectedAnnouncement.content}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </GlassModal>
 
             </div>
         </div>

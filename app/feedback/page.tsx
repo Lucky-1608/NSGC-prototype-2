@@ -47,59 +47,66 @@ export default function FeedbackPage() {
 
                         <div className="space-y-6">
                             <div className="space-y-6">
-                                {polls.filter(p => p.status === 'Active').length > 0 ? (
-                                    polls.filter(p => p.status === 'Active').map((poll) => (
-                                        <motion.div
-                                            key={poll.id}
-                                            initial={{ opacity: 0, x: -20 }}
-                                            whileInView={{ opacity: 1, x: 0 }}
-                                            viewport={{ once: true }}
-                                        >
-                                            <Card className="bg-white/5 border-white/10">
-                                                <CardHeader>
-                                                    <CardTitle className="text-xl">{poll.question}</CardTitle>
-                                                    <CardDescription>{poll.totalVotes} votes so far</CardDescription>
-                                                </CardHeader>
-                                                <CardContent className="space-y-4">
-                                                    {poll.options.map((option) => {
-                                                        const percentage = Math.round((option.votes / poll.totalVotes) * 100) || 0;
-                                                        const isSelected = poll.userVoted && poll.userChoice === option.id;
+                                {polls.length > 0 ? (
+                                    polls.map((poll) => {
+                                        const isPastDue = poll.dueDate && new Date(poll.dueDate) < new Date();
+                                        const isActive = poll.status === 'Active' && !isPastDue;
 
-                                                        return (
-                                                            <div key={option.id} className="space-y-2">
-                                                                <div className="flex justify-between text-sm">
-                                                                    <span className={isSelected ? "text-cyan-500 font-bold" : "text-gray-300"}>
-                                                                        {option.text} {isSelected && "(You voted)"}
-                                                                    </span>
-                                                                    <span className="text-gray-400">{percentage}%</span>
-                                                                </div>
-                                                                {poll.userVoted ? (
-                                                                    <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden">
-                                                                        <motion.div
-                                                                            className={`h-full ${isSelected ? 'bg-cyan-500' : 'bg-gray-600'}`}
-                                                                            initial={{ width: 0 }}
-                                                                            animate={{ width: `${percentage}%` }}
-                                                                            transition={{ duration: 1 }}
-                                                                        />
+                                        if (!isActive) return null; // Only show active polls for now, or you could show closed ones differently
+
+                                        return (
+                                            <motion.div
+                                                key={poll.id}
+                                                initial={{ opacity: 0, x: -20 }}
+                                                whileInView={{ opacity: 1, x: 0 }}
+                                                viewport={{ once: true }}
+                                            >
+                                                <Card className="bg-white/5 border-white/10">
+                                                    <CardHeader>
+                                                        <CardTitle className="text-xl">{poll.question}</CardTitle>
+                                                        <CardDescription>{poll.totalVotes} votes so far {poll.dueDate && `• Ends: ${new Date(poll.dueDate).toLocaleDateString()}`}</CardDescription>
+                                                    </CardHeader>
+                                                    <CardContent className="space-y-4">
+                                                        {poll.options.map((option) => {
+                                                            const percentage = Math.round((option.votes / poll.totalVotes) * 100) || 0;
+                                                            const isSelected = poll.userVoted && poll.userChoice === option.id;
+
+                                                            return (
+                                                                <div key={option.id} className="space-y-2">
+                                                                    <div className="flex justify-between text-sm">
+                                                                        <span className={isSelected ? "text-cyan-500 font-bold" : "text-gray-300"}>
+                                                                            {option.text} {isSelected && "(You voted)"}
+                                                                        </span>
+                                                                        <span className="text-gray-400">{percentage}%</span>
                                                                     </div>
-                                                                ) : (
-                                                                    <Button
-                                                                        variant="outline"
-                                                                        className="w-full justify-start border-white/20 hover:bg-cyan-500 hover:text-black hover:border-cyan-500"
-                                                                        onClick={() => handleVote(poll.id, option.id)}
-                                                                    >
-                                                                        Vote
-                                                                    </Button>
-                                                                )}
-                                                            </div>
-                                                        );
-                                                    })}
-                                                </CardContent>
-                                            </Card>
-                                        </motion.div>
-                                    ))
+                                                                    {poll.userVoted ? (
+                                                                        <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden">
+                                                                            <motion.div
+                                                                                className={`h-full ${isSelected ? 'bg-cyan-500' : 'bg-gray-600'}`}
+                                                                                initial={{ width: 0 }}
+                                                                                animate={{ width: `${percentage}%` }}
+                                                                                transition={{ duration: 1 }}
+                                                                            />
+                                                                        </div>
+                                                                    ) : (
+                                                                        <Button
+                                                                            variant="outline"
+                                                                            className="w-full justify-start border-white/20 hover:bg-cyan-500 hover:text-black hover:border-cyan-500"
+                                                                            onClick={() => handleVote(poll.id, option.id)}
+                                                                        >
+                                                                            Vote
+                                                                        </Button>
+                                                                    )}
+                                                                </div>
+                                                            );
+                                                        })}
+                                                    </CardContent>
+                                                </Card>
+                                            </motion.div>
+                                        )
+                                    })
                                 ) : (
-                                    <p className="text-gray-500 text-center py-8">No active polls at the moment.</p>
+                                    <p className="text-gray-500 text-center py-8">No polls at the moment.</p>
                                 )}
                             </div>
                         </div>
@@ -115,33 +122,46 @@ export default function FeedbackPage() {
                         <div className="space-y-6">
                             <div className="space-y-6">
                                 {surveys.length > 0 ? (
-                                    surveys.map((survey, index) => (
-                                        <motion.div
-                                            key={survey.id}
-                                            initial={{ opacity: 0, x: 20 }}
-                                            whileInView={{ opacity: 1, x: 0 }}
-                                            viewport={{ once: true }}
-                                            transition={{ delay: index * 0.1 }}
-                                        >
-                                            <Card className="bg-white/5 border-white/10 hover:border-cyan-500/50 transition-colors">
-                                                <CardHeader>
-                                                    <CardTitle className="text-xl">{survey.title}</CardTitle>
-                                                    <CardDescription>{survey.description}</CardDescription>
-                                                </CardHeader>
-                                                <CardContent>
-                                                    <div className="flex gap-4 text-sm text-gray-400 mb-4">
-                                                        <span className="bg-white/10 px-2 py-1 rounded">{survey.questions} Questions</span>
-                                                        <span className="bg-white/10 px-2 py-1 rounded">{survey.time} to complete</span>
-                                                    </div>
-                                                </CardContent>
-                                                <CardFooter>
-                                                    <Button className="w-full bg-white/10 hover:bg-white/20 text-white border border-white/10" disabled={survey.status !== 'Active'} onClick={() => survey.link && window.open(survey.link, '_blank')}>
-                                                        {survey.status === 'Active' ? 'Start Survey' : 'Closed'}
-                                                    </Button>
-                                                </CardFooter>
-                                            </Card>
-                                        </motion.div>
-                                    ))
+                                    surveys.map((survey, index) => {
+                                        const isPastDue = survey.dueDate && new Date(survey.dueDate) < new Date();
+                                        const isActive = survey.status === 'Active' && !isPastDue;
+
+                                        return (
+                                            <motion.div
+                                                key={survey.id}
+                                                initial={{ opacity: 0, x: 20 }}
+                                                whileInView={{ opacity: 1, x: 0 }}
+                                                viewport={{ once: true }}
+                                                transition={{ delay: index * 0.1 }}
+                                            >
+                                                <Card className={`bg-white/5 border-white/10 ${isActive ? 'hover:border-cyan-500/50' : 'opacity-60'} transition-colors`}>
+                                                    <CardHeader>
+                                                        <div className="flex justify-between items-start">
+                                                            <CardTitle className="text-xl">{survey.title}</CardTitle>
+                                                            {!isActive && <span className="text-xs text-red-500 font-bold border border-red-500 px-2 py-1 rounded">CLOSED</span>}
+                                                        </div>
+                                                        <CardDescription>{survey.description}</CardDescription>
+                                                        {survey.dueDate && <CardDescription className="text-cyan-500/80">Ends: {new Date(survey.dueDate).toLocaleDateString()}</CardDescription>}
+                                                    </CardHeader>
+                                                    <CardContent>
+                                                        <div className="flex gap-4 text-sm text-gray-400 mb-4">
+                                                            <span className="bg-white/10 px-2 py-1 rounded">{survey.questions} Questions</span>
+                                                            <span className="bg-white/10 px-2 py-1 rounded">{survey.time} to complete</span>
+                                                        </div>
+                                                    </CardContent>
+                                                    <CardFooter>
+                                                        <Button
+                                                            className={`w-full ${isActive ? 'bg-cyan-500 text-black hover:bg-cyan-400' : 'bg-white/10 text-gray-400 border border-white/10'}`}
+                                                            disabled={!isActive}
+                                                            onClick={() => survey.link && window.open(survey.link, '_blank')}
+                                                        >
+                                                            {isActive ? 'Start Survey' : 'Closed'}
+                                                        </Button>
+                                                    </CardFooter>
+                                                </Card>
+                                            </motion.div>
+                                        )
+                                    })
                                 ) : (
                                     <p className="text-gray-500 text-center py-8">No feedback forms available.</p>
                                 )}

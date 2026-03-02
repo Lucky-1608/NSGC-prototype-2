@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, User, Sun, Moon, Settings, LayoutDashboard, Shield, Bell, Monitor, LogOut, Crown, Megaphone, Calendar, Vote, MessageCircleWarning, Users, Trophy, ShoppingBag, MessageSquare, TerminalSquare } from 'lucide-react';
+import { Menu, X, User, Sun, Moon, Settings, LayoutDashboard, Shield, Bell, Monitor, LogOut, Crown, Megaphone, Calendar, Vote, MessageCircleWarning, Users, Trophy, ShoppingBag, MessageSquare, TerminalSquare, Flag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -12,8 +12,12 @@ const navItems = [
     { name: 'Home', href: '/' },
     { name: 'Council', href: '/council' },
     { name: 'Members', href: '/members' },
+    { name: 'Clubs', href: '/clubs' },
     { name: 'Announcements', href: '/announcements' },
     { name: 'Events', href: '/events' },
+    { name: 'Elections', href: '/elections' },
+    { name: 'Achievements', href: '/achievements' },
+    { name: 'Feedback', href: '/feedback' },
     { name: 'Complaints', href: '/complaints' },
 ];
 
@@ -21,8 +25,12 @@ const navIcons: Record<string, any> = {
     'Home': LayoutDashboard,
     'Council': Crown,
     'Members': Users,
+    'Clubs': Flag,
     'Announcements': Megaphone,
     'Events': Calendar,
+    'Elections': Vote,
+    'Achievements': Trophy,
+    'Feedback': MessageSquare,
     'Complaints': MessageCircleWarning,
 };
 
@@ -91,7 +99,7 @@ export function Navbar() {
                     </motion.div>
                 </div>
 
-                <div className="p-4 lg:p-6 flex flex-col gap-8 flex-1 overflow-y-auto relative z-10 w-full md:pr-6 lg:pr-8">
+                <div className="p-4 lg:p-6 flex flex-col gap-8 flex-1 overflow-y-auto scrollbar-hide relative z-10 w-full md:pr-6 lg:pr-8">
 
                     {/* LOGO */}
                     <Link href="/" className="flex items-center gap-3 group relative mb-4 hidden md:flex">
@@ -150,6 +158,14 @@ export function Navbar() {
                                     </Link>
                                 </Button>
                             )}
+                            {userRole === 'clubs' && (
+                                <Button variant="ghost" className="w-full justify-start gap-3 rounded-sm text-xs font-mono uppercase tracking-widest text-teal-400 hover:text-teal-300 hover:bg-teal-500/10 border border-teal-500/20" asChild onClick={() => setIsMobileMenuOpen(false)}>
+                                    <Link href="/dashboard/clubs">
+                                        <Flag className="w-4 h-4" />
+                                        <span className="inline md:hidden lg:inline">CLUB MGR</span>
+                                    </Link>
+                                </Button>
+                            )}
                             {(!userRole || userRole === 'student') && (
                                 <Button variant="ghost" className="w-full justify-start gap-3 rounded-sm text-xs font-mono uppercase tracking-widest text-gray-300 hover:text-white hover:bg-white/5 border border-white/10" asChild onClick={() => setIsMobileMenuOpen(false)}>
                                     <Link href="/dashboard/student">
@@ -159,16 +175,14 @@ export function Navbar() {
                                 </Button>
                             )}
 
-                            {/* User Profile info */}
-                            <div className="flex md:hidden lg:flex flex-col mt-2">
-                                <span className="text-[9px] font-mono text-blue-500/60 tracking-widest uppercase">Operator</span>
-                                <span className="text-sm font-mono text-white truncate">{userName}</span>
-                            </div>
+
 
                             {/* Utility Icons */}
                             <div className="flex items-center gap-2 mt-2">
-                                <Button variant="ghost" size="icon" className="text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 rounded-sm w-full lg:w-10">
-                                    <Settings className="w-4 h-4" />
+                                <Button variant="ghost" size="icon" className="text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 rounded-sm w-full lg:w-10" asChild onClick={() => setIsMobileMenuOpen(false)}>
+                                    <Link href="/settings">
+                                        <Settings className="w-4 h-4" />
+                                    </Link>
                                 </Button>
                                 <Button
                                     variant="ghost"

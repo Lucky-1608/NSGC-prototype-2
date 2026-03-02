@@ -49,9 +49,11 @@ function PresidentDashboardContent() {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [addModalType, setAddModalType] = useState<'announcement' | 'member' | 'club' | 'event' | 'election' | 'achievement' | 'user' | 'poll' | 'survey'>('announcement');
 
-    // Delete Modal State
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [itemToDelete, setItemToDelete] = useState<{ type: string, id: string } | null>(null);
+    const [eventFilter, setEventFilter] = useState<'All' | 'President' | 'Council' | 'Club Manager'>('All');
+    const [announcementFilter, setAnnouncementFilter] = useState<'All' | 'President' | 'Council' | 'Club Manager'>('All');
+    const [achievementFilter, setAchievementFilter] = useState<'All' | 'President' | 'Council' | 'Club Manager'>('All');
 
     // Camera & Image State for Forms
     const [isCameraOpen, setIsCameraOpen] = useState(false);
@@ -75,10 +77,16 @@ function PresidentDashboardContent() {
 
     useEffect(() => {
         const role = localStorage.getItem('userRole');
-        if (role !== 'president') {
-            router.push('/president/login');
-        } else {
+        if (role === 'president') {
             setIsAuthorized(true);
+        } else if (role === 'student') {
+            router.push('/dashboard/student');
+        } else if (role === 'admin') {
+            router.push('/dashboard/admin');
+        } else if (role === 'clubs') {
+            router.push('/dashboard/clubs');
+        } else {
+            router.push('/login');
         }
     }, [router]);
 
@@ -210,7 +218,7 @@ function PresidentDashboardContent() {
 
         switch (addModalType) {
             case 'announcement':
-                setAnnouncements(prev => updateState(prev, { ...newData, date: (newData as Announcement).date || new Date().toISOString().split('T')[0] }));
+                setAnnouncements(prev => updateState(prev, { ...newData, addedByRole: 'President', date: (newData as Announcement).date || new Date().toISOString().split('T')[0] }));
                 break;
             case 'member':
                 setMembers(prev => updateState(prev, { ...newData, status: (newData as CouncilMember).status || 'Active' }));
@@ -219,13 +227,13 @@ function PresidentDashboardContent() {
                 setClubs(prev => updateState(prev, { ...newData, members: (newData as Club).members || 0 }));
                 break;
             case 'event':
-                setEvents(prev => updateState(prev, newData));
+                setEvents(prev => updateState(prev, { ...newData, addedByRole: 'President' }));
                 break;
             case 'election':
                 setElections(prev => updateState(prev, { ...newData, candidates: (newData as any).candidates || [] }));
                 break;
             case 'achievement':
-                setAchievements(prev => updateState(prev, { ...newData, image: (newData as any).image || '' }));
+                setAchievements(prev => updateState(prev, { ...newData, image: (newData as any).image || '', addedByRole: 'President' }));
                 break;
             case 'user':
                 setUsers(prev => {
@@ -331,41 +339,55 @@ function PresidentDashboardContent() {
 
                     {/* Announcements Content */}
                     <TabsContent value="announcements" className="space-y-6">
-                        <div className="flex justify-between items-center">
-                            <h2 className="text-2xl font-bold">Public Announcements</h2>
-                            <Button onClick={() => openAddModal('announcement')} className="bg-cyan-500 text-black hover:bg-cyan-400"><Plus className="w-4 h-4 mr-2" /> New Announcement</Button>
+                        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                            <h2 className="text-2xl font-bold">Announcements</h2>
+                            <div className="flex gap-2 w-full md:w-auto">
+                                <select
+                                    className="bg-black/50 border border-white/10 rounded-md p-2 text-sm text-gray-300 outline-none focus:border-cyan-500/50"
+                                    value={announcementFilter}
+                                    onChange={(e) => setAnnouncementFilter(e.target.value as any)}
+                                >
+                                    <option value="All">All Announcements</option>
+                                    <option value="President">Added by President</option>
+                                    <option value="Council">Added by Council</option>
+                                    <option value="Club Manager">Added by Clubs</option>
+                                </select>
+                                <Button onClick={() => openAddModal('announcement')} className="bg-cyan-500 text-black hover:bg-cyan-400 whitespace-nowrap"><Plus className="w-4 h-4 mr-2 md:mr-0 lg:mr-2" /> <span className="hidden lg:inline">New Announcement</span></Button>
+                            </div>
                         </div>
                         <div className="grid gap-4">
-                            {announcements.map((item) => (
-                                <Card key={item.id} className="bg-white/5 border-white/10 hover:border-cyan-500/50 transition-colors">
-                                    <div className="p-6 flex flex-col md:flex-row justify-between gap-4">
-                                        <div>
-                                            <div className="flex items-center gap-2 mb-2">
-                                                <h3 className="text-xl font-bold">{item.title}</h3>
-                                                <Badge variant="outline" className={item.priority === 'High' ? 'text-red-500 border-red-500' : 'text-blue-500 border-blue-500'}>{item.priority}</Badge>
-                                                <Badge variant="secondary" className="bg-white/10 text-gray-300">{item.category || 'General'}</Badge>
+                            {announcements
+                                .filter(a => announcementFilter === 'All' ? true : a.addedByRole === announcementFilter)
+                                .map((item) => (
+                                    <Card key={item.id} className="bg-white/5 border-white/10 hover:border-cyan-500/50 transition-colors">
+                                        <div className="p-6 flex flex-col md:flex-row justify-between gap-4">
+                                            <div>
+                                                <div className="flex items-center gap-2 mb-2">
+                                                    <h3 className="text-xl font-bold">{item.title}</h3>
+                                                    <Badge variant="outline" className={item.priority === 'High' ? 'text-red-500 border-red-500' : 'text-blue-500 border-blue-500'}>{item.priority}</Badge>
+                                                    <Badge variant="secondary" className="bg-white/10 text-gray-300">{item.category || 'General'}</Badge>
+                                                </div>
+                                                <p className="text-gray-400 mb-2">{item.content}</p>
+                                                <p className="text-xs text-gray-500">Posted: {item.date}</p>
                                             </div>
-                                            <p className="text-gray-400 mb-2">{item.content}</p>
-                                            <p className="text-xs text-gray-500">Posted: {item.date}</p>
+                                            <div className="flex flex-col gap-2">
+                                                {item.link && (
+                                                    <a href={item.link.startsWith('http') ? item.link : `https://${item.link}`} target="_blank" rel="noopener noreferrer">
+                                                        <Button variant="outline" size="sm" className="w-full border-cyan-500/20 text-cyan-500 hover:bg-cyan-500/10 hover:text-cyan-400 mb-2 md:mb-0">
+                                                            <ExternalLink className="w-4 h-4 mr-2" /> View Link
+                                                        </Button>
+                                                    </a>
+                                                )}
+                                                <Button variant="outline" size="sm" onClick={() => openAddModal('announcement', item)} className="border-white/20 text-gray-300 hover:text-white mb-2 md:mb-0">
+                                                    Edit
+                                                </Button>
+                                                <Button variant="ghost" size="icon" onClick={() => confirmDelete('announcement', item.id)} className="text-red-500 hover:bg-red-500/10 hover:text-red-400 self-start md:self-center bg-black/20">
+                                                    <Trash2 className="w-5 h-5" />
+                                                </Button>
+                                            </div>
                                         </div>
-                                        <div className="flex flex-col gap-2">
-                                            {item.link && (
-                                                <a href={item.link.startsWith('http') ? item.link : `https://${item.link}`} target="_blank" rel="noopener noreferrer">
-                                                    <Button variant="outline" size="sm" className="w-full border-cyan-500/20 text-cyan-500 hover:bg-cyan-500/10 hover:text-cyan-400 mb-2 md:mb-0">
-                                                        <ExternalLink className="w-4 h-4 mr-2" /> View Link
-                                                    </Button>
-                                                </a>
-                                            )}
-                                            <Button variant="outline" size="sm" onClick={() => openAddModal('announcement', item)} className="border-white/20 text-gray-300 hover:text-white mb-2 md:mb-0">
-                                                Edit
-                                            </Button>
-                                            <Button variant="ghost" size="icon" onClick={() => confirmDelete('announcement', item.id)} className="text-red-500 hover:bg-red-500/10 hover:text-red-400 self-start md:self-center bg-black/20">
-                                                <Trash2 className="w-5 h-5" />
-                                            </Button>
-                                        </div>
-                                    </div>
-                                </Card>
-                            ))}
+                                    </Card>
+                                ))}
                             {announcements.length === 0 && <p className="text-gray-500 italic">No active announcements.</p>}
                         </div>
                     </TabsContent>
@@ -438,56 +460,70 @@ function PresidentDashboardContent() {
 
                     {/* Events Content */}
                     <TabsContent value="events" className="space-y-6">
-                        <div className="flex justify-between items-center">
+                        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                             <h2 className="text-2xl font-bold">Upcoming Events</h2>
-                            <Button onClick={() => openAddModal('event')} className="bg-cyan-500 text-black hover:bg-cyan-400"><Plus className="w-4 h-4 mr-2" /> Create Event</Button>
+                            <div className="flex gap-2 w-full md:w-auto">
+                                <select
+                                    className="bg-black/50 border border-white/10 rounded-md p-2 text-sm text-gray-300 outline-none focus:border-cyan-500/50"
+                                    value={eventFilter}
+                                    onChange={(e) => setEventFilter(e.target.value as any)}
+                                >
+                                    <option value="All">All Events</option>
+                                    <option value="President">Added by President</option>
+                                    <option value="Council">Added by Council</option>
+                                    <option value="Club Manager">Added by Clubs</option>
+                                </select>
+                                <Button onClick={() => openAddModal('event')} className="bg-cyan-500 text-black hover:bg-cyan-400 whitespace-nowrap"><Plus className="w-4 h-4 mr-2 md:mr-0 lg:mr-2" /> <span className="hidden lg:inline">Create Event</span></Button>
+                            </div>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {events.map((event) => (
-                                <Card key={event.id} className="bg-white/5 border-white/10 group relative overflow-hidden">
-                                    {event.image ? (
-                                        <div className="h-32 w-full relative">
-                                            <img src={event.image} alt={event.name} className="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity" />
-                                            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80" />
-                                            <div className="absolute bottom-2 left-4">
-                                                <Badge variant="outline" className="border-white/20 bg-black/50 backdrop-blur-md">{event.type}</Badge>
+                            {events
+                                .filter(e => eventFilter === 'All' ? true : e.addedByRole === eventFilter)
+                                .map((event) => (
+                                    <Card key={event.id} className="bg-white/5 border-white/10 group relative overflow-hidden">
+                                        {event.image ? (
+                                            <div className="h-32 w-full relative">
+                                                <img src={event.image} alt={event.name} className="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity" />
+                                                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80" />
+                                                <div className="absolute bottom-2 left-4">
+                                                    <Badge variant="outline" className="border-white/20 bg-black/50 backdrop-blur-md">{event.type}</Badge>
+                                                </div>
                                             </div>
-                                        </div>
-                                    ) : (
-                                        <div className="absolute top-0 left-0 w-1 h-full bg-cyan-500" />
-                                    )}
-                                    <CardContent className={`p-6 ${event.image ? 'pt-4' : 'pl-8'}`}>
-                                        <div className="flex justify-between items-start mb-4">
-                                            {!event.image && <Badge variant="outline" className="border-white/20">{event.type}</Badge>}
-                                            <div className="flex items-center gap-1 -mt-2 -mr-2 ml-auto z-10 relative">
-                                                <Button variant="ghost" size="sm" onClick={() => openAddModal('event', event)} className="text-gray-300 hover:text-white h-8 px-2">
-                                                    Edit
-                                                </Button>
-                                                <Button variant="ghost" size="icon" onClick={() => confirmDelete('event', event.id)} className="text-red-500 hover:bg-red-500/10 h-8 w-8">
-                                                    <Trash2 className="w-4 h-4" />
-                                                </Button>
-                                            </div>
-                                        </div>
-                                        <h3 className="text-xl font-bold mb-2">{event.name}</h3>
-                                        <div className="flex items-center gap-2 text-sm text-gray-400">
-                                            <Calendar className="w-4 h-4" />
-                                            <span>{event.date}</span>
-                                        </div>
-                                        <div className="flex items-center gap-2 text-sm text-gray-400 mt-1">
-                                            <Star className="w-4 h-4" />
-                                            <span>{event.location}</span>
-                                        </div>
-                                        {event.registrationLink && (
-                                            <div className="mt-3 pt-3 border-t border-white/10">
-                                                <a href={event.registrationLink} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-xs text-cyan-500 hover:text-cyan-400 font-medium">
-                                                    <ExternalLink className="w-3 h-3" />
-                                                    Registration Link
-                                                </a>
-                                            </div>
+                                        ) : (
+                                            <div className="absolute top-0 left-0 w-1 h-full bg-cyan-500" />
                                         )}
-                                    </CardContent>
-                                </Card>
-                            ))}
+                                        <CardContent className={`p-6 ${event.image ? 'pt-4' : 'pl-8'}`}>
+                                            <div className="flex justify-between items-start mb-4">
+                                                {!event.image && <Badge variant="outline" className="border-white/20">{event.type}</Badge>}
+                                                <div className="flex items-center gap-1 -mt-2 -mr-2 ml-auto z-10 relative">
+                                                    <Button variant="ghost" size="sm" onClick={() => openAddModal('event', event)} className="text-gray-300 hover:text-white h-8 px-2">
+                                                        Edit
+                                                    </Button>
+                                                    <Button variant="ghost" size="icon" onClick={() => confirmDelete('event', event.id)} className="text-red-500 hover:bg-red-500/10 h-8 w-8">
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                            <h3 className="text-xl font-bold mb-2">{event.name}</h3>
+                                            <div className="flex items-center gap-2 text-sm text-gray-400">
+                                                <Calendar className="w-4 h-4" />
+                                                <span>{event.date}</span>
+                                            </div>
+                                            <div className="flex items-center gap-2 text-sm text-gray-400 mt-1">
+                                                <Star className="w-4 h-4" />
+                                                <span>{event.location}</span>
+                                            </div>
+                                            {event.registrationLink && (
+                                                <div className="mt-3 pt-3 border-t border-white/10">
+                                                    <a href={event.registrationLink} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-xs text-cyan-500 hover:text-cyan-400 font-medium">
+                                                        <ExternalLink className="w-3 h-3" />
+                                                        Registration Link
+                                                    </a>
+                                                </div>
+                                            )}
+                                        </CardContent>
+                                    </Card>
+                                ))}
                         </div>
                     </TabsContent>
 
@@ -540,9 +576,14 @@ function PresidentDashboardContent() {
                                                 </div>
                                             )}
                                         </div>
-                                        <Button variant="ghost" size="icon" onClick={() => confirmDelete('election', election.id)} className="text-red-500 hover:bg-red-500/10 self-start md:self-center">
-                                            <Trash2 className="w-5 h-5" />
-                                        </Button>
+                                        <div className="flex gap-2 self-start md:self-center">
+                                            <Button variant="outline" size="sm" onClick={() => openAddModal('election', election)} className="border-white/20 text-gray-300 hover:text-white mt-1 border">
+                                                Edit
+                                            </Button>
+                                            <Button variant="ghost" size="icon" onClick={() => confirmDelete('election', election.id)} className="text-red-500 hover:bg-red-500/10">
+                                                <Trash2 className="w-5 h-5" />
+                                            </Button>
+                                        </div>
                                     </div>
                                 </Card>
                             ))}
@@ -551,45 +592,59 @@ function PresidentDashboardContent() {
 
                     {/* Achievements Content */}
                     <TabsContent value="achievements" className="space-y-6">
-                        <div className="flex justify-between items-center">
+                        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                             <h2 className="text-2xl font-bold">Hall of Fame</h2>
-                            <Button onClick={() => openAddModal('achievement')} className="bg-cyan-500 text-black hover:bg-cyan-400"><Plus className="w-4 h-4 mr-2" /> Add Achievement</Button>
+                            <div className="flex gap-2 w-full md:w-auto">
+                                <select
+                                    className="bg-black/50 border border-white/10 rounded-md p-2 text-sm text-gray-300 outline-none focus:border-cyan-500/50"
+                                    value={achievementFilter}
+                                    onChange={(e) => setAchievementFilter(e.target.value as any)}
+                                >
+                                    <option value="All">All Achievements</option>
+                                    <option value="President">Added by President</option>
+                                    <option value="Council">Added by Council</option>
+                                    <option value="Club Manager">Added by Clubs</option>
+                                </select>
+                                <Button onClick={() => openAddModal('achievement')} className="bg-cyan-500 text-black hover:bg-cyan-400 whitespace-nowrap"><Plus className="w-4 h-4 mr-2 md:mr-0 lg:mr-2" /> <span className="hidden lg:inline">Add Achievement</span></Button>
+                            </div>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {achievements.map((achievement) => (
-                                <Card key={achievement.id} className="bg-white/5 border-white/10 overflow-hidden">
-                                    <div className="h-40 bg-zinc-900 relative">
-                                        {achievement.image ? (
-                                            <img src={achievement.image} alt={achievement.title} className="w-full h-full object-cover opacity-80" />
-                                        ) : (
-                                            <div className="w-full h-full flex items-center justify-center bg-cyan-500/10 text-cyan-500">
-                                                <Trophy className="w-12 h-12" />
-                                            </div>
-                                        )}
-                                        <div className="absolute top-2 right-2">
-                                            <Badge className="bg-black/50 text-white border-white/10 backdrop-blur-md">{achievement.category}</Badge>
-                                        </div>
-                                    </div>
-                                    <CardContent className="p-6">
-                                        <div className="flex justify-between items-start mb-2">
-                                            <div>
-                                                <h3 className="font-bold text-lg">{achievement.title}</h3>
-                                                <p className="text-cyan-500 text-sm">{achievement.student}</p>
-                                            </div>
-                                            <div className="flex items-center gap-1 -mt-2 -mr-2">
-                                                <Button variant="ghost" size="sm" onClick={() => openAddModal('achievement', achievement)} className="text-gray-300 hover:text-white h-8 px-2">
-                                                    Edit
-                                                </Button>
-                                                <Button variant="ghost" size="icon" onClick={() => confirmDelete('achievement', achievement.id)} className="text-red-500 hover:bg-red-500/10 h-8 w-8">
-                                                    <Trash2 className="w-4 h-4" />
-                                                </Button>
+                            {achievements
+                                .filter(a => achievementFilter === 'All' ? true : a.addedByRole === achievementFilter)
+                                .map((achievement) => (
+                                    <Card key={achievement.id} className="bg-white/5 border-white/10 overflow-hidden">
+                                        <div className="h-40 bg-zinc-900 relative">
+                                            {achievement.image ? (
+                                                <img src={achievement.image} alt={achievement.title} className="w-full h-full object-cover opacity-80" />
+                                            ) : (
+                                                <div className="w-full h-full flex items-center justify-center bg-cyan-500/10 text-cyan-500">
+                                                    <Trophy className="w-12 h-12" />
+                                                </div>
+                                            )}
+                                            <div className="absolute top-2 right-2">
+                                                <Badge className="bg-black/50 text-white border-white/10 backdrop-blur-md">{achievement.category}</Badge>
                                             </div>
                                         </div>
-                                        <p className="text-sm text-gray-400 line-clamp-2">{achievement.description}</p>
-                                        <div className="mt-4 text-xs text-gray-500">{achievement.date}</div>
-                                    </CardContent>
-                                </Card>
-                            ))}
+                                        <CardContent className="p-6">
+                                            <div className="flex justify-between items-start mb-2">
+                                                <div>
+                                                    <h3 className="font-bold text-lg">{achievement.title}</h3>
+                                                    <p className="text-cyan-500 text-sm">{achievement.student}</p>
+                                                </div>
+                                                <div className="flex items-center gap-1 -mt-2 -mr-2">
+                                                    <Button variant="ghost" size="sm" onClick={() => openAddModal('achievement', achievement)} className="text-gray-300 hover:text-white h-8 px-2">
+                                                        Edit
+                                                    </Button>
+                                                    <Button variant="ghost" size="icon" onClick={() => confirmDelete('achievement', achievement.id)} className="text-red-500 hover:bg-red-500/10 h-8 w-8">
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                            <p className="text-sm text-gray-400 line-clamp-2">{achievement.description}</p>
+                                            <div className="mt-4 text-xs text-gray-500">{achievement.date}</div>
+                                        </CardContent>
+                                    </Card>
+                                ))}
                         </div>
                     </TabsContent>
 
@@ -1049,12 +1104,18 @@ function PresidentDashboardContent() {
                                     <label className="text-sm font-medium text-gray-300">Question</label>
                                     <Input required value={formData.question || ''} onChange={e => setFormData({ ...formData, question: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-cyan-500/50" />
                                 </div>
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-gray-300">Status</label>
-                                    <select value={formData.status || 'Active'} onChange={e => setFormData({ ...formData, status: e.target.value })} className="w-full bg-black/50 border border-white/10 rounded-md p-2 text-white outline-none">
-                                        <option value="Active">Active</option>
-                                        <option value="Closed">Closed</option>
-                                    </select>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium text-gray-300">Status</label>
+                                        <select value={formData.status || 'Active'} onChange={e => setFormData({ ...formData, status: e.target.value })} className="w-full bg-black/50 border border-white/10 rounded-md p-2 text-white outline-none">
+                                            <option value="Active">Active</option>
+                                            <option value="Closed">Closed</option>
+                                        </select>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium text-gray-300">Due Date</label>
+                                        <Input type="date" value={formData.dueDate || ''} onChange={e => setFormData({ ...formData, dueDate: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-cyan-500/50" style={{ colorScheme: 'dark' }} />
+                                    </div>
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-300">Options</label>
@@ -1122,12 +1183,18 @@ function PresidentDashboardContent() {
                                     <label className="text-sm font-medium text-gray-300">External Link (Optional)</label>
                                     <Input type="url" value={formData.link || ''} onChange={e => setFormData({ ...formData, link: e.target.value })} className="bg-black/50 border-white/10 text-white" placeholder="https://..." />
                                 </div>
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-gray-300">Status</label>
-                                    <select value={formData.status || 'Active'} onChange={e => setFormData({ ...formData, status: e.target.value })} className="w-full bg-black/50 border border-white/10 rounded-md p-2 text-white outline-none">
-                                        <option value="Active">Active</option>
-                                        <option value="Closed">Closed</option>
-                                    </select>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium text-gray-300">Status</label>
+                                        <select value={formData.status || 'Active'} onChange={e => setFormData({ ...formData, status: e.target.value })} className="w-full bg-black/50 border border-white/10 rounded-md p-2 text-white outline-none">
+                                            <option value="Active">Active</option>
+                                            <option value="Closed">Closed</option>
+                                        </select>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium text-gray-300">Due Date</label>
+                                        <Input type="date" value={formData.dueDate || ''} onChange={e => setFormData({ ...formData, dueDate: e.target.value })} className="bg-black/50 border-white/10 text-white focus:border-cyan-500/50" style={{ colorScheme: 'dark' }} />
+                                    </div>
                                 </div>
                             </>
                         )}

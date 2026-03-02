@@ -30,11 +30,18 @@ export default function AchievementsPage() {
                             <Card className="bg-white/5 border-white/10 overflow-hidden group">
                                 <div className="flex flex-col md:flex-row">
                                     <div className="w-full md:w-2/5 h-64 md:h-auto relative overflow-hidden">
-                                        <img
-                                            src={item.image}
-                                            alt={item.title}
-                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                        />
+                                        {item.image ? (
+                                            <img
+                                                src={item.image}
+                                                alt={item.title}
+                                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full bg-cyan-950/30 flex flex-col items-center justify-center text-cyan-500/50 transition-transform duration-700 group-hover:scale-105">
+                                                <Trophy className="w-16 h-16 mb-2 opacity-50" />
+                                                <span className="text-sm font-semibold uppercase tracking-widest opacity-50">No Image</span>
+                                            </div>
+                                        )}
                                         <div className="absolute top-4 left-4">
                                             <Badge className="bg-cyan-500 text-black hover:bg-cyan-400">{item.category}</Badge>
                                         </div>
